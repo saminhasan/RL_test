@@ -31,7 +31,6 @@ text_color: Tuple[int, int, int] = (220, 220, 220)
 font_size: int = 18
 
 levels = {
-    0: "test",
     1: "easy",
     2: "medium",
     3: "hard",
@@ -236,7 +235,7 @@ class GUI:
         elif key == pg.K_z:
             self.board.random_reveal(safe=True)
             self.probability = predict(self.board)
-        elif key in [pg.K_0, pg.K_1, pg.K_2, pg.K_3]:
+        elif key in [pg.K_1, pg.K_2, pg.K_3]:
             chosen_level = levels.get(key - pg.K_0)
             if chosen_level is not None and chosen_level in game_mode:
                 self.level = chosen_level
@@ -271,8 +270,6 @@ class GUI:
 
     def _level_help_lines(self) -> List[str]:
         lines = [f"Current Level: {self.level.capitalize()}"]
-        if "test" in game_mode:
-            lines.append("Press 0 - Test")
         if "easy" in game_mode:
             lines.append("Press 1 - Easy")
         if "medium" in game_mode:
@@ -442,7 +439,7 @@ class GUI:
 
 
 def main() -> None:
-    game = GUI(0)
+    game = GUI(1)
 
     while game.running:
         game.handle_events()

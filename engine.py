@@ -16,12 +16,11 @@ class MinesweeperEngine:
     _FLAT_NEIGHBORS_CACHE: dict[tuple[int, int], tuple[np.ndarray, np.ndarray]] = {}
 
     DIFFICULTIES = {
-        "test": (5, 5, 4),
-        "easy": (9, 9, 10),
-        "medium": (16, 16, 40),
-        "hard": (16, 30, 99),
+        "easy": (9, 9, 10), # 12.35% mines
+        "medium": (16, 16, 40), # 15.62% mines
+        "hard": (16, 30, 99), # 20.62% mines
     }
-    LEVELS = {0: "test", 1: "easy", 2: "medium", 3: "hard"}
+    LEVELS = {1: "easy", 2: "medium", 3: "hard"}
     RUNNING = 1
     OVER = 0
 
@@ -151,7 +150,7 @@ class MinesweeperEngine:
 
         if mines[flat]:
             row, col = divmod(flat, self.cols)
-            if changed is not None:
+            if changed_flat is not None:
                 changed_flat[flat] = True
             revealed[flat] = True
             self.covered_count -= 1
@@ -567,7 +566,7 @@ def _run_solver_game(level: int, solver_name: str, seed: int) -> dict[str, float
 
 
 def benchmark_solvers(
-    levels: tuple[int | str, ...] | list[int | str] = (0,),
+    levels: tuple[int | str, ...] | list[int | str] = (1,),
     num_games: int = 1_000,
     seed: int = 42,
     n_jobs: int = -1,
@@ -655,4 +654,4 @@ def benchmark_solvers(
     return results
 
 if __name__ == "__main__":
-    benchmark_solvers(levels=[1], num_games=100_000, seed=42, n_jobs=4 , backend="loky", solver_names=("bayes", "oracle"))
+    benchmark_solvers(levels=[2], num_games=10_000, seed=42, n_jobs=16 , backend="loky", solver_names=("bayes", "oracle", "random_safe"))
