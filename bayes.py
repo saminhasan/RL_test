@@ -34,11 +34,6 @@ except Exception:
 T = TypeVar("T")
 
 
-def fact_div(a: int, b: int) -> float:
-    """return a! / b!"""
-    return product(range(b + 1, a + 1)) if a >= b else 1.0 / fact_div(b, a)
-
-
 @lru_cache(maxsize=8192)
 def _choose_cached(n: int, k: int) -> float:
     if k < 0 or k > n:
