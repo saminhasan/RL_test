@@ -45,8 +45,6 @@ NUMBER_COLORS: List[Tuple[int, int, int]] = [
 ]
 
 IMAGE_PATH: str = "./assets/images"
-FONT_PATH:  str = "./assets/fonts"
-font_size:  int = 24
 
 levels    = MinesweeperEngine.LEVELS
 game_mode = set(MinesweeperEngine.DIFFICULTIES.keys())
@@ -213,7 +211,7 @@ class GUI:
         pg.font.init()
         self.clock  = pg.time.Clock()
         self.screen = pg.display.set_mode((self.width, self.height))
-        self.font   = pg.font.SysFont("Consolas", font_size)
+        self.font   = pg.font.SysFont("Consolas", max(8, min(30, int(self.cell_size * 0.32))))
 
         mine_img         = pg.image.load(f"{IMAGE_PATH}/mine.png").convert_alpha()
         flag_img         = pg.image.load(f"{IMAGE_PATH}/flag.png").convert_alpha()
@@ -470,20 +468,22 @@ class GUI:
             self._blit_centered(self.scaled_flag, row, col)
 
     def _nice_lines(self) -> None:
-        """Dashed grid lines drawn at the 1-px gaps between cells."""
+        """Dashed grid lines at the 1-px gaps between cells.
+        Segments are pinned to each cell's origin so the pattern never drifts."""
         stride = self.cell_size + LINE_WIDTH
-        gap    = self.cell_size // 8
-        seg    = self.cell_size - gap
+        gap    = max(1, self.cell_size // 8)
 
         for col in range(self.board.cols - 1):
-            x = (col + 1) * stride          # pixel position of the gap
-            for y0 in range(0, self.height, seg + gap):
-                pg.draw.line(self.screen, line_color, (x, y0 + gap), (x, min(y0 + seg, self.height)), 1)
+            x = (col + 1) * stride
+            for row in range(self.board.rows):
+                y0 = LINE_WIDTH + row * stride
+                pg.draw.line(self.screen, line_color, (x, y0 + gap), (x, y0 + self.cell_size - gap), 1)
 
         for row in range(self.board.rows - 1):
             y = (row + 1) * stride
-            for x0 in range(0, self.width, seg + gap):
-                pg.draw.line(self.screen, line_color, (x0 + gap, y), (min(x0 + seg, self.width), y), 1)
+            for col in range(self.board.cols):
+                x0 = LINE_WIDTH + col * stride
+                pg.draw.line(self.screen, line_color, (x0 + gap, y), (x0 + self.cell_size - gap, y), 1)
 
 
 # ---------------------------------------------------------------------------

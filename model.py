@@ -3,11 +3,24 @@ Model creation, saving, and loading for Minesweeper PPO training.
 
 CNN architecture:
     Input : (N, 15, rows, cols)  float32
-    Conv2d(15 -> 64,  3×3, pad=1) -> ReLU
-    Conv2d(64 -> 128, 3×3, pad=1) -> ReLU
-    Conv2d(128-> 128, 3×3, pad=1) -> ReLU
-    Flatten -> Linear(n_flat -> features_dim) -> ReLU
-    -> actor + critic heads added by SB3 (MaskablePPO)
+
+    Local stream — 3 conv blocks, each: Conv2d 3×3 same-pad → ReLU → SE
+        Conv2d(15  → 64,  3×3, pad=1) → ReLU → SE(64)
+        Conv2d(64  → 128, 3×3, pad=1) → ReLU → SE(128)
+        Conv2d(128 → 128, 3×3, pad=1) → ReLU → SE(128)
+        → (N, 128, H, W)
+
+    SE block (Squeeze-and-Excite):
+        AdaptiveAvgPool2d(1) → Linear(C → C//8) → ReLU → Linear(C//8 → C) → Sigmoid
+        Channel-wise multiply: re-weights feature maps by their global importance.
+
+    Global branch (parallel to flatten):
+        AdaptiveAvgPool2d(1) → Flatten → Linear(128 → 64) → ReLU
+        Captures board-wide spatial averages; complements per-cell local features.
+
+    Head:
+        cat(Flatten(local), global) → Linear(n_flat + 64 → features_dim) → ReLU
+        → actor + critic heads added by SB3 (MaskablePPO)
 
 Optimizer (Adam) state is stored inside model.zip automatically by PyTorch/SB3.
 Resuming with load_or_create() restores weights + Adam moments.
@@ -29,37 +42,69 @@ from stable_baselines3.common.vec_env import VecEnv
 from minesweeper_env import N_OBS_CHANNELS
 
 
+class SEBlock(nn.Module):
+    """Squeeze-and-Excite: learn per-channel importance from global average."""
+
+    def __init__(self, channels: int, reduction: int = 8) -> None:
+        super().__init__()
+        mid = max(1, channels // reduction)
+        self.squeeze = nn.AdaptiveAvgPool2d(1)
+        self.excite  = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(channels, mid),
+            nn.ReLU(),
+            nn.Linear(mid, channels),
+            nn.Sigmoid(),
+        )
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        w = self.excite(self.squeeze(x))           # (B, C)
+        return x * w.unsqueeze(-1).unsqueeze(-1)   # scale each channel
+
+
 class MinesweeperCNN(BaseFeaturesExtractor):
     """
     CNN feature extractor for the 15-channel Minesweeper observation.
 
-    Same-padding conv layers keep spatial dims intact so every layer
-    sees the full board context. Followed by flatten + linear projection.
+    Local stream  : 3× [Conv 3×3 same-pad → ReLU → SE]  →  (B, 128, H, W)
+    Global branch : AdaptiveAvgPool2d(1) → Linear(128→64) → ReLU  →  (B, 64)
+    Head          : cat(flatten, global) → Linear → ReLU  →  (B, features_dim)
     """
+
+    GLOBAL_DIM: int = 64
 
     def __init__(self, observation_space: spaces.Box, features_dim: int = 512) -> None:
         super().__init__(observation_space, features_dim)
 
-        n_in = observation_space.shape[0]  # N_OBS_CHANNELS = 15
+        n_in = observation_space.shape[0]
 
-        self.cnn = nn.Sequential(
-            nn.Conv2d(n_in, 64,  kernel_size=3, padding=1), nn.ReLU(),
-            nn.Conv2d(64,  128, kernel_size=3, padding=1), nn.ReLU(),
-            nn.Conv2d(128, 128, kernel_size=3, padding=1), nn.ReLU(),
+        self.conv = nn.Sequential(
+            nn.Conv2d(n_in, 64,  kernel_size=3, padding=1), nn.ReLU(), SEBlock(64),
+            nn.Conv2d(64,  128, kernel_size=3, padding=1), nn.ReLU(), SEBlock(128),
+            nn.Conv2d(128, 128, kernel_size=3, padding=1), nn.ReLU(), SEBlock(128),
+        )
+
+        self.global_pool = nn.Sequential(
+            nn.AdaptiveAvgPool2d(1),
             nn.Flatten(),
+            nn.Linear(128, self.GLOBAL_DIM),
+            nn.ReLU(),
         )
 
         with torch.no_grad():
-            sample = torch.zeros(1, *observation_space.shape)
-            n_flat = self.cnn(sample).shape[1]
+            sample  = torch.zeros(1, *observation_space.shape)
+            n_flat  = self.conv(sample).flatten(1).shape[1]
 
         self.linear = nn.Sequential(
-            nn.Linear(n_flat, features_dim),
+            nn.Linear(n_flat + self.GLOBAL_DIM, features_dim),
             nn.ReLU(),
         )
 
     def forward(self, obs: torch.Tensor) -> torch.Tensor:
-        return self.linear(self.cnn(obs))
+        conv_out = self.conv(obs)
+        local    = conv_out.flatten(1)
+        global_  = self.global_pool(conv_out)
+        return self.linear(torch.cat([local, global_], dim=1))
 
 
 # ──────────────────────────────────────────────────────────────────────────────
