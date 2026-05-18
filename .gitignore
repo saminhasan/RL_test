@@ -218,6 +218,17 @@ __marimo__/
 .streamlit/secrets.toml
 
 # TensorBoard logs
-models/rl/dqn/test/tensorboard/
+*/tensorboard/
 *.tfevents*
+
+# Cython build artifacts
+*.c
+cy_rules.*.so
+cy_rules.*.pyd
+
+# Model checkpoints (large binaries)
+models/
+
+# torch.compile cache
+__pycache__/
 

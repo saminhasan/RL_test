@@ -10,26 +10,25 @@
             ]
         ],
         "depends": [
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\arrayobject.h",
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\arrayscalars.h",
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ndarrayobject.h",
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ndarraytypes.h",
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include\\numpy\\ufuncobject.h"
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include/numpy/arrayobject.h",
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include/numpy/arrayscalars.h",
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include/numpy/ndarrayobject.h",
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include/numpy/ndarraytypes.h",
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include/numpy/ufuncobject.h"
         ],
         "extra_compile_args": [
-            "/O2",
-            "/Ox",
-            "/Ob2",
-            "/Oi",
-            "/Ot",
-            "/GL",
-            "/fp:fast"
+            "-O3",
+            "-march=native",
+            "-mtune=native",
+            "-ffast-math",
+            "-funroll-loops",
+            "-flto"
         ],
         "extra_link_args": [
-            "/LTCG"
+            "-flto"
         ],
         "include_dirs": [
-            "C:\\Python314\\Lib\\site-packages\\numpy\\_core\\include"
+            "/mnt/d/Projects/MNSPR_RL/.venv/lib/python3.12/site-packages/numpy/_core/include"
         ],
         "name": "cy_rules",
         "sources": [
@@ -1406,8 +1405,8 @@ static const char *__pyx_filename;
 
 static const char* const __pyx_f[] = {
   "cy_rules.pyx",
-  "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd",
-  "cpython/type.pxd",
+  ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd",
+  ".venv/lib/python3.12/site-packages/Cython/Includes/cpython/type.pxd",
 };
 /* #### Code section: utility_code_proto_before_types ### */
 /* Atomics.proto (used by UnpackUnboundCMethod) */
@@ -1616,7 +1615,7 @@ typedef struct {
 
 /* #### Code section: numeric_typedefs ### */
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":744
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":744
  * # in Cython to enable them only on the right systems.
  * 
  * ctypedef npy_int8       int8_t             # <<<<<<<<<<<<<<
@@ -1625,7 +1624,7 @@ typedef struct {
 */
 typedef npy_int8 __pyx_t_5numpy_int8_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":745
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":745
  * 
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t             # <<<<<<<<<<<<<<
@@ -1634,7 +1633,7 @@ typedef npy_int8 __pyx_t_5numpy_int8_t;
 */
 typedef npy_int16 __pyx_t_5numpy_int16_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":746
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":746
  * ctypedef npy_int8       int8_t
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t             # <<<<<<<<<<<<<<
@@ -1643,7 +1642,7 @@ typedef npy_int16 __pyx_t_5numpy_int16_t;
 */
 typedef npy_int32 __pyx_t_5numpy_int32_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":747
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":747
  * ctypedef npy_int16      int16_t
  * ctypedef npy_int32      int32_t
  * ctypedef npy_int64      int64_t             # <<<<<<<<<<<<<<
@@ -1652,7 +1651,7 @@ typedef npy_int32 __pyx_t_5numpy_int32_t;
 */
 typedef npy_int64 __pyx_t_5numpy_int64_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":749
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":749
  * ctypedef npy_int64      int64_t
  * 
  * ctypedef npy_uint8      uint8_t             # <<<<<<<<<<<<<<
@@ -1661,7 +1660,7 @@ typedef npy_int64 __pyx_t_5numpy_int64_t;
 */
 typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":750
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":750
  * 
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t             # <<<<<<<<<<<<<<
@@ -1670,7 +1669,7 @@ typedef npy_uint8 __pyx_t_5numpy_uint8_t;
 */
 typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":751
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":751
  * ctypedef npy_uint8      uint8_t
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t             # <<<<<<<<<<<<<<
@@ -1679,7 +1678,7 @@ typedef npy_uint16 __pyx_t_5numpy_uint16_t;
 */
 typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":752
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":752
  * ctypedef npy_uint16     uint16_t
  * ctypedef npy_uint32     uint32_t
  * ctypedef npy_uint64     uint64_t             # <<<<<<<<<<<<<<
@@ -1688,7 +1687,7 @@ typedef npy_uint32 __pyx_t_5numpy_uint32_t;
 */
 typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":754
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":754
  * ctypedef npy_uint64     uint64_t
  * 
  * ctypedef npy_float32    float32_t             # <<<<<<<<<<<<<<
@@ -1697,7 +1696,7 @@ typedef npy_uint64 __pyx_t_5numpy_uint64_t;
 */
 typedef npy_float32 __pyx_t_5numpy_float32_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":755
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":755
  * 
  * ctypedef npy_float32    float32_t
  * ctypedef npy_float64    float64_t             # <<<<<<<<<<<<<<
@@ -1706,7 +1705,7 @@ typedef npy_float32 __pyx_t_5numpy_float32_t;
 */
 typedef npy_float64 __pyx_t_5numpy_float64_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":762
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":762
  * ctypedef double complex complex128_t
  * 
  * ctypedef npy_longlong   longlong_t             # <<<<<<<<<<<<<<
@@ -1715,7 +1714,7 @@ typedef npy_float64 __pyx_t_5numpy_float64_t;
 */
 typedef npy_longlong __pyx_t_5numpy_longlong_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":763
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":763
  * 
  * ctypedef npy_longlong   longlong_t
  * ctypedef npy_ulonglong  ulonglong_t             # <<<<<<<<<<<<<<
@@ -1724,7 +1723,7 @@ typedef npy_longlong __pyx_t_5numpy_longlong_t;
 */
 typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":765
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":765
  * ctypedef npy_ulonglong  ulonglong_t
  * 
  * ctypedef npy_intp       intp_t             # <<<<<<<<<<<<<<
@@ -1733,7 +1732,7 @@ typedef npy_ulonglong __pyx_t_5numpy_ulonglong_t;
 */
 typedef npy_intp __pyx_t_5numpy_intp_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":766
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":766
  * 
  * ctypedef npy_intp       intp_t
  * ctypedef npy_uintp      uintp_t             # <<<<<<<<<<<<<<
@@ -1742,7 +1741,7 @@ typedef npy_intp __pyx_t_5numpy_intp_t;
 */
 typedef npy_uintp __pyx_t_5numpy_uintp_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":768
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":768
  * ctypedef npy_uintp      uintp_t
  * 
  * ctypedef npy_double     float_t             # <<<<<<<<<<<<<<
@@ -1751,7 +1750,7 @@ typedef npy_uintp __pyx_t_5numpy_uintp_t;
 */
 typedef npy_double __pyx_t_5numpy_float_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":769
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":769
  * 
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t             # <<<<<<<<<<<<<<
@@ -1760,7 +1759,7 @@ typedef npy_double __pyx_t_5numpy_float_t;
 */
 typedef npy_double __pyx_t_5numpy_double_t;
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":770
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":770
  * ctypedef npy_double     float_t
  * ctypedef npy_double     double_t
  * ctypedef npy_longdouble longdouble_t             # <<<<<<<<<<<<<<
@@ -3422,7 +3421,7 @@ return 0;
 #endif
 /* #### Code section: module_code ### */
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":243
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":243
  *         cdef int type_num
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3433,7 +3432,7 @@ return 0;
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_8itemsize_itemsize(PyArray_Descr *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":245
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":245
  *         @property
  *         cdef inline npy_intp itemsize(self) noexcept nogil:
  *             return PyDataType_ELSIZE(self)             # <<<<<<<<<<<<<<
@@ -3443,7 +3442,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_8itemsize_itemsize(PyArray_D
   __pyx_r = PyDataType_ELSIZE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":243
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":243
  *         cdef int type_num
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3456,7 +3455,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_8itemsize_itemsize(PyArray_D
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":247
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":247
  *             return PyDataType_ELSIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3467,7 +3466,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_8itemsize_itemsize(PyArray_D
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_9alignment_alignment(PyArray_Descr *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":249
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":249
  *         @property
  *         cdef inline npy_intp alignment(self) noexcept nogil:
  *             return PyDataType_ALIGNMENT(self)             # <<<<<<<<<<<<<<
@@ -3477,7 +3476,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_9alignment_alignment(PyArray
   __pyx_r = PyDataType_ALIGNMENT(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":247
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":247
  *             return PyDataType_ELSIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3490,7 +3489,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_5dtype_9alignment_alignment(PyArray
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":253
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":253
  *         # Use fields/names with care as they may be NULL.  You must check
  *         # for this using PyDataType_HASFIELDS.
  *         @property             # <<<<<<<<<<<<<<
@@ -3504,7 +3503,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_6fields_fields(PyArray_Desc
   PyObject *__pyx_t_1;
   __Pyx_RefNannySetupContext("fields", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":255
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":255
  *         @property
  *         cdef inline object fields(self):
  *             return <object>PyDataType_FIELDS(self)             # <<<<<<<<<<<<<<
@@ -3517,7 +3516,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_6fields_fields(PyArray_Desc
   __pyx_r = ((PyObject *)__pyx_t_1);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":253
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":253
  *         # Use fields/names with care as they may be NULL.  You must check
  *         # for this using PyDataType_HASFIELDS.
  *         @property             # <<<<<<<<<<<<<<
@@ -3532,7 +3531,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_6fields_fields(PyArray_Desc
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":257
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":257
  *             return <object>PyDataType_FIELDS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3546,7 +3545,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_5names_names(PyArray_Descr 
   PyObject *__pyx_t_1;
   __Pyx_RefNannySetupContext("names", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":259
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":259
  *         @property
  *         cdef inline tuple names(self):
  *             return <tuple>PyDataType_NAMES(self)             # <<<<<<<<<<<<<<
@@ -3559,7 +3558,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_5names_names(PyArray_Descr 
   __pyx_r = ((PyObject*)__pyx_t_1);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":257
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":257
  *             return <object>PyDataType_FIELDS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3574,7 +3573,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_5names_names(PyArray_Descr 
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":264
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":264
  *         # valid (the pointer can be NULL). Most users should access
  *         # this field via the inline helper method PyDataType_SHAPE.
  *         @property             # <<<<<<<<<<<<<<
@@ -3585,7 +3584,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_5dtype_5names_names(PyArray_Descr 
 static CYTHON_INLINE PyArray_ArrayDescr *__pyx_f_5numpy_5dtype_8subarray_subarray(PyArray_Descr *__pyx_v_self) {
   PyArray_ArrayDescr *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":266
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":266
  *         @property
  *         cdef inline PyArray_ArrayDescr* subarray(self) noexcept nogil:
  *             return PyDataType_SUBARRAY(self)             # <<<<<<<<<<<<<<
@@ -3595,7 +3594,7 @@ static CYTHON_INLINE PyArray_ArrayDescr *__pyx_f_5numpy_5dtype_8subarray_subarra
   __pyx_r = PyDataType_SUBARRAY(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":264
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":264
  *         # valid (the pointer can be NULL). Most users should access
  *         # this field via the inline helper method PyDataType_SHAPE.
  *         @property             # <<<<<<<<<<<<<<
@@ -3608,7 +3607,7 @@ static CYTHON_INLINE PyArray_ArrayDescr *__pyx_f_5numpy_5dtype_8subarray_subarra
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":268
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":268
  *             return PyDataType_SUBARRAY(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3619,7 +3618,7 @@ static CYTHON_INLINE PyArray_ArrayDescr *__pyx_f_5numpy_5dtype_8subarray_subarra
 static CYTHON_INLINE npy_uint64 __pyx_f_5numpy_5dtype_5flags_flags(PyArray_Descr *__pyx_v_self) {
   npy_uint64 __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":271
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":271
  *         cdef inline npy_uint64 flags(self) noexcept nogil:
  *             """The data types flags."""
  *             return PyDataType_FLAGS(self)             # <<<<<<<<<<<<<<
@@ -3629,7 +3628,7 @@ static CYTHON_INLINE npy_uint64 __pyx_f_5numpy_5dtype_5flags_flags(PyArray_Descr
   __pyx_r = PyDataType_FLAGS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":268
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":268
  *             return PyDataType_SUBARRAY(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3642,7 +3641,7 @@ static CYTHON_INLINE npy_uint64 __pyx_f_5numpy_5dtype_5flags_flags(PyArray_Descr
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":280
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":280
  *     ctypedef class numpy.broadcast [object PyArrayMultiIterObject, check_size ignore]:
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3653,7 +3652,7 @@ static CYTHON_INLINE npy_uint64 __pyx_f_5numpy_5dtype_5flags_flags(PyArray_Descr
 static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_7numiter_numiter(PyArrayMultiIterObject *__pyx_v_self) {
   int __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":283
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":283
  *         cdef inline int numiter(self) noexcept nogil:
  *             """The number of arrays that need to be broadcast to the same shape."""
  *             return PyArray_MultiIter_NUMITER(self)             # <<<<<<<<<<<<<<
@@ -3663,7 +3662,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_7numiter_numiter(PyArrayMulti
   __pyx_r = PyArray_MultiIter_NUMITER(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":280
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":280
  *     ctypedef class numpy.broadcast [object PyArrayMultiIterObject, check_size ignore]:
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3676,7 +3675,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_7numiter_numiter(PyArrayMulti
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":285
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":285
  *             return PyArray_MultiIter_NUMITER(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3687,7 +3686,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_7numiter_numiter(PyArrayMulti
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_4size_size(PyArrayMultiIterObject *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":288
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":288
  *         cdef inline npy_intp size(self) noexcept nogil:
  *             """The total broadcasted size."""
  *             return PyArray_MultiIter_SIZE(self)             # <<<<<<<<<<<<<<
@@ -3697,7 +3696,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_4size_size(PyArrayMultiI
   __pyx_r = PyArray_MultiIter_SIZE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":285
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":285
  *             return PyArray_MultiIter_NUMITER(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3710,7 +3709,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_4size_size(PyArrayMultiI
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":290
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":290
  *             return PyArray_MultiIter_SIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3721,7 +3720,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_4size_size(PyArrayMultiI
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_5index_index(PyArrayMultiIterObject *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":293
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":293
  *         cdef inline npy_intp index(self) noexcept nogil:
  *             """The current (1-d) index into the broadcasted result."""
  *             return PyArray_MultiIter_INDEX(self)             # <<<<<<<<<<<<<<
@@ -3731,7 +3730,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_5index_index(PyArrayMult
   __pyx_r = PyArray_MultiIter_INDEX(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":290
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":290
  *             return PyArray_MultiIter_SIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3744,7 +3743,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_5index_index(PyArrayMult
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":295
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":295
  *             return PyArray_MultiIter_INDEX(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3755,7 +3754,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_9broadcast_5index_index(PyArrayMult
 static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_2nd_nd(PyArrayMultiIterObject *__pyx_v_self) {
   int __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":298
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":298
  *         cdef inline int nd(self) noexcept nogil:
  *             """The number of dimensions in the broadcasted result."""
  *             return PyArray_MultiIter_NDIM(self)             # <<<<<<<<<<<<<<
@@ -3765,7 +3764,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_2nd_nd(PyArrayMultiIterObject
   __pyx_r = PyArray_MultiIter_NDIM(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":295
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":295
  *             return PyArray_MultiIter_INDEX(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3778,7 +3777,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_2nd_nd(PyArrayMultiIterObject
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":300
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":300
  *             return PyArray_MultiIter_NDIM(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3789,7 +3788,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_9broadcast_2nd_nd(PyArrayMultiIterObject
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_9broadcast_10dimensions_dimensions(PyArrayMultiIterObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":303
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":303
  *         cdef inline npy_intp* dimensions(self) noexcept nogil:
  *             """The shape of the broadcasted result."""
  *             return PyArray_MultiIter_DIMS(self)             # <<<<<<<<<<<<<<
@@ -3799,7 +3798,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_9broadcast_10dimensions_dimensions
   __pyx_r = PyArray_MultiIter_DIMS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":300
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":300
  *             return PyArray_MultiIter_NDIM(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3812,7 +3811,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_9broadcast_10dimensions_dimensions
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":305
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":305
  *             return PyArray_MultiIter_DIMS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3823,7 +3822,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_9broadcast_10dimensions_dimensions
 static CYTHON_INLINE void **__pyx_f_5numpy_9broadcast_5iters_iters(PyArrayMultiIterObject *__pyx_v_self) {
   void **__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":309
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":309
  *             """An array of iterator objects that holds the iterators for the arrays to be broadcast together.
  *             On return, the iterators are adjusted for broadcasting."""
  *             return PyArray_MultiIter_ITERS(self)             # <<<<<<<<<<<<<<
@@ -3833,7 +3832,7 @@ static CYTHON_INLINE void **__pyx_f_5numpy_9broadcast_5iters_iters(PyArrayMultiI
   __pyx_r = PyArray_MultiIter_ITERS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":305
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":305
  *             return PyArray_MultiIter_DIMS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3846,7 +3845,7 @@ static CYTHON_INLINE void **__pyx_f_5numpy_9broadcast_5iters_iters(PyArrayMultiI
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":323
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":323
  *         # Instead, we use properties that map to the corresponding C-API functions.
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3857,7 +3856,7 @@ static CYTHON_INLINE void **__pyx_f_5numpy_9broadcast_5iters_iters(PyArrayMultiI
 static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject *__pyx_v_self) {
   PyObject *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":327
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":327
  *             """Returns a borrowed reference to the object owning the data/memory.
  *             """
  *             return PyArray_BASE(self)             # <<<<<<<<<<<<<<
@@ -3867,7 +3866,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   __pyx_r = PyArray_BASE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":323
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":323
  *         # Instead, we use properties that map to the corresponding C-API functions.
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3880,7 +3879,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_7ndarray_4base_base(PyArrayObject 
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":329
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":329
  *             return PyArray_BASE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3894,7 +3893,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   PyArray_Descr *__pyx_t_1;
   __Pyx_RefNannySetupContext("descr", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":333
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":333
  *             """Returns an owned reference to the dtype of the array.
  *             """
  *             return <dtype>PyArray_DESCR(self)             # <<<<<<<<<<<<<<
@@ -3907,7 +3906,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   __pyx_r = ((PyArray_Descr *)__pyx_t_1);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":329
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":329
  *             return PyArray_BASE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3922,7 +3921,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":335
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":335
  *             return <dtype>PyArray_DESCR(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3933,7 +3932,7 @@ static CYTHON_INLINE PyArray_Descr *__pyx_f_5numpy_7ndarray_5descr_descr(PyArray
 static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx_v_self) {
   int __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":339
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":339
  *             """Returns the number of dimensions in the array.
  *             """
  *             return PyArray_NDIM(self)             # <<<<<<<<<<<<<<
@@ -3943,7 +3942,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   __pyx_r = PyArray_NDIM(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":335
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":335
  *             return <dtype>PyArray_DESCR(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3956,7 +3955,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":341
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":341
  *             return PyArray_NDIM(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3967,7 +3966,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_7ndarray_4ndim_ndim(PyArrayObject *__pyx
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":347
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":347
  *             Can return NULL for 0-dimensional arrays.
  *             """
  *             return PyArray_DIMS(self)             # <<<<<<<<<<<<<<
@@ -3977,7 +3976,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   __pyx_r = PyArray_DIMS(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":341
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":341
  *             return PyArray_NDIM(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -3990,7 +3989,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":349
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":349
  *             return PyArray_DIMS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4001,7 +4000,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_5shape_shape(PyArrayObjec
 static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayObject *__pyx_v_self) {
   npy_intp *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":354
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":354
  *             The number of elements matches the number of dimensions of the array (ndim).
  *             """
  *             return PyArray_STRIDES(self)             # <<<<<<<<<<<<<<
@@ -4011,7 +4010,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   __pyx_r = PyArray_STRIDES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":349
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":349
  *             return PyArray_DIMS(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4024,7 +4023,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":356
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":356
  *             return PyArray_STRIDES(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4035,7 +4034,7 @@ static CYTHON_INLINE npy_intp *__pyx_f_5numpy_7ndarray_7strides_strides(PyArrayO
 static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *__pyx_v_self) {
   npy_intp __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":360
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":360
  *             """Returns the total size (in number of elements) of the array.
  *             """
  *             return PyArray_SIZE(self)             # <<<<<<<<<<<<<<
@@ -4045,7 +4044,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   __pyx_r = PyArray_SIZE(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":356
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":356
  *             return PyArray_STRIDES(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4058,7 +4057,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":362
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":362
  *             return PyArray_SIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4069,7 +4068,7 @@ static CYTHON_INLINE npy_intp __pyx_f_5numpy_7ndarray_4size_size(PyArrayObject *
 static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__pyx_v_self) {
   char *__pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":369
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":369
  *             of `PyArray_DATA()` instead, which returns a 'void*'.
  *             """
  *             return PyArray_BYTES(self)             # <<<<<<<<<<<<<<
@@ -4079,7 +4078,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   __pyx_r = PyArray_BYTES(__pyx_v_self);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":362
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":362
  *             return PyArray_SIZE(self)
  * 
  *         @property             # <<<<<<<<<<<<<<
@@ -4092,7 +4091,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy_7ndarray_4data_data(PyArrayObject *__p
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":777
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":777
  * ctypedef long double complex clongdouble_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -4109,7 +4108,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew1", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":778
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":778
  * 
  * cdef inline object PyArray_MultiIterNew1(a):
  *     return PyArray_MultiIterNew(1, <void*>a)             # <<<<<<<<<<<<<<
@@ -4123,7 +4122,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":777
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":777
  * ctypedef long double complex clongdouble_t
  * 
  * cdef inline object PyArray_MultiIterNew1(a):             # <<<<<<<<<<<<<<
@@ -4142,7 +4141,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew1(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":780
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":780
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -4159,7 +4158,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew2", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":781
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":781
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)             # <<<<<<<<<<<<<<
@@ -4173,7 +4172,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":780
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":780
  *     return PyArray_MultiIterNew(1, <void*>a)
  * 
  * cdef inline object PyArray_MultiIterNew2(a, b):             # <<<<<<<<<<<<<<
@@ -4192,7 +4191,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew2(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":783
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":783
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -4209,7 +4208,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew3", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":784
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":784
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)             # <<<<<<<<<<<<<<
@@ -4223,7 +4222,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":783
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":783
  *     return PyArray_MultiIterNew(2, <void*>a, <void*>b)
  * 
  * cdef inline object PyArray_MultiIterNew3(a, b, c):             # <<<<<<<<<<<<<<
@@ -4242,7 +4241,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew3(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":786
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":786
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -4259,7 +4258,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew4", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":787
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":787
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)             # <<<<<<<<<<<<<<
@@ -4273,7 +4272,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":786
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":786
  *     return PyArray_MultiIterNew(3, <void*>a, <void*>b, <void*> c)
  * 
  * cdef inline object PyArray_MultiIterNew4(a, b, c, d):             # <<<<<<<<<<<<<<
@@ -4292,7 +4291,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew4(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":789
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":789
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -4309,7 +4308,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("PyArray_MultiIterNew5", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":790
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":790
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)             # <<<<<<<<<<<<<<
@@ -4323,7 +4322,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":789
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":789
  *     return PyArray_MultiIterNew(4, <void*>a, <void*>b, <void*>c, <void*> d)
  * 
  * cdef inline object PyArray_MultiIterNew5(a, b, c, d, e):             # <<<<<<<<<<<<<<
@@ -4342,7 +4341,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyArray_MultiIterNew5(PyObject *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":792
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":792
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4357,7 +4356,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   PyObject *__pyx_t_2;
   __Pyx_RefNannySetupContext("PyDataType_SHAPE", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":793
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":793
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4367,7 +4366,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   __pyx_t_1 = PyDataType_HASSUBARRAY(__pyx_v_d);
   if (__pyx_t_1) {
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":794
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":794
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):
  *         return <tuple>d.subarray.shape             # <<<<<<<<<<<<<<
@@ -4380,7 +4379,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     __pyx_r = ((PyObject*)__pyx_t_2);
     goto __pyx_L0;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":793
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":793
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):
  *     if PyDataType_HASSUBARRAY(d):             # <<<<<<<<<<<<<<
@@ -4389,7 +4388,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
 */
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":796
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":796
  *         return <tuple>d.subarray.shape
  *     else:
  *         return ()             # <<<<<<<<<<<<<<
@@ -4403,7 +4402,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
     goto __pyx_L0;
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":792
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":792
  *     return PyArray_MultiIterNew(5, <void*>a, <void*>b, <void*>c, <void*> d, <void*> e)
  * 
  * cdef inline tuple PyDataType_SHAPE(dtype d):             # <<<<<<<<<<<<<<
@@ -4418,7 +4417,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_PyDataType_SHAPE(PyArray_Descr *__
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":995
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":995
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base) except *:             # <<<<<<<<<<<<<<
@@ -4432,7 +4431,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":996
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":996
  * 
  * cdef inline void set_array_base(ndarray arr, object base) except *:
  *     Py_INCREF(base) # important to do this before stealing the reference below!             # <<<<<<<<<<<<<<
@@ -4441,7 +4440,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
 */
   Py_INCREF(__pyx_v_base);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":997
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":997
  * cdef inline void set_array_base(ndarray arr, object base) except *:
  *     Py_INCREF(base) # important to do this before stealing the reference below!
  *     PyArray_SetBaseObject(arr, base)             # <<<<<<<<<<<<<<
@@ -4450,7 +4449,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
 */
   __pyx_t_1 = PyArray_SetBaseObject(__pyx_v_arr, __pyx_v_base); if (unlikely(__pyx_t_1 == ((int)-1))) __PYX_ERR(1, 997, __pyx_L1_error)
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":995
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":995
  *     int _import_umath() except -1
  * 
  * cdef inline void set_array_base(ndarray arr, object base) except *:             # <<<<<<<<<<<<<<
@@ -4465,7 +4464,7 @@ static CYTHON_INLINE void __pyx_f_5numpy_set_array_base(PyArrayObject *__pyx_v_a
   __pyx_L0:;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":999
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":999
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4480,7 +4479,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   int __pyx_t_1;
   __Pyx_RefNannySetupContext("get_array_base", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1000
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1000
  * 
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)             # <<<<<<<<<<<<<<
@@ -4489,7 +4488,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
 */
   __pyx_v_base = PyArray_BASE(__pyx_v_arr);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1001
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1001
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4499,7 +4498,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_t_1 = (__pyx_v_base == NULL);
   if (__pyx_t_1) {
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1002
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1002
  *     base = PyArray_BASE(arr)
  *     if base is NULL:
  *         return None             # <<<<<<<<<<<<<<
@@ -4510,7 +4509,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
     __pyx_r = Py_None; __Pyx_INCREF(Py_None);
     goto __pyx_L0;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1001
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1001
  * cdef inline object get_array_base(ndarray arr):
  *     base = PyArray_BASE(arr)
  *     if base is NULL:             # <<<<<<<<<<<<<<
@@ -4519,7 +4518,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
 */
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1003
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1003
  *     if base is NULL:
  *         return None
  *     return <object>base             # <<<<<<<<<<<<<<
@@ -4531,7 +4530,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   __pyx_r = ((PyObject *)__pyx_v_base);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":999
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":999
  *     PyArray_SetBaseObject(arr, base)
  * 
  * cdef inline object get_array_base(ndarray arr):             # <<<<<<<<<<<<<<
@@ -4546,7 +4545,7 @@ static CYTHON_INLINE PyObject *__pyx_f_5numpy_get_array_base(PyArrayObject *__py
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1007
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1007
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4572,7 +4571,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_array", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1008
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1008
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4588,7 +4587,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1009
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1009
  * cdef inline int import_array() except -1:
  *     try:
  *         __pyx_import_array()             # <<<<<<<<<<<<<<
@@ -4597,7 +4596,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
 */
       __pyx_t_4 = _import_array(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1009, __pyx_L3_error)
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1008
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1008
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4611,7 +4610,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1010
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1010
  *     try:
  *         __pyx_import_array()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4626,7 +4625,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1011
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1011
  *         __pyx_import_array()
  *     except Exception:
  *         raise ImportError("numpy._core.multiarray failed to import")             # <<<<<<<<<<<<<<
@@ -4648,7 +4647,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1008
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1008
  * # Cython code.
  * cdef inline int import_array() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4664,7 +4663,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1007
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1007
  * # Versions of the import_* functions which are more suitable for
  * # Cython code.
  * cdef inline int import_array() except -1:             # <<<<<<<<<<<<<<
@@ -4688,7 +4687,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1013
  *         raise ImportError("numpy._core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4714,7 +4713,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_umath", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1014
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1014
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4730,7 +4729,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1015
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1015
  * cdef inline int import_umath() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4739,7 +4738,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
 */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1015, __pyx_L3_error)
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1014
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1014
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4753,7 +4752,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1016
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1016
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4768,7 +4767,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1017
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1017
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy._core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4790,7 +4789,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1014
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1014
  * 
  * cdef inline int import_umath() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4806,7 +4805,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1013
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1013
  *         raise ImportError("numpy._core.multiarray failed to import")
  * 
  * cdef inline int import_umath() except -1:             # <<<<<<<<<<<<<<
@@ -4830,7 +4829,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1019
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1019
  *         raise ImportError("numpy._core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -4856,7 +4855,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("import_ufunc", 0);
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1020
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1020
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4872,7 +4871,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __Pyx_XGOTREF(__pyx_t_3);
     /*try:*/ {
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1021
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1021
  * cdef inline int import_ufunc() except -1:
  *     try:
  *         _import_umath()             # <<<<<<<<<<<<<<
@@ -4881,7 +4880,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
 */
       __pyx_t_4 = _import_umath(); if (unlikely(__pyx_t_4 == ((int)-1))) __PYX_ERR(1, 1021, __pyx_L3_error)
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1020
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1020
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4895,7 +4894,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     goto __pyx_L8_try_end;
     __pyx_L3_error:;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1022
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1022
  *     try:
  *         _import_umath()
  *     except Exception:             # <<<<<<<<<<<<<<
@@ -4910,7 +4909,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
       __Pyx_XGOTREF(__pyx_t_6);
       __Pyx_XGOTREF(__pyx_t_7);
 
-      /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1023
+      /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1023
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy._core.umath failed to import")             # <<<<<<<<<<<<<<
@@ -4932,7 +4931,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     }
     goto __pyx_L5_except_error;
 
-    /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1020
+    /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1020
  * 
  * cdef inline int import_ufunc() except -1:
  *     try:             # <<<<<<<<<<<<<<
@@ -4948,7 +4947,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
     __pyx_L8_try_end:;
   }
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1019
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1019
  *         raise ImportError("numpy._core.umath failed to import")
  * 
  * cdef inline int import_ufunc() except -1:             # <<<<<<<<<<<<<<
@@ -4972,7 +4971,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1026
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1026
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj) noexcept:             # <<<<<<<<<<<<<<
@@ -4983,7 +4982,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
 static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_obj) {
   int __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1038
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1038
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyTimedeltaArrType_Type)             # <<<<<<<<<<<<<<
@@ -4993,7 +4992,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyTimedeltaArrType_Type));
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1026
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1026
  * 
  * 
  * cdef inline bint is_timedelta64_object(object obj) noexcept:             # <<<<<<<<<<<<<<
@@ -5006,7 +5005,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1041
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1041
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj) noexcept:             # <<<<<<<<<<<<<<
@@ -5017,7 +5016,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_timedelta64_object(PyObject *__pyx_v_
 static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_obj) {
   int __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1053
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1053
  *     bool
  *     """
  *     return PyObject_TypeCheck(obj, &PyDatetimeArrType_Type)             # <<<<<<<<<<<<<<
@@ -5027,7 +5026,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   __pyx_r = PyObject_TypeCheck(__pyx_v_obj, (&PyDatetimeArrType_Type));
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1041
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1041
  * 
  * 
  * cdef inline bint is_datetime64_object(object obj) noexcept:             # <<<<<<<<<<<<<<
@@ -5040,7 +5039,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1056
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1056
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -5051,7 +5050,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_is_datetime64_object(PyObject *__pyx_v_o
 static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *__pyx_v_obj) {
   npy_datetime __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1063
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1063
  *     also needed.  That can be found using `get_datetime64_unit`.
  *     """
  *     return (<PyDatetimeScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -5061,7 +5060,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   __pyx_r = ((PyDatetimeScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1056
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1056
  * 
  * 
  * cdef inline npy_datetime get_datetime64_value(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -5074,7 +5073,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1066
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1066
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -5085,7 +5084,7 @@ static CYTHON_INLINE npy_datetime __pyx_f_5numpy_get_datetime64_value(PyObject *
 static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject *__pyx_v_obj) {
   npy_timedelta __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1070
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1070
  *     returns the int64 value underlying scalar numpy timedelta64 object
  *     """
  *     return (<PyTimedeltaScalarObject*>obj).obval             # <<<<<<<<<<<<<<
@@ -5095,7 +5094,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   __pyx_r = ((PyTimedeltaScalarObject *)__pyx_v_obj)->obval;
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1066
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1066
  * 
  * 
  * cdef inline npy_timedelta get_timedelta64_value(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -5108,7 +5107,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
   return __pyx_r;
 }
 
-/* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1073
+/* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1073
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -5119,7 +5118,7 @@ static CYTHON_INLINE npy_timedelta __pyx_f_5numpy_get_timedelta64_value(PyObject
 static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObject *__pyx_v_obj) {
   NPY_DATETIMEUNIT __pyx_r;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1077
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1077
  *     returns the unit part of the dtype for a numpy datetime64 object.
  *     """
  *     return <NPY_DATETIMEUNIT>(<PyDatetimeScalarObject*>obj).obmeta.base             # <<<<<<<<<<<<<<
@@ -5129,7 +5128,7 @@ static CYTHON_INLINE NPY_DATETIMEUNIT __pyx_f_5numpy_get_datetime64_unit(PyObjec
   __pyx_r = ((NPY_DATETIMEUNIT)((PyDatetimeScalarObject *)__pyx_v_obj)->obmeta.base);
   goto __pyx_L0;
 
-  /* "C:/Python314/Lib/site-packages/numpy/__init__.cython-30.pxd":1073
+  /* ".venv/lib/python3.12/site-packages/numpy/__init__.cython-30.pxd":1073
  * 
  * 
  * cdef inline NPY_DATETIMEUNIT get_datetime64_unit(object obj) noexcept nogil:             # <<<<<<<<<<<<<<
@@ -10235,15 +10234,7 @@ static int __Pyx_InitConstants(__pyx_mstatetype *__pyx_mstate) {
   CYTHON_UNUSED_VAR(__pyx_mstate);
   {
     const struct { const unsigned int length: 10; } index[] = {{1},{179},{8},{12},{7},{6},{2},{9},{39},{34},{20},{3},{7},{14},{18},{8},{9},{3},{16},{8},{7},{18},{5},{9},{10},{10},{9},{8},{4},{5},{11},{13},{12},{10},{4},{8},{7},{3},{18},{16},{1},{8},{19},{13},{8},{5},{1},{1},{3},{8},{4},{15},{3},{9},{13},{8},{10},{1},{7},{6},{7},{6},{8},{20},{13},{13},{4},{10},{2},{5},{17},{1},{5},{6},{18},{3},{8},{12},{18},{12},{12},{9},{13},{3},{8},{7},{9},{4},{8},{10},{4},{12},{10},{19},{36},{5},{6},{7},{8},{5},{6},{1},{5},{6},{8},{183},{62},{30},{849},{2},{294}};
-    #if (CYTHON_COMPRESS_STRINGS) == 3 && __PYX_LIMITED_VERSION_HEX >= 0x030e0000 /* compression: zstd (1600 bytes) */
-const char* const cstring = "(\265/\375`\002\t\2651\000\032K\250\017: \225\033\000\034\266(\007@\002\352qF\031\265\253\256\364:\030\274\026\331)ir\2236\305\010\245Hi\346k\304.G\000\252\221.W3{\020\361;\231\005\261]H\002\336\236}\002\334\000\334\000\370\000#\21079\2025\360\3060x5\267Y\264#\030\342\031\270qx\301\r\342r\333p&\3062\036-\3378\266q\026\271I~\220\"\230\317}\267i\323\270\264x\210\034\307+\3038\234\010\333\330\027\242\363\306Z\032\2776\223k\262\264\211\243xe\337y\265\276\246\355\003k\022\264\037gi3s\270Ep\2261\036cw\213!\321Y\216\246\266'\210m\030\336\017\274\307\033\203q\242\026\303\217c\226E\233I\221_N\346|9>\216\367\227\361\276\345G\362/\3048\177&y~\262\231\357c\343\362\344_\026\371(\232\261OF~\033\357}G0f\356os\020\013a\375\205\371~\256\022\227\307\r\314\315\2275\346\240\250\371\376\316\021\363\253qL\034q\370m\361\313$\215\237.\037\2774\376aN\332\260\004\251)=}\225\256:\255\027(\302\000@j\311\373#\236\301C\230\326\016\351\3426n\210\3244n\355\354rM\356\217\225=^\220\034S>\354)\023\307\315G\363\312ph\303\214w\031\342\361b\254G\254\307k\336\254\235\335\222\324\345\246i\213\303\272,\311\262\006\212eY\336Qc\034Y\346\020\027\211\232\314\234(\024\355\336<\233\232\214Yl\273Yg\332\314\346\274\307\021\2036g\033\222\326\326l\333f<\346!2\327\366\266'\256\325\204\266\rs\221\343\0353\367\026\355\3467,M\020o\215y\026C\2545\226eQ\254\355k\263\031\207\241H;\363\265v_\032\3073]\022\341\214g\326\202\331\224Y\213\261\226\201\2324\205b\244\035/\316fCL$\312d21\324\332\004K\033\t\362;\312,6\0039\275\001\225\273\375\373C~\306\252\207\307S\254T\177\345\"\311Kb\251\235\372\222\242\376\227Zo\376\372\220\235>\020\201ry\211\325z\341w\212\337\016\353\031\235!uHY\277\326ir\260\336\300pZ\007L\271\226\347\335\265}E*\201\247\277\372\n%\340U^\277\365\271'\352\017\247\265\345/<I\307 \252\340;\372\201k\311\203y\212VW\241n\275\006m\301\320\001\364d\312\255\235g\2418(H\327o\250\313\217\021B\tP\203\233\2670Q\014\000\020,uH-\024\301\224\363\222\272\244\027\265\245\362\264\342k_\340Y\267\376\220Ru\375\352\255.\320S\250\034""\204\022\004j\365\324\237\334\035P9/\265v?\307\037\241\013\250\025\366_\3374\201Zo\nK=&\224&PJ\250S\316\353]\177AQ\335\353:h\302)\227\200Z_^\345WP\204\323\352\375\356\277x\223g\235\326W\255[\202\330\035\274\265\373\017\347\255\301[owH\221t\357\224SU*G\032\252\376\205\267\302\322W\312\363\007Z\251\200\305\202R\212\002t\353\2677t\030\024\345\241\240\244p\362T0\245\371\246\037CP\222\360]+\301\363\021\027\252\247\216\2446o1\000\300\340}O]!\360\247nr\335\274\224\365\345\244G\251L\347\312\310\2300\361\022\254\265\245\302\324\0145@=1~\300?_*\206\032\223\266\322\222o\261\0229\251\267T\374-%\253\034\004K\365\2134|\304\nd\370:\327yi7\221\353R\221\317[)\307\236\206C\027N\271S\220G\342]\274\321E\352\245:\377\304Kl\270,X!i\220\177\371\t\010\014\026.\275\251\217\006k\275}\227o\324\037V\353M\202%\315\2444x\230\276J\2550u\"\005\277\306\337\361\024)W\254\207x\036\354C\271\033\357~\314k\340t\020\317w>\201\032\250\321,%\2252C\"\"\n\222$)t!\010\202a\234\366\332\rQ\271u22RP\220BiX\003-\317\230\240\274\224\360\232\337G''\375~\330\032`}@O^\362\366\313S\272y\266\217\276J\246z\203\352\307\243\002\320\243r\306\025\266Hqqj\272V~M\333\032@\332\351-\267j\020\232d\206\336\354\314l\214\t\032\000\177\350A\234\212t\323\036L\226\235H\007{\003\212Pu\376\253\266\303G\322\332\003\366\316)\267 @\321\0266g\235\245\221E\2353\245\273\322\276\310\033\337>\365:]\262\303\353\361\360*\266\304\023Z\022k\351\202 \355?\006Gf<\034\271%vF\340\245c\363\303\211.\016\200n|\200%)\267\330,\210\321\326\232\t\205\014hC/\030\352\013\250\364^Q\333e\321\337|\341\273\007V\022*\377Ir\323P\317\037k\373K\300k\356$\242\005\232\271x\017+\361\277O\033T#}\317\003\3558\204xi\253\033\325\360\024\377O\267\376.\006\227\213'\311\300\017\360!\332<!\346el\037\201q\202\332\323\301\357\177$\364\260\202\3411\201Y\245\300GJ\217\314q\315i\301\236|\347\373\354\2666\202\350\207\241\004\247A@\n\2221\225\2110n\266\006\0303\364\307$\031\227\202\205\354\327\252\3754\010\216\377\n\237\035,\263\010\020\001&\345}()\3621\360\265j}\343`\027t\267\221\002""\224}\356i\037\r\313\320\344E\306:\"\031#\226\372\201:a\245e^6\211J\007\016\027\2548\366\272\256\021\204\374&U\304~\230;\250~\212\262\035{_\366E\032\023\234x\250%G\312KXP\372\362\377\230\2735\230\324%\300\220\220\275\232\017V\254N\355\2339\266\245@\013I\252\375\353k\346\030\2334Ttf\022\303\206\353B\004\215\256H1\304\211\360\316\320_\200%s\345b\203\031\033H\336\221\217\276C\331<\310Ul/\367\322\350\023v9\304[\326LV+`\311\222\303\035\330V\222dH\2353\246\020\317\266\205.\2376\025:\024\233\234\010\251\010\303\316or5\007}\224\351B<,\301@\014\005\035*\241\003\376\003";
-    PyObject *data = __Pyx_DecompressString(cstring, 1600, 3);
-    if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)
-    const char* const bytes = __Pyx_PyBytes_AsString(data);
-    #if !CYTHON_ASSUME_SAFE_MACROS
-    if (likely(bytes)); else { Py_DECREF(data); __PYX_ERR(0, 1, __pyx_L1_error) }
-    #endif
-    #elif (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (1577 bytes) */
+    #if (CYTHON_COMPRESS_STRINGS) == 2 /* compression: bz2 (1577 bytes) */
 const char* const cstring = "BZh91AY&SY\312\331\301E\000\0016\177\373\377\377\377\377\376\213?\377\277\271~\347\277\377\377\363@@@@@@@@@@@\000@\000P\005\336\006\346\206\323fQ\"\270\003\201\246\221\n\200\365\000\014\231\212oJl\000\217T\332OShl\251\204\036\241\352\006\324\036\236\250m@\332\236!\007\224\032\020\0104j\023\311=M\245\030\232\000\000\000\000\000\000\000\000\003CM\000\032\231\240\246\221\004z4\236\223A\223@\003@\001\240\000\000\000\000\00044\321\2408\000\000\001\240\000\000\006\200\032\000\001\240\000\006\200\000\000\001\"@\246\246\322j\237\262%?L\232j5\r\032\000\000\000\000\000\000\000\000\000\310\304\257p\364c\017\333\376\217\355\177\213\245\323\377I\364\312\305\032\252\251'I&8\245\002\235S\2524\302J\244\370R\352X\236=e;#\"\271\244\301\2154\330R\305\227\006\245\223\255\025Z\323\030\262\005\315\014`\3061\266\206\320\330RA\221\310v\344\nI8J\032/\240\026h\r\323P\031+;\313\363\217Ec;s\224\341\323PR\216\362\354\251\312r\223n\203\210\250R\212\353\325\35164\362s\262\027D\213\256(Nw\2716\3373\035\245\010\256D*Ltk)\226\206}\005\272\000\302\365N\275j\022*\210\010l\003\303\"sN\271\253\2134Z\312K\325\251\247\303\323\317\367jq>?\267\207j\264\374\331\330iaa\025\212E\314<}]\006\272\370\031\00352]\266\tBB\215~u\240\231\0308A(dD@\372\361\355>t\2673\034j\205\374\035\265d\273x\n\342\032]\305\014\254\254\241]H\224L\031\023j\002jgG\327\364l\254\026E\205b!\304\347.{\242c\346n\036\352\251\350\255\"\204\013\025UIEK\250U\0064\270\004SPH\230\306k\005\221\026\031\202\231\335\317\014\021Qe,\312\266\256\251k\251\202s!h\356a\250\310\212\002\205\026F\232\205L\314\215\013\301B&jiJ\210{\3416H\332(\346\313B\206\026)\313h\020\320\205\017\346EHa\373\031%,t$[\001n[[\20084\232 d\256\216\026\332\261Mj\037\221]&\205@1\265\177\245\205Im\357=\306\010Xz\257\r\230.\246\214LKjL\304\265\211\342\303\032\354\330-\273\244\310\215\3627\271>>3N\032\347\321S:KR\266\255\231s\234\023\211\263Ri)L\205\r\274c\313\\-2\312j\001\340\300\221\214\371Z3*a\031\212\014f\231\004\270%bx\330\325\206a\251\031\236\205d\004q\317\226la\367\326`\333\231""\200\"\210?*V\360\to\351\245)q1pi\271\265\016R\327\371d\2343\241\201M\003\003l\024\274\321\211\206\253y\n\274\261\206\010\346\244\354N.\314\3424\305n\"V\\\014\314I\326\307\354\364\255\374\365\267\364\303p\355\273\027\206}\263\345\024\261\224\252[{qt\247\315\215\002x\233\031\304\231\331\304\025\005\242\224\230\273\342\313\351\030C\206J\300\206L\000\361\013\002\327\r\010,&*\206'6\234O\t4\310\272X,\001\330tY*\314dH\010\333z\3569\245k\304h2\030\254\211\2023@\345\026lpu\026\025\273Q\226s\033\t\263\357\234\324\206W+\234\325r<\331\302J\264P9\271D\000a=\367\230\032\3109\216\025\316\255)#\032/P\215f\221\307B\23626m$Y0E\t\306JY\251\254]\327\272tm\257\271@5\345\034\261\306$\321d\367g4H\302\202\3559\331\240v:\001\030\026\251[\032\206!@\022\244\302\247Y\255\202k\0202i\221\266\336lj\333\177*\326\034\202\337\320Ns\223\207'90\222\221\020\342\010\341\341\304\333(\222\331\0338\257\256\0073\323:\351\214\245\262\264Z\016Mf\2529\267\024\205\026$\321\306\326&\202M\236(.7\321\201T\2760a!)\255hz\007\305\356\230\260Dd7\205\323\216\204\316iM@@#\n\203\3520qX\021*Q\226\224\200E\\\372\\\026b\374.Z 3a\316\354\225,R\363).L#\220G\270\320\243<\000z\342\331\346\203\235\230\004\201H\001qg\030u3.\276\360\326q`\205<7`\2712\350\347[P\324\315E\023\354\243>\311\321\361c \213\203\000\223@;D\261^6\370\004\203\360\235W;(_\312\013\256\234\352\321FG\222\375\311q9\275r\332\010\221\000\344Q\356\302<\235O\002A\266\002A\265H\241\030\345[\352\212c]\214\026\305\362=&\347\251&\022\204\t\205<\2431QF\376\237\345{~\320Nvxq\204\342\272/\330c0\234_Qxj\235\007\324\020\252\024\204\030\367\260\227\301!l\304\321\267X*?\243\362\272.\316\016\016)\304:6\0013~\300\316$(\340\n\030\251A\255`\275x_\243\306\301\222\243\254.\340\237\225\201D\361\372\242\025N\267\254\340\341\340\331R\312*R\200b\265px\334\334\0045\036z\034>z\264\253VJ\2575\211Y\353T\006(\252M\371\271\276\346*y>\352\232m\030\340\335\322\0342\024ne\324b:\320\256(%\225`\243\356\200j\002k\327\034}5\345\301\311\342T\357';\370)\n\205\r2\002\303Rz\217D=\330\202\320\021\313""\223h\217\356\200h\277+\265\275*\310\377f\305\223%\311 \213\231\302\325\310\260\3676%\210m-\235yyy&?\255a\361\006\224\221^\335\334\332}jR\004\216'c\321\216?g?\241\314\345\0215X\305Vs~\033!\303a\320\240\273\236\013\305r\345\232\013+\325\314\206D`\222\242!\303\262\272D\207\200fa\302:\314\311I\226e(\324\210vY\002(\322\313\"\026\025\215H\206!\336\205%\021U\004-\312\243\240.\351U_\370\273\222)\302\204\206V\316\n(";
     PyObject *data = __Pyx_DecompressString(cstring, 1577, 2);
     if (unlikely(!data)) __PYX_ERR(0, 1, __pyx_L1_error)

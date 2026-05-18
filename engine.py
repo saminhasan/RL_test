@@ -1,6 +1,7 @@
 import numpy as np
 from bayes import mine_probabilities_for_engine
 
+
 class MinesweeperEngine:
     """NumPy-based reveal-only Minesweeper engine (no flags, no chord)."""
 
@@ -8,71 +9,62 @@ class MinesweeperEngine:
     _FLAT_NEIGHBORS_CACHE: dict[tuple[int, int], tuple[np.ndarray, np.ndarray]] = {}
 
     DIFFICULTIES = {
-        "test": (6, 6, 6), # 16.67% mines, for quick testing
-        "easy": (9, 9, 10), # 12.35% mines
-        "medium": (16, 16, 40), # 15.62% mines
-        "hard": (16, 30, 99), # 20.62% mines
+        "test":   (6,  6,  6),   # 16.67% mines
+        "easy":   (9,  9, 10),   # 12.35% mines
+        "medium": (16, 16, 40),  # 15.62% mines
+        "hard":   (16, 30, 99),  # 20.62% mines
     }
-    LEVELS = {idx+1: value for idx, value in enumerate(DIFFICULTIES)}
-    RUNNING = 1
-    OVER = 0
+    LEVELS = dict(enumerate(DIFFICULTIES, 1))
+
+    # Per-level (min_moves_ref, max_moves_ref) from benchmark_optimality_distribution.
+    # min = p5 of oracle wins, max = p95 of anti_oracle wins (random first click).
+    # Update by running: benchmark_optimality_distribution(levels=[1,2,3,4], num_games=5000)
+    LEVEL_WIN_BOUNDS: dict[int, tuple[int, int]] = {
+        1: (5, 29),   # test   6×6    — oracle p5=5, anti_oracle p95=29
+        2: (6, 25),   # easy   9×9    — placeholder, run benchmark to update
+        3: (15, 60),  # medium 16×16  — placeholder, run benchmark to update
+        4: (30, 110), # hard   16×30  — placeholder, run benchmark to update
+    }
+    RUNNING  = 1
+    OVER     = 0
 
     def __init__(self, level: int = 1, seed: int = 42) -> None:
         rows, cols, mine_count = self.DIFFICULTIES[self.LEVELS[level]]
-        self.rows = rows
-        self.cols = cols
-        self.mine_count = mine_count
-        self.total_safe_cells = rows * cols - mine_count
-        self._seed = seed
-        self._rng = np.random.default_rng(seed)
+        self.level             = level
+        self.rows              = rows
+        self.cols              = cols
+        self.mine_count        = mine_count
+        self.total_safe_cells  = rows * cols - mine_count
+        self._seed             = seed
+        self._rng              = np.random.default_rng(seed)
 
-        self._mines = np.zeros((rows, cols), dtype=bool)
-        self._neighbor_counts = np.zeros((rows, cols), dtype=np.uint8)
-        self.revealed = np.zeros((rows, cols), dtype=bool)
-        self._flat_size = rows * cols
-        self._mines_flat = self._mines.ravel()
+        self._mines               = np.zeros((rows, cols), dtype=bool)
+        self._neighbor_counts     = np.zeros((rows, cols), dtype=np.uint8)
+        self.revealed             = np.zeros((rows, cols), dtype=bool)
+        self._flat_size           = rows * cols
+        self._mines_flat          = self._mines.ravel()
         self._neighbor_counts_flat = self._neighbor_counts.ravel()
-        self._revealed_flat = self.revealed.ravel()
-        self.covered_count = self._flat_size
-        self._safe_flat_cells = np.empty(self.total_safe_cells, dtype=np.int32)
-        self._safe_flat_pos = np.full(self._flat_size, -1, dtype=np.int32)
-        self._safe_pool_size = 0
-        self._flood_queue = np.empty(self._flat_size, dtype=np.int32)
+        self._revealed_flat       = self.revealed.ravel()
+        self.covered_count        = self._flat_size
+        self._safe_flat_cells     = np.empty(self.total_safe_cells, dtype=np.int32)
+        self._safe_flat_pos       = np.full(self._flat_size, -1, dtype=np.int32)
+        self._safe_pool_size      = 0
+        self._flood_queue         = np.empty(self._flat_size, dtype=np.int32)
 
-        cache_key = (rows, cols)
-        cached_neighbors = self._NEIGHBORS_CACHE.get(cache_key)
-        if cached_neighbors is None:
-            cached_neighbors = tuple(
-                tuple(self._build_neighbors(i, j))
-                for i in range(rows)
-                for j in range(cols)
-            )
-            self._NEIGHBORS_CACHE[cache_key] = cached_neighbors
-        self._neighbors = cached_neighbors
+        (self._neighbors,
+         self._neighbor_indices,
+         self._neighbor_lengths) = self._ensure_neighbor_cache(rows, cols)
 
-        flat_cached_neighbors = self._FLAT_NEIGHBORS_CACHE.get(cache_key)
-        if flat_cached_neighbors is None:
-            neighbor_indices = np.full((self._flat_size, 8), -1, dtype=np.int32)
-            neighbor_lengths = np.zeros(self._flat_size, dtype=np.int8)
-            for flat, neighbors in enumerate(cached_neighbors):
-                count = len(neighbors)
-                neighbor_lengths[flat] = count
-                for idx, (row, col) in enumerate(neighbors):
-                    neighbor_indices[flat, idx] = row * cols + col
-            neighbor_indices.setflags(write=False)
-            neighbor_lengths.setflags(write=False)
-            flat_cached_neighbors = (neighbor_indices, neighbor_lengths)
-            self._FLAT_NEIGHBORS_CACHE[cache_key] = flat_cached_neighbors
-        self._neighbor_indices, self._neighbor_lengths = flat_cached_neighbors
-
-        self.state = self.RUNNING
-        self.started = False
+        self.state               = self.RUNNING
+        self.started             = False
         self.revealed_safe_cells = 0
         self.exploded_cell: tuple[int, int] | None = None
-        self.hit_mine = False
-        self.won = False
-        self.move_count = 0
+        self.hit_mine            = False
+        self.won                 = False
+        self.move_count          = 0
         self._mine_probs: np.ndarray = self.get_mine_probabilities()
+        self.min_win_moves: int | None = None
+        self.max_win_moves: int | None = None
 
     @property
     def mine_probs(self) -> np.ndarray:
@@ -87,18 +79,20 @@ class MinesweeperEngine:
         self._mines.fill(False)
         self._neighbor_counts.fill(0)
         self.revealed.fill(False)
-        self.covered_count = self._flat_size
+        self.covered_count   = self._flat_size
         self._safe_flat_pos.fill(-1)
         self._safe_pool_size = 0
 
-        self.state = self.RUNNING
-        self.started = False
+        self.state               = self.RUNNING
+        self.started             = False
         self.revealed_safe_cells = 0
-        self.exploded_cell = None
-        self.hit_mine = False
-        self.won = False
-        self.move_count = 0
-        self._mine_probs = self.get_mine_probabilities()
+        self.exploded_cell       = None
+        self.hit_mine            = False
+        self.won                 = False
+        self.move_count          = 0
+        self._mine_probs         = self.get_mine_probabilities()
+        self.min_win_moves       = None
+        self.max_win_moves       = None
 
     @classmethod
     def from_state(
@@ -123,67 +117,45 @@ class MinesweeperEngine:
         mine_count = int(mines.sum())
 
         eng = object.__new__(cls)
-        eng.rows = rows
-        eng.cols = cols
-        eng.mine_count = mine_count
-        eng.total_safe_cells = rows * cols - mine_count
-        eng._seed = seed
-        eng._rng = np.random.default_rng(seed)
+        eng.rows              = rows
+        eng.cols              = cols
+        eng.mine_count        = mine_count
+        eng.total_safe_cells  = rows * cols - mine_count
+        eng._seed             = seed
+        eng._rng              = np.random.default_rng(seed)
 
-        eng._mines           = mines.astype(bool, copy=True)
-        eng._neighbor_counts = cls._compute_neighbor_counts(eng._mines)
-        eng.revealed         = revealed.astype(bool, copy=True)
-        eng._flat_size       = rows * cols
-        eng._mines_flat           = eng._mines.ravel()
+        eng._mines               = mines.astype(bool, copy=True)
+        eng._neighbor_counts     = cls._compute_neighbor_counts(eng._mines)
+        eng.revealed             = revealed.astype(bool, copy=True)
+        eng._flat_size           = rows * cols
+        eng._mines_flat          = eng._mines.ravel()
         eng._neighbor_counts_flat = eng._neighbor_counts.ravel()
-        eng._revealed_flat        = eng.revealed.ravel()
-        eng.covered_count    = int((~eng.revealed).sum())
-        eng._safe_flat_cells = np.empty(eng.total_safe_cells, dtype=np.int32)
-        eng._safe_flat_pos   = np.full(eng._flat_size, -1, dtype=np.int32)
-        eng._safe_pool_size  = 0
-        eng._flood_queue     = np.empty(eng._flat_size, dtype=np.int32)
+        eng._revealed_flat       = eng.revealed.ravel()
+        eng.covered_count        = int((~eng.revealed).sum())
+        eng._safe_flat_cells     = np.empty(eng.total_safe_cells, dtype=np.int32)
+        eng._safe_flat_pos       = np.full(eng._flat_size, -1, dtype=np.int32)
+        eng._safe_pool_size      = 0
+        eng._flood_queue         = np.empty(eng._flat_size, dtype=np.int32)
 
-        cache_key = (rows, cols)
-        cached_neighbors = cls._NEIGHBORS_CACHE.get(cache_key)
-        if cached_neighbors is None:
-            cached_neighbors = tuple(
-                tuple(eng._build_neighbors(i, j))
-                for i in range(rows)
-                for j in range(cols)
-            )
-            cls._NEIGHBORS_CACHE[cache_key] = cached_neighbors
-        eng._neighbors = cached_neighbors
-
-        flat_cached = cls._FLAT_NEIGHBORS_CACHE.get(cache_key)
-        if flat_cached is None:
-            neighbor_indices = np.full((eng._flat_size, 8), -1, dtype=np.int32)
-            neighbor_lengths = np.zeros(eng._flat_size, dtype=np.int8)
-            for flat, neighbors in enumerate(cached_neighbors):
-                count = len(neighbors)
-                neighbor_lengths[flat] = count
-                for idx, (r, c) in enumerate(neighbors):
-                    neighbor_indices[flat, idx] = r * cols + c
-            neighbor_indices.setflags(write=False)
-            neighbor_lengths.setflags(write=False)
-            flat_cached = (neighbor_indices, neighbor_lengths)
-            cls._FLAT_NEIGHBORS_CACHE[cache_key] = flat_cached
-        eng._neighbor_indices, eng._neighbor_lengths = flat_cached
+        (eng._neighbors,
+         eng._neighbor_indices,
+         eng._neighbor_lengths) = cls._ensure_neighbor_cache(rows, cols)
 
         eng.started    = True
         eng.move_count = 0
 
         mine_revealed = eng._mines_flat & eng._revealed_flat
         if mine_revealed.any():
-            exploded_flat      = int(np.flatnonzero(mine_revealed)[0])
-            eng.exploded_cell  = divmod(exploded_flat, cols)
-            eng.hit_mine       = True
-            eng.won            = False
-            eng.state          = cls.OVER
-            eng.revealed_safe_cells = int((eng._revealed_flat & ~eng._mines_flat).sum())
+            exploded_flat            = int(np.flatnonzero(mine_revealed)[0])
+            eng.exploded_cell        = divmod(exploded_flat, cols)
+            eng.hit_mine             = True
+            eng.won                  = False
+            eng.state                = cls.OVER
+            eng.revealed_safe_cells  = int((eng._revealed_flat & ~eng._mines_flat).sum())
         else:
-            eng.exploded_cell       = None
-            eng.hit_mine            = False
-            eng.revealed_safe_cells = int(eng._revealed_flat.sum())
+            eng.exploded_cell        = None
+            eng.hit_mine             = False
+            eng.revealed_safe_cells  = int(eng._revealed_flat.sum())
             if eng.revealed_safe_cells == eng.total_safe_cells:
                 eng.won   = True
                 eng.state = cls.OVER
@@ -193,9 +165,9 @@ class MinesweeperEngine:
 
         unrevealed_safe = np.flatnonzero(~eng._mines_flat & ~eng._revealed_flat)
         count = int(unrevealed_safe.size)
-        eng._safe_flat_cells[:count]          = unrevealed_safe
-        eng._safe_flat_pos[unrevealed_safe]   = np.arange(count, dtype=np.int32)
-        eng._safe_pool_size                   = count
+        eng._safe_flat_cells[:count]        = unrevealed_safe
+        eng._safe_flat_pos[unrevealed_safe] = np.arange(count, dtype=np.int32)
+        eng._safe_pool_size                 = count
 
         eng._mine_probs = eng.get_mine_probabilities()
         return eng
@@ -220,43 +192,42 @@ class MinesweeperEngine:
             return 0
 
         if not self.started:
-            self._place_mines_flat(first_flat=int(flat))
+            self._place_mines_flat(first_flat=flat)
             self.started = True
 
         revealed = self._revealed_flat
-        mines = self._mines_flat
-        flat = int(flat)
+        mines    = self._mines_flat
 
         if revealed[flat]:
             return 0
 
         if mines[flat]:
             row, col = divmod(flat, self.cols)
-            revealed[flat] = True
+            revealed[flat]     = True
             self.covered_count -= 1
-            self.state = self.OVER
+            self.state         = self.OVER
             self.exploded_cell = (row, col)
-            self.hit_mine = True
-            self.won = False
-            self._mine_probs = self.get_mine_probabilities()
+            self.hit_mine      = True
+            self.won           = False
+            self._mine_probs   = self.get_mine_probabilities()
             return 0
 
-        neighbor_counts = self._neighbor_counts_flat
+        neighbor_counts  = self._neighbor_counts_flat
         neighbor_indices = self._neighbor_indices
         neighbor_lengths = self._neighbor_lengths
-        queue = self._flood_queue
+        queue            = self._flood_queue
 
-        head = 0
-        tail = 1
-        queue[0] = flat
+        head           = 0
+        tail           = 1
+        queue[0]       = flat
         revealed[flat] = True
         revealed_count = 0
 
         while head < tail:
             current = int(queue[head])
-            head += 1
+            head   += 1
 
-            revealed_count += 1
+            revealed_count    += 1
             self.covered_count -= 1
             self._remove_from_pool(current)
 
@@ -267,15 +238,15 @@ class MinesweeperEngine:
                 neighbor = int(neighbor_indices[current, idx])
                 if not revealed[neighbor] and not mines[neighbor]:
                     revealed[neighbor] = True
-                    queue[tail] = neighbor
-                    tail += 1
+                    queue[tail]        = neighbor
+                    tail              += 1
 
         if revealed_count:
             self.revealed_safe_cells += revealed_count
 
         if self.revealed_safe_cells == self.total_safe_cells:
             self.state = self.OVER
-            self.won = True
+            self.won   = True
 
         self._mine_probs = self.get_mine_probabilities()
         return revealed_count
@@ -283,17 +254,14 @@ class MinesweeperEngine:
     def get_public_view(self, reveal_mines_on_loss: bool = True, out: np.ndarray | None = None) -> np.ndarray:
         """
         Returns an int8 board where:
-        -1 = hidden
-         0..8 = revealed neighbor count
-         9 = mine (shown only after loss when reveal_mines_on_loss is True)
+        -1    = hidden
+        0..8  = revealed neighbor count
+        9     = mine (shown only after loss when reveal_mines_on_loss is True)
         """
-        if out is None:
-            view = np.empty((self.rows, self.cols), dtype=np.int8)
-        else:
-            view = out
+        view = np.empty((self.rows, self.cols), dtype=np.int8) if out is None else out
         view.fill(-1)
 
-        view_flat = view.ravel()
+        view_flat     = view.ravel()
         safe_revealed = self._revealed_flat & ~self._mines_flat
         view_flat[safe_revealed] = self._neighbor_counts_flat[safe_revealed]
 
@@ -303,12 +271,9 @@ class MinesweeperEngine:
         return view
 
     def get_mine_probabilities(self) -> np.ndarray:
-        """
-        Bayesian estimate of mine probability per cell from visible state only.
+        """Bayesian estimate of mine probability per cell from visible state only.
 
-        Returns a float64 board where:
-        - revealed cells are np.nan
-        - hidden cells are probabilities in [0, 1]
+        Returns float64 board: revealed cells are np.nan; hidden cells are in [0, 1].
         """
         return mine_probabilities_for_engine(
             revealed=self.revealed,
@@ -322,12 +287,43 @@ class MinesweeperEngine:
             neighbors=self._neighbors,
         )
 
-    def _build_neighbors(self, i: int, j: int) -> list[tuple[int, int]]:
-        r0 = i - 1 if i else 0
-        r1 = i + 1 if i + 1 < self.rows else self.rows - 1
-        c0 = j - 1 if j else 0
-        c1 = j + 1 if j + 1 < self.cols else self.cols - 1
+    @classmethod
+    def _ensure_neighbor_cache(
+        cls, rows: int, cols: int
+    ) -> tuple[tuple, np.ndarray, np.ndarray]:
+        """Return (neighbors, neighbor_indices, neighbor_lengths), building cache on first call."""
+        cache_key = (rows, cols)
 
+        neighbors = cls._NEIGHBORS_CACHE.get(cache_key)
+        if neighbors is None:
+            neighbors = tuple(
+                tuple(cls._build_neighbors(i, j, rows, cols))
+                for i in range(rows)
+                for j in range(cols)
+            )
+            cls._NEIGHBORS_CACHE[cache_key] = neighbors
+
+        flat_cached = cls._FLAT_NEIGHBORS_CACHE.get(cache_key)
+        if flat_cached is None:
+            flat_size = rows * cols
+            idx_arr   = np.full((flat_size, 8), -1, dtype=np.int32)
+            len_arr   = np.zeros(flat_size, dtype=np.int8)
+            for flat, neighs in enumerate(neighbors):
+                n = len(neighs)
+                len_arr[flat] = n
+                for k, (r, c) in enumerate(neighs):
+                    idx_arr[flat, k] = r * cols + c
+            idx_arr.setflags(write=False)
+            len_arr.setflags(write=False)
+            flat_cached = (idx_arr, len_arr)
+            cls._FLAT_NEIGHBORS_CACHE[cache_key] = flat_cached
+
+        return neighbors, flat_cached[0], flat_cached[1]
+
+    @staticmethod
+    def _build_neighbors(i: int, j: int, rows: int, cols: int) -> list[tuple[int, int]]:
+        r0, r1 = max(i - 1, 0), min(i + 1, rows - 1)
+        c0, c1 = max(j - 1, 0), min(j + 1, cols - 1)
         return [
             (ni, nj)
             for ni in range(r0, r1 + 1)
@@ -340,13 +336,9 @@ class MinesweeperEngine:
 
     def _place_mines_flat(self, first_flat: int) -> None:
         self._mines_flat.fill(False)
-
-        # Sample from [0, flat_size - 1) then shift values past first_flat.
-        # This avoids building a full candidate mask every episode.
         chosen = self._rng.choice(self._flat_size - 1, size=self.mine_count, replace=False)
-        chosen = chosen + (chosen >= int(first_flat))
+        chosen = chosen + (chosen >= first_flat)
         self._mines_flat[chosen] = True
-
         self._neighbor_counts[:] = self._compute_neighbor_counts(self._mines)
         self._init_safe_cells()
 
@@ -354,39 +346,34 @@ class MinesweeperEngine:
         pos = int(self._safe_flat_pos[flat])
         if pos < 0:
             return
-
         last_index = self._safe_pool_size - 1
-        last_flat = int(self._safe_flat_cells[last_index])
+        last_flat  = int(self._safe_flat_cells[last_index])
         if pos != last_index:
-            self._safe_flat_cells[pos] = last_flat
+            self._safe_flat_cells[pos]     = last_flat
             self._safe_flat_pos[last_flat] = pos
         self._safe_flat_pos[flat] = -1
-        self._safe_pool_size -= 1
+        self._safe_pool_size     -= 1
 
     def _init_safe_cells(self) -> None:
-        safe = np.flatnonzero(~self._mines_flat)
+        safe  = np.flatnonzero(~self._mines_flat)
         count = int(safe.size)
         self._safe_flat_cells[:count] = safe
         self._safe_flat_pos.fill(-1)
-        self._safe_flat_pos[safe] = np.arange(count, dtype=np.int32)
-        self._safe_pool_size = count
+        self._safe_flat_pos[safe]     = np.arange(count, dtype=np.int32)
+        self._safe_pool_size          = count
 
     @staticmethod
     def _compute_neighbor_counts(mines: np.ndarray) -> np.ndarray:
-        m = mines.view(np.uint8)   # mines should be bool
+        m = mines.view(np.uint8)
         c = np.zeros_like(m, dtype=np.uint8)
 
-        c[1:, 1:]   += m[:-1, :-1]
-        c[1:, :]    += m[:-1, :]
-        c[1:, :-1]  += m[:-1, 1:]
-
-        c[:, 1:]    += m[:, :-1]
-        c[:, :-1]   += m[:, 1:]
-
-        c[:-1, 1:]  += m[1:, :-1]
-        c[:-1, :]   += m[1:, :]
-        c[:-1, :-1] += m[1:, 1:]
+        c[1:,   1:] += m[:-1, :-1]
+        c[1:,    :] += m[:-1,   :]
+        c[1:,  :-1] += m[:-1,  1:]
+        c[:,    1:] += m[:,   :-1]
+        c[:,   :-1] += m[:,    1:]
+        c[:-1,  1:] += m[1:,  :-1]
+        c[:-1,   :] += m[1:,    :]
+        c[:-1, :-1] += m[1:,   1:]
 
         return c
-
-

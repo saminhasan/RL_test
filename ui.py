@@ -163,9 +163,15 @@ class GUI:
         self.style:        str  = style if style in self.STYLES else "nice"
         self._initialized: bool = False
 
-        user32 = ctypes.windll.user32
-        sw = user32.GetSystemMetrics(0)
-        sh = user32.GetSystemMetrics(1)
+        if hasattr(ctypes, "windll"):
+            user32 = ctypes.windll.user32
+            sw = user32.GetSystemMetrics(0)
+            sh = user32.GetSystemMetrics(1)
+        else:
+            pg.display.init()
+            info = pg.display.Info()
+            sw = info.current_w if info.current_w > 0 else 1920
+            sh = info.current_h if info.current_h > 0 else 1080
         self._sw = sw
         self._sh = sh
 
@@ -323,7 +329,9 @@ class GUI:
         for lvl, name in levels.items():
             if name in game_mode:
                 lines.append(f"{lvl} = {name.capitalize()}")
-        lines.append("H: toggle help  |  C: toggle number colours  |  T: toggle style")
+        lines.append("H: toggle help")
+        lines.append("C: toggle number colours")
+        lines.append("T: toggle style")
         return lines
 
     def _number_color(self, n: int) -> Tuple[int, int, int]:
@@ -402,6 +410,7 @@ class GUI:
 
         if self.board.state == MinesweeperEngine.OVER and self.board.hit_mine:
             self._nice_mines()
+            self._nice_cells()
             self._tint((128, 0, 0, 64))
             self._nice_lines()
             _blur_bg(self.screen, sigma=2)
@@ -409,6 +418,7 @@ class GUI:
 
         elif self.board.state == MinesweeperEngine.OVER and self.board.won:
             self._nice_clusters()
+            self._nice_cells()
             self._nice_flags()
             self._tint((0, 128, 0, 64))
             self._nice_lines()
