@@ -53,6 +53,8 @@ class Args:
     """seed of the experiment"""
     cuda: bool = True
     """if toggled, cuda will be enabled by default"""
+    bf16: bool = True
+    """MINESWEEPER: bf16 maths on the GPU (needs an RTX 30-series or newer); --no-bf16 for older cards"""
 
     # MINESWEEPER: the game
     curriculum: str = "2:200000,3:600000,4"
@@ -168,7 +170,7 @@ def linear_schedule(start_e: float, end_e: float, duration: int, t: int):
 
 def train(args: Args) -> Path:
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
-    amp = dict(device_type=device.type, dtype=torch.bfloat16, enabled=device.type == "cuda")
+    amp = dict(device_type=device.type, dtype=torch.bfloat16, enabled=device.type == "cuda" and args.bf16)
     torch.backends.cudnn.benchmark = True
 
     # MINESWEEPER: resume, or a new run
@@ -261,7 +263,8 @@ def train(args: Args) -> Path:
     def evaluate(level: int) -> dict:
         nonlocal best_score
         base = bayes_on(level)
-        res = summarize(play_q(q_network, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas))
+        res = summarize(play_q(q_network, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas,
+                               bf16=args.bf16))
         res.update(step=global_step, level=level)
         eval_history.append(res)
         print(format_row(f"eval L{level} at step {global_step:,}", res) + f"   (bayes {base['win']*100:.1f}%)",

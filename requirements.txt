@@ -1,0 +1,21 @@
+# Tested with Python 3.13 on Windows 11 (versions in the comments are the tested ones).
+#
+# Install PyTorch first, the build that matches your GPU, e.g. CUDA 12.8:
+#   pip install torch --index-url https://download.pytorch.org/whl/cu128
+# then:
+#   pip install -r requirements.txt
+#
+# Windows: cppyy also needs the "MSVC v142 - VS 2019 C++ x64/x86 build tools" component of
+# Visual Studio Build Tools and the Windows 10/11 SDK (_native.py finds them on its own).
+
+torch                 # 2.11.0+cu128
+numpy                 # 2.5.2
+scipy                 # 1.18.1
+pygame                # 2.6.1
+shapely               # 2.1.2
+joblib                # 1.6.0
+tqdm                  # 4.70.0
+cppyy==3.1.2          # 3.5.0 does not build on Windows
+gymnasium>=1.2        # 1.4.0
+tyro                  # 1.0.16
+tensorboard           # 2.21.0

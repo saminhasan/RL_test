@@ -39,7 +39,7 @@ def eval_board_seeds(level: int, n: int) -> range:
 
 @torch.no_grad()
 def play_q(q, level: int, board_seeds, device, n_envs: int = 256, breakdown: bool = False,
-           canvas: tuple[int, int] | None = None) -> list[dict]:
+           canvas: tuple[int, int] | None = None, bf16: bool = True) -> list[dict]:
     """Greedy play, many boards at once, drawn on `canvas` (default: the board's
     own size; use the canvas the net was trained on). breakdown=True also asks
     the solver how the fatal click of each lost game compares (measuring only)."""
@@ -64,7 +64,7 @@ def play_q(q, level: int, board_seeds, device, n_envs: int = 256, breakdown: boo
     while any(s is not None for s in seed_of):
         active = [i for i in range(n_envs) if seed_of[i] is not None]
         x = torch.from_numpy(obs[active]).to(device)
-        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=device.type == "cuda"):
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=device.type == "cuda" and bf16):
             qv = q(x).float()
         actions = greedy(qv, x).cpu().numpy()
         for i, a in zip(active, actions):
@@ -119,6 +119,7 @@ def main() -> None:
     ap.add_argument("--level", type=int, default=4)
     ap.add_argument("--games", type=int, default=2000)
     ap.add_argument("--breakdown", action="store_true", help="classify losses with the exact solver")
+    ap.add_argument("--no-bf16", action="store_true", help="full precision (GPUs older than RTX 30-series)")
     args = ap.parse_args()
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -127,7 +128,7 @@ def main() -> None:
     print(format_row("bayes", summarize(play_bayes(args.level, seeds))))
     print(format_row(f"dqn (step {ckpt.get('global_step', '?')})",
                      summarize(play_q(q, args.level, seeds, device, breakdown=args.breakdown,
-                                      canvas=ckpt.get("canvas")))))
+                                      canvas=ckpt.get("canvas"), bf16=not args.no_bf16))))
 
 
 if __name__ == "__main__":

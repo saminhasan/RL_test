@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# build output (old Cython builds, compiled extensions)
+build/
+*.pyd
+*.so
+
+# trained models: only the run being continued is kept in git
+models/*.pt
+!models/dqn-L4-c64x16-20261005-084123-latest.pt
+!models/dqn-L4-c64x16-20261005-084123-best.pt
+models/*.tmp
+models/*.stop
+
+# logs
+*.log
