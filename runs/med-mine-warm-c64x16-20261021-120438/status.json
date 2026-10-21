@@ -1,0 +1,96 @@
+{
+ "updated": 1792610980.5360477,
+ "state": "training",
+ "run": "med-mine-warm-c64x16-20261021-120438",
+ "pid": 30504,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792609480.9374387,
+ "session_step": 0,
+ "step": 740096,
+ "total_steps": 3000000,
+ "level": 3,
+ "target_level": 3,
+ "epsilon": 0.02,
+ "lr": 0.0001,
+ "lr_patience": 0,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 1,
+ "sps": 493,
+ "sps_recent": 495.5119058888639,
+ "games": {
+  "return": -0.8,
+  "won": 0.2,
+  "revealed": 0.5037777777777778,
+  "length": 34.512
+ },
+ "td": 0.015213082544505596,
+ "q": -0.029514729976654053,
+ "gpu_temp": 75.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.321,
+  "win_margin": 0.028936331737108627,
+  "efficiency": 0.8015091547826406,
+  "revealed": 0.5461342592592593,
+  "step": 700032,
+  "level": 3,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.38,
+  "win_margin": 0.030084563483620635,
+  "efficiency": 0.7912588184529661,
+  "revealed": 0.5893425925925926,
+  "step": 600000,
+  "level": 3,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "3": {
+   "games": 1000,
+   "win": 0.713,
+   "win_margin": 0.028037661271939213,
+   "efficiency": 0.9089510135277442,
+   "revealed": 0.805287037037037
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 800000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\med-mine-warm-c64x16-20261021-120438-latest.pt",
+  "best": "D:\\RL_test\\models\\med-mine-warm-c64x16-20261021-120438-best.pt"
+ }
+}

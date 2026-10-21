@@ -67,6 +67,20 @@ def test_reward_shaping_cancels_out_over_a_game() -> None:
         assert seen_win and seen_late_loss
 
 
+def test_mine_penalty_alone_scores_each_click() -> None:
+    """mine 1, win 0, progress 0, gamma 0: every click earns -1 if it was a mine, else 0."""
+    env = MinesweeperEnv(level=2, reward=RewardConfig(win=0.0, progress=0.0, mine=1.0, gamma=0.0), seed=5)
+    rng = np.random.default_rng(1)
+    for _ in range(50):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            a = rng.choice(np.flatnonzero(info["action_mask"]))
+            was_mine = bool(env.engine._mines_flat[a])
+            obs, r, done, _, info = env.step(a)
+            assert r == (-1.0 if was_mine else 0.0)
+
+
 def test_wasted_click_changes_nothing_and_never_pays() -> None:
     env = MinesweeperEnv(level=2, seed=0)
     obs, info = env.reset()
@@ -76,7 +90,7 @@ def test_wasted_click_changes_nothing_and_never_pays() -> None:
 
 
 def test_reward_config_rejects_bad_settings() -> None:
-    for bad in (dict(win=0.0), dict(progress=-1.0), dict(credit=1.5), dict(gamma=0.0), dict(gamma=1.5)):
+    for bad in (dict(win=0.0), dict(progress=-1.0), dict(credit=1.5), dict(mine=-1.0), dict(gamma=-0.1), dict(gamma=1.5)):
         try:
             RewardConfig(**bad)
         except ValueError:
@@ -173,6 +187,23 @@ def test_small_board_on_a_bigger_canvas() -> None:
     assert env.level == 2
     obs, info = env.reset()
     assert env.level == 4 and not (obs[0] == 10).any()
+
+
+def test_mirrored_boards_keep_the_clicked_cell() -> None:
+    from rl.dqn import mirror
+
+    for level in (3, 4):                                                   # square and not
+        env = MinesweeperEnv(level=level, seed=2)
+        obs = np.stack([env.reset()[0] for _ in range(16)])
+        x = torch.from_numpy(obs)
+        cols = obs.shape[-1]
+        a = torch.tensor([int(np.flatnonzero(o[0].ravel() != 0)[0]) for o in obs])   # a revealed cell, to track
+        for seed in range(12):
+            mo, mn, ma = mirror(x, x, a, np.random.default_rng(seed))
+            assert mo.shape[-2:] == x.shape[-2:]
+            for i in range(16):                                            # the same clue sits under the moved cell
+                assert mo[i, 0].flatten()[ma[i]] == x[i, 0].flatten()[a[i]]
+            assert sorted(mo[:, 0].flatten().tolist()) == sorted(x[:, 0].flatten().tolist())
 
 
 def test_n_step_returns() -> None:

@@ -1,0 +1,97 @@
+{
+ "updated": 1792615621.8844237,
+ "state": "stopped",
+ "run": "med-mine-aug-anneal-c64x16-20261021-122947",
+ "pid": 22520,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792613695.653528,
+ "session_step": 1250048,
+ "step": 2136448,
+ "total_steps": 3000000,
+ "level": 3,
+ "target_level": 3,
+ "epsilon": 0.02,
+ "lr": 1.25e-05,
+ "lr_patience": 3,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 0,
+ "sps": 460,
+ "sps_recent": 431.8377487021931,
+ "games": {
+  "return": -0.678,
+  "won": 0.322,
+  "revealed": 0.6514583333333334,
+  "length": 50.89
+ },
+ "td": 0.0005174935795366764,
+ "q": -0.01524496078491211,
+ "gpu_temp": 75.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.665,
+  "win_margin": 0.0292542721666426,
+  "efficiency": 0.7743880437729507,
+  "revealed": 0.7705555555555557,
+  "step": 2100032,
+  "level": 3,
+  "lr": 1.25e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.665,
+  "win_margin": 0.0292542721666426,
+  "efficiency": 0.7743880437729507,
+  "revealed": 0.7705555555555557,
+  "step": 2100032,
+  "level": 3,
+  "lr": 1.25e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "3": {
+   "games": 1000,
+   "win": 0.713,
+   "win_margin": 0.028037661271939213,
+   "efficiency": 0.9089510135277442,
+   "revealed": 0.805287037037037
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 2200000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\med-mine-aug-anneal-c64x16-20261021-122947-latest.pt",
+  "best": "D:\\RL_test\\models\\med-mine-aug-anneal-c64x16-20261021-122947-best.pt"
+ },
+ "stop_reason": "stopped by stop file"
+}

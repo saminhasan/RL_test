@@ -300,7 +300,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .28); backdrop-filter: blur(3px); }
   </section>
 
   <div class="section-head">
-    <div><h2>Progress</h2><div class="section-sub">Hard board, 16 × 30 with 99 mines. Evaluations are greedy play on fixed boards that training never sees.</div></div>
+    <div><h2>Progress</h2><div class="section-sub"><span id="boardName">The board</span>. Evaluations are greedy play on fixed boards that training never sees.</div></div>
     <div class="segmented" role="group" aria-label="Time range" id="range">
       <button data-range="all" aria-pressed="true">All</button>
       <button data-range="7d" aria-pressed="false">7 days</button>
@@ -646,6 +646,8 @@ async function api(path, opts = {}) {
   return body;
 }
 
+const BOARDS = { 1: "Test board, 6 × 6 with 6 mines", 2: "Easy board, 9 × 9 with 10 mines",
+                 3: "Medium board, 16 × 16 with 40 mines", 4: "Hard board, 16 × 30 with 99 mines" };
 const PHASES = {
   training:   ["Training", "good", true],
   evaluating: ["Evaluating", "accent", true],
@@ -679,6 +681,8 @@ function renderState() {
   document.title = label + " · Minesweeper Training";
 
   const model = st.model ? `${st.model.channels}×${st.model.layers} net` : "";
+  setText("boardName", BOARDS[st.target_level] || "The board");
+  setText("heroEyebrow", "Win rate on the evaluation boards" + (BOARDS[st.target_level] ? " · " + BOARDS[st.target_level].split(",")[0].toLowerCase() : ""));
   setText("sub", [S.host, st.device, model].filter(Boolean).join(" · "));
 
   // buttons

@@ -78,6 +78,8 @@ class Args:
     """paid for uncovering cells, as a share of the board's safe cells; a mine takes back the unbanked part"""
     reward_credit: float = 0.0
     """share of the progress a lost game keeps (0 = winning is the only goal)"""
+    reward_mine: float = 0.0
+    """penalty for hitting a mine (with gamma 0 and no other terms: learn each cell's chance of being a mine)"""
 
     # MINESWEEPER: the network
     channels: int = 64
@@ -132,12 +134,19 @@ class Args:
     """seconds between updates of the run's status for the dashboard"""
     resume: str = ""
     """continue from this checkpoint (the replay buffer starts empty again)"""
+    init: str = ""
+    """MINESWEEPER: start a new run from this checkpoint's network (weights only)"""
     lr_patience: int = 0
     """MINESWEEPER: evaluations without a new best before the learning rate drops (0 = never)"""
     lr_decay: float = 0.5
     """MINESWEEPER: the learning rate is multiplied by this when it drops"""
     lr_min: float = 1e-6
     """MINESWEEPER: the learning rate never drops below this"""
+    ema: float = 0.0
+    """MINESWEEPER: act, evaluate and save a moving average of the weights, updated by this
+    much per gradient step (e.g. 0.999; 0 = off)"""
+    augment: bool = False
+    """MINESWEEPER: also learn from flipped (and, on square boards, rotated) copies of replayed boards"""
     max_gpu_temp: float = 0
     """MINESWEEPER: slow down while the GPU is hotter than this, in degrees C (0 = off)"""
 
@@ -172,6 +181,21 @@ class NStep:
             out.append((q[0][0], q[0][1], ret, next_obs, discount))
             q.popleft()
         return out
+
+
+def mirror(obs, next_obs, actions, rng):
+    """MINESWEEPER: a board seen in a mirror is just as valid a game. Flips the whole batch
+    up-down and/or left-right, and swaps rows and columns of square boards, at random
+    (8 ways on a square board, 4 otherwise); the clicked cell moves with the board."""
+    rows, cols = obs.shape[-2:]
+    r, c = actions // cols, actions % cols
+    if rng.random() < 0.5:
+        obs, next_obs, r = obs.flip(-2), next_obs.flip(-2), rows - 1 - r
+    if rng.random() < 0.5:
+        obs, next_obs, c = obs.flip(-1), next_obs.flip(-1), cols - 1 - c
+    if rows == cols and rng.random() < 0.5:
+        obs, next_obs, r, c = obs.transpose(-2, -1), next_obs.transpose(-2, -1), c, r
+    return obs.contiguous(), next_obs.contiguous(), r * cols + c
 
 
 def make_env(level, seed, reward, canvas):
@@ -236,23 +260,29 @@ def train(args: Args) -> Path:
 
     # env setup
     reward = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,   # MINESWEEPER
-                          gamma=args.gamma)
+                          mine=args.reward_mine, gamma=args.gamma)
     envs = gym.vector.SyncVectorEnv(
         [make_env(stages[stage][0], args.seed * 10_000 + i + seed_offset, reward, canvas) for i in range(args.num_envs)],
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
 
-    config = ckpt["config"] if ckpt else {"channels": args.channels, "layers": args.layers}
+    init = load_checkpoint(args.init, "cpu")[1] if args.init and not ckpt else None   # MINESWEEPER
+    config = (ckpt or init or {}).get("config") or {"channels": args.channels, "layers": args.layers}
     q_network = QNetwork(config).to(device)
+    if init:
+        q_network.load_state_dict(init["state_dict"])
     if amp["enabled"]:   # MINESWEEPER: channels-last memory helps bf16 on newer GPUs, but is 1.7x slower in fp32 on a GTX 1050
         q_network = q_network.to(memory_format=torch.channels_last)
     optimizer = optim.Adam(q_network.parameters(), lr=args.learning_rate)
     target_network = copy.deepcopy(q_network)
+    # MINESWEEPER: the network that plays (and is saved and evaluated): the weights' moving average, or the weights
+    policy = copy.deepcopy(q_network) if args.ema > 0 else q_network
     global_step, eval_history, best_eval = 0, [], None
     lr, evals_since_best = args.learning_rate, 0
     if ckpt:
-        q_network.load_state_dict(ckpt["state_dict"])
+        q_network.load_state_dict(ckpt.get("online") or ckpt["state_dict"])
+        policy.load_state_dict(ckpt["state_dict"])
         target_network.load_state_dict(ckpt["target"])
         optimizer.load_state_dict(ckpt["optimizer"])
         # MINESWEEPER: the same learning rate on the command line carries on with the one the run
@@ -290,8 +320,9 @@ def train(args: Args) -> Path:
     bayes_on(target_level)
 
     def save(path: Path) -> None:
-        save_checkpoint(path, q_network, {
+        save_checkpoint(path, policy, {
             "target": target_network.state_dict(), "optimizer": optimizer.state_dict(),
+            **({"online": q_network.state_dict()} if policy is not q_network else {}),
             "global_step": global_step, "run_name": run_name, "args": vars(args), "stage": stage,
             "canvas": canvas, "reward": asdict(reward), "eval_history": eval_history, "bayes": bayes,
             "explore_steps": explore_steps, "lr": lr, "evals_since_best": evals_since_best,
@@ -320,7 +351,7 @@ def train(args: Args) -> Path:
         nonlocal best_score, best_eval, evals_since_best, lr
         base = bayes_on(level)
         report("evaluating")
-        res = summarize(play_q(q_network, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas,
+        res = summarize(play_q(policy, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas,
                                bf16=args.bf16))
         res.update(step=global_step, level=level, lr=lr, reward=asdict(reward))
         eval_history.append(res)
@@ -392,7 +423,7 @@ def train(args: Args) -> Path:
             # MINESWEEPER: greedy over legal cells; exploring picks a random legal cell
             obs_t = torch.from_numpy(obs).to(device)
             with torch.no_grad(), torch.autocast(**amp):
-                actions = greedy(q_network(obs_t).float(), obs_t).cpu().numpy()
+                actions = greedy(policy(obs_t).float(), obs_t).cpu().numpy()
             for i in np.flatnonzero(rng.random(args.num_envs) < epsilon):
                 actions[i] = rng.choice(np.flatnonzero(obs[i, 0].ravel() == 0))
 
@@ -431,13 +462,18 @@ def train(args: Args) -> Path:
                     b_obs      = torch.from_numpy(data["obs"]).to(device)
                     b_next_obs = torch.from_numpy(data["next_obs"]).to(device)
                     b_actions  = torch.from_numpy(data["action"]).to(device)
+                    if args.augment:   # MINESWEEPER
+                        b_obs, b_next_obs, b_actions = mirror(b_obs, b_next_obs, b_actions, rng)
                     b_rewards  = torch.from_numpy(data["reward"]).to(device)
                     b_discount = torch.from_numpy(data["discount"]).to(device)
                     with torch.no_grad(), torch.autocast(**amp):
-                        # MINESWEEPER: Double DQN -- online net picks the next cell, target net scores it
-                        next_actions = greedy(q_network(b_next_obs).float(), b_next_obs)
-                        next_q = target_network(b_next_obs).float().gather(1, next_actions[:, None]).squeeze(1)
-                        td_target = b_rewards + b_discount * next_q
+                        if args.gamma > 0:
+                            # MINESWEEPER: Double DQN -- online net picks the next cell, target net scores it
+                            next_actions = greedy(q_network(b_next_obs).float(), b_next_obs)
+                            next_q = target_network(b_next_obs).float().gather(1, next_actions[:, None]).squeeze(1)
+                            td_target = b_rewards + b_discount * next_q
+                        else:   # MINESWEEPER: no discount, nothing to look ahead to
+                            td_target = b_rewards
                     with torch.autocast(**amp):
                         old_val = q_network(b_obs).float().gather(1, b_actions[:, None]).squeeze(1)
                     # MINESWEEPER: Huber, weighted for prioritized replay; new priorities = |TD error|
@@ -454,6 +490,9 @@ def train(args: Args) -> Path:
                     loss.backward()
                     torch.nn.utils.clip_grad_norm_(q_network.parameters(), 10.0)   # MINESWEEPER
                     optimizer.step()
+                    if policy is not q_network:   # MINESWEEPER: the moving average follows
+                        with torch.no_grad():
+                            torch._foreach_lerp_(list(policy.parameters()), list(q_network.parameters()), 1 - args.ema)
                 td_loss, q_mean = loss.item(), old_val.mean().item()
 
                 # update target network

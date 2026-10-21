@@ -54,8 +54,15 @@ class RewardConfig:
     The goal, paid when a game ends:
         win                            for clearing the board
         credit * progress * cleared    for the share of the safe cells uncovered (1 for a win)
+        - mine                         for hitting a mine
     credit 0 makes winning the only goal; credit > 0 also counts how much of the
     board a lost game cleared (partial credit).
+
+    The mine penalty on its own (mine 1, win 0, progress 0) with gamma 0 makes
+    the value of a click minus the chance that the cell is a mine, learned only
+    from how the agent's own clicks turned out: the greedy agent then clicks the
+    cell least likely to be a mine, which is how bayes plays. Raising gamma
+    towards 1 turns the same reward into minus the chance of losing the game.
 
     Paid on every click, potential-based shaping (Ng, Harada & Russell 1999):
         gamma * Phi(after) - Phi(before),
@@ -84,11 +91,13 @@ class RewardConfig:
     win: float = 1.0
     progress: float = 1.0
     credit: float = 0.0
+    mine: float = 0.0
     gamma: float = 0.999
 
     def __post_init__(self) -> None:
-        if not (self.win > 0 and self.progress >= 0 and 0 <= self.credit <= 1 and 0 < self.gamma <= 1):
-            raise ValueError("need win > 0, progress >= 0, 0 <= credit <= 1 and 0 < gamma <= 1")
+        if not (min(self.win, self.progress, self.mine) >= 0 and self.win + self.mine > 0
+                and 0 <= self.credit <= 1 and 0 <= self.gamma <= 1):
+            raise ValueError("need win, progress, mine >= 0 with win or mine > 0, 0 <= credit <= 1, 0 <= gamma <= 1")
 
     def potential(self, engine: MinesweeperEngine) -> float:
         if engine.state == engine.OVER:
@@ -99,7 +108,8 @@ class RewardConfig:
         """The goal's payment once a game is over (0 while it runs)."""
         if engine.state != engine.OVER:
             return 0.0
-        return self.win * engine.won + self.credit * self.progress * engine.revealed_safe_cells / engine.total_safe_cells
+        return (self.win * engine.won - self.mine * engine.hit_mine
+                + self.credit * self.progress * engine.revealed_safe_cells / engine.total_safe_cells)
 
 
 def first_click(board_seed: int, n_cells: int) -> int:
