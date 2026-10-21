@@ -2,14 +2,13 @@
 AI agents and benchmarking for MinesweeperEngine.
 
 Agents are standalone functions that take an engine and return a reveal result.
-Engine stays pure (game mechanics + Bayes probs only).
+Engine stays pure (game mechanics, Bayes probs, fewest-moves count).
 
 Agents:
-  random_safe   -- reveal a random known-safe cell
   random_any    -- reveal a random hidden cell (may hit a mine)
-  bayes         -- reveal lowest Bayesian mine-probability cell
-  oracle        -- never hits a mine; picks largest cascade (min moves to win)
-  anti_oracle  -- never hits a mine; picks smallest cascade (max moves to win)
+  random_safe   -- reveal a random known-safe cell (cheats: reads the mines)
+  bayes         -- lowest Bayesian mine probability; ties go to the cell likeliest to be a zero
+  oracle        -- sees the mines; wins in the fewest possible moves
 """
 from __future__ import annotations
 
@@ -19,7 +18,6 @@ import numpy as np
 
 from engine import MinesweeperEngine
 
-AGENT_NAMES : tuple[str, ...] = ("random_any", "random_safe", "bayes", "oracle", "anti_oracle")
 
 def _random_hidden_flat(engine: MinesweeperEngine) -> int | None:
     if engine.covered_count <= 0:
@@ -68,165 +66,90 @@ def random_reveal_safe(engine: MinesweeperEngine) -> int:
     return _reveal_flat(engine, flat)
 
 # ---------------------------------------------------------------------------
-# Bayes agent
+# Bayes agent (the visible board only)
 # ---------------------------------------------------------------------------
 
 def _lowest_probability_candidates(engine: MinesweeperEngine) -> np.ndarray:
     hidden = np.flatnonzero(~engine._revealed_flat)
     if hidden.size == 0:
         return hidden
-    probs  = engine._mine_probs.ravel()
+    probs  = engine.mine_probs.ravel()
     hp     = probs[hidden]
     lowest = float(hp.min())
-    return hidden[hp == lowest]
+    # tolerance: equal probabilities from different fronts can differ in the last bit
+    return hidden[hp <= lowest + 1e-12]
+
+
+def _zero_chance(engine: MinesweeperEngine, cells: np.ndarray) -> np.ndarray:
+    """Rough chance each cell is a zero: none of its hidden neighbours is a mine.
+
+    Multiplies (1 - p) over the neighbours as if they were independent. Exact
+    when the neighbours are already known (p = 0 or 1), which is the usual case
+    for the safe cells this is used on.
+    """
+    probs = np.nan_to_num(engine.mine_probs.ravel(), nan=0.0)  # revealed: not a mine
+    safe  = np.append(1.0 - probs, 1.0)                        # padding index -1 -> 1.0
+    return safe[engine._neighbor_indices[cells]].prod(axis=1)
 
 
 def bayes_reveal(engine: MinesweeperEngine) -> int:
-    """Reveal the hidden cell with lowest Bayesian mine probability."""
+    """Reveal the hidden cell with the lowest Bayesian mine probability.
+
+    Among the equally safest cells it picks the one likeliest to be a zero: a
+    zero opens a whole patch in one click, while a number next to an unopened
+    patch is a wasted click (the patch would uncover it anyway). Before the
+    first click every cell is equally safe, so it starts in a corner, the cell
+    likeliest to be a zero.
+    """
     if engine.state == engine.OVER:
         return 0
     choices = _lowest_probability_candidates(engine)
     if choices.size == 0:
         return 0
-    choice = int(choices[int(engine._rng.integers(len(choices)))])
-    return _reveal_flat(engine, choice)
+    chance = _zero_chance(engine, choices)
+    best   = choices[chance >= chance.max() - 1e-12]
+    return _reveal_flat(engine, int(best[int(engine._rng.integers(best.size))]))
 
 
 # ---------------------------------------------------------------------------
-# Oracle agent (oracle mine-avoidance + cascade maximisation)
+# Oracle agent (sees the mines, fewest possible moves)
 # ---------------------------------------------------------------------------
-def _cascade_size(engine, f: int) -> int:
-    """BFS through _neighbor_counts_flat to predict cascade cells if f is revealed."""
-    counts   = engine._neighbor_counts_flat
-    revealed = engine._revealed_flat
 
-    if int(counts[f]) != 0:
-        return 1
-
-    nidx  = engine._neighbor_indices
-    nlen  = engine._neighbor_lengths
-    fsize = engine._flat_size
-
-    visited = np.zeros(fsize, dtype=bool)
-    queue   = np.empty(fsize, dtype=np.int32)
-    head = tail = 0
-    queue[tail] = f; tail += 1
-    visited[f] = True
-    size = 0
-
-    while head < tail:
-        cur   = int(queue[head]); head += 1
-        size += 1
-        if int(counts[cur]) != 0:
-            continue
-        for k in range(int(nlen[cur])):
-            n = int(nidx[cur, k])
-            if not visited[n] and not revealed[n]:
-                visited[n] = True
-                queue[tail] = n; tail += 1
-
-    return size
-
-
-def _pick_largest_cascade(engine, cells: np.ndarray) -> int:
-    """Return the cell in `cells` with the largest predicted cascade."""
-    csizes = np.array([_cascade_size(engine, int(f)) for f in cells], dtype=np.int64)
-    best   = int(csizes.max())
-    top    = cells[csizes == best]
-    return int(top[int(engine._rng.integers(top.size))])
-
-
-def _pick_smallest_cascade(engine, cells: np.ndarray) -> int:
-    """Return the cell in `cells` with the smallest predicted cascade."""
-    csizes = np.array([_cascade_size(engine, int(f)) for f in cells], dtype=np.int64)
-    best   = int(csizes.min())
-    top    = cells[csizes == best]
-    return int(top[int(engine._rng.integers(top.size))])
-
-
-def oracle_choice(engine) -> int | None:
+def oracle_choice(engine: MinesweeperEngine) -> int | None:
     """
-    Select best hidden cell (flat index) to reveal.
+    Select the next cell for a fewest-moves win.
 
-    Never hits a mine. Among safe candidates, always picks the cell that
-    cascades the most cells in one move.
+    Knows where the mines are. Clicks one cell of each opening (a patch of
+    zeros, which uncovers itself and its border), then every number cell no
+    opening uncovered. That is exactly engine.min_clicks_left() clicks, the
+    minimum. The first click is blind like every other agent's: mines do not
+    exist until it lands.
     """
     if engine.state == engine.OVER:
         return None
-
-    hidden = np.flatnonzero(~engine._revealed_flat)
-    if hidden.size == 0:
-        return None
-
     if not engine.started:
-        return _pick_largest_cascade(engine, hidden)
+        return _random_hidden_flat(engine)
 
-    probs = engine.mine_probs.ravel()
-    hp    = probs[hidden]
-
-    good = ~np.isnan(hp)
-    if not good.any():
-        safe = hidden[~engine._mines_flat[hidden]]
-        if safe.size == 0:
-            return None
-        return _pick_largest_cascade(engine, safe)
-
-    hidden = hidden[good]
-    hp     = hp[good]
-    pmin   = float(hp.min())
-    cand   = hidden[np.abs(hp - pmin) <= 1e-9]
-
-    safe_cand = cand[~engine._mines_flat[cand]]
-
-    if safe_cand.size == 0:
-        # All minimum-p candidates are mines — escape to any safe hidden cell
-        all_safe = np.flatnonzero(~engine._revealed_flat & ~engine._mines_flat)
-        if all_safe.size == 0:
-            return None
-        return _pick_largest_cascade(engine, all_safe)
-
-    if safe_cand.size == 1:
-        return int(safe_cand[0])
-
-    return _pick_largest_cascade(engine, safe_cand)
+    hidden_safe = ~engine._revealed_flat & ~engine._mines_flat
+    openings    = np.flatnonzero(hidden_safe & (engine._neighbor_counts_flat == 0))
+    cells       = openings if openings.size else np.flatnonzero(hidden_safe)
+    if cells.size == 0:
+        return None
+    return int(cells[int(engine._rng.integers(cells.size))])
 
 
 def oracle_reveal(engine: MinesweeperEngine) -> int:
-    """Never hits a mine; always picks the largest cascade among safe cells."""
+    """Never hits a mine; wins in the fewest possible moves."""
     return int(_reveal_flat(engine, oracle_choice(engine)))
 
 
-# ---------------------------------------------------------------------------
-# Worst-oracle agent (oracle mine-avoidance + cascade minimisation)
-# ---------------------------------------------------------------------------
-
-def anti_oracle_choice(engine) -> int | None:
-    """
-    Select hidden cell that minimises cascade — most unoptimal winning play.
-
-    Never hits a mine. Among safe cells, always picks the one that reveals
-    fewest cells (cascade_size == 1 preferred; forced cascade if no other option).
-    """
-    if engine.state == engine.OVER:
-        return None
-
-    hidden = np.flatnonzero(~engine._revealed_flat)
-    if hidden.size == 0:
-        return None
-
-    if not engine.started:
-        return _pick_smallest_cascade(engine, hidden)
-
-    safe = hidden[~engine._mines_flat[hidden]]
-    if safe.size == 0:
-        return None
-
-    return _pick_smallest_cascade(engine, safe)
-
-
-def anti_oracle_reveal(engine: MinesweeperEngine) -> int:
-    """Never hits a mine; always picks the smallest cascade among safe cells."""
-    return int(_reveal_flat(engine, anti_oracle_choice(engine)))
+AGENTS = {
+    "random_any":   random_reveal_any,
+    "random_safe":  random_reveal_safe,
+    "bayes":        bayes_reveal,
+    "oracle":       oracle_reveal,
+}
+AGENT_NAMES : tuple[str, ...] = tuple(AGENTS)
 
 
 # ---------------------------------------------------------------------------
@@ -252,38 +175,26 @@ def _run_agent_game(
     level: int,
     agent_name: str,
     seed: int,
-    random_first: bool = False,
-) -> dict[str, float | int | str | bool]:
-    engine = MinesweeperEngine(level=level, seed=seed)
-    if agent_name == "random_any":
-        reveal = lambda: random_reveal_any(engine)
-    elif agent_name == "random_safe":
-        reveal = lambda: random_reveal_safe(engine)
-    elif agent_name == "bayes":
-        reveal = lambda: bayes_reveal(engine)
-    elif agent_name == "oracle":
-        reveal = lambda: oracle_reveal(engine)
-    elif agent_name == "anti_oracle":
-        reveal = lambda: anti_oracle_reveal(engine)
-    else:
+) -> dict[str, float | int | str | bool | None]:
+    if agent_name not in AGENTS:
         raise ValueError(f"unknown agent {agent_name!r}")
+    agent  = AGENTS[agent_name]
+    engine = MinesweeperEngine(level=level, seed=seed)
 
-    if random_first:
-        first_changed = _reveal_flat(engine, _random_hidden_flat(engine))
-    else:
-        first_changed = int(reveal())
+    first_changed = int(agent(engine))
     reveal_events = 1
     total_changed = first_changed
     max_changed   = first_changed
 
-
     while engine.state != engine.OVER:
-        changed_count = int(reveal())
+        changed_count = int(agent(engine))
         total_changed += changed_count
         max_changed    = max(max_changed, changed_count)
         reveal_events += 1
 
     safe_revealed = int(engine.revealed_safe_cells)
+    moves         = int(engine.move_count)
+    min_moves     = engine.min_win_moves
     return {
         "level":           level,
         "level_name":      MinesweeperEngine.LEVELS[level],
@@ -291,7 +202,10 @@ def _run_agent_game(
         "seed":            seed,
         "won":             bool(engine.won),
         "hit_mine":        bool(engine.hit_mine),
-        "moves":           int(engine.move_count),
+        "moves":           moves,
+        "min_moves":       min_moves,
+        # fewest possible moves / moves taken: 1.0 is a perfect win
+        "efficiency":      min_moves / moves if engine.won and min_moves is not None else None,
         "reveal_events":   reveal_events,
         "safe_revealed":   safe_revealed,
         "safe_total":      int(engine.total_safe_cells),
@@ -309,10 +223,13 @@ def benchmark_agents(
     n_jobs: int = -1,
     backend: str = "loky",
     agent_names: tuple[str, ...] = AGENT_NAMES,
-) -> list[dict[str, float | int | str | bool]]:
+) -> list[dict[str, float | int | str | bool | None]]:
     """
     Run num_games per agent/level in parallel and print aggregate stats.
     Returns one result dict per agent/game.
+
+    Agents get the same seeds. Agents with the same first click (all but
+    bayes, which starts in a corner) therefore play the same boards.
     """
     if num_games <= 0:
         raise ValueError("num_games must be > 0")
@@ -331,7 +248,7 @@ def benchmark_agents(
     start = perf_counter()
     results = [
         r for r in Parallel(n_jobs=n_jobs, backend=backend)(
-            delayed(_run_agent_game)(level, agent, gseed, random_first=False)
+            delayed(_run_agent_game)(level, agent, gseed)
             for level, agent, gseed in tqdm(tasks, desc="agent games", unit="game")
         )
         if r is not None
@@ -356,6 +273,9 @@ def benchmark_agents(
             safe_frac   = np.array([r["safe_fraction"]        for r in rows], dtype=np.float64)
             avg_changed = np.array([r["avg_changed_per_move"] for r in rows], dtype=np.float64)
             max_changed = np.array([r["max_changed"]          for r in rows], dtype=np.float64)
+            won_rows    = [r for r in rows if r["won"]]
+            efficiency  = np.array([r["efficiency"] for r in won_rows], dtype=np.float64)
+            extra_moves = np.array([r["moves"] - r["min_moves"] for r in won_rows], dtype=np.float64)
 
             def _fmt(a: np.ndarray) -> str:
                 if len(a) == 0:
@@ -370,6 +290,8 @@ def benchmark_agents(
                 f"    mine hits     : {int(hit_mines.sum())}/{len(rows)} ({hit_mines.mean()*100:.2f}%)\n"
                 f"    moves         : {_fmt(moves)}\n"
                 f"    won moves     : {_fmt(won_moves)}\n"
+                f"    efficiency    : {_fmt(efficiency)}  (wins: fewest possible / moves)\n"
+                f"    extra moves   : {_fmt(extra_moves)}  (wins: moves - fewest possible)\n"
                 f"    lost moves    : {_fmt(lost_moves)}\n"
                 f"    safe revealed : {_fmt(safe_frac * 100)} %\n"
                 f"    cells/move    : {_fmt(avg_changed)}\n"
@@ -377,66 +299,6 @@ def benchmark_agents(
             )
 
     return results
-
-
-def benchmark_optimality_distribution(
-    levels: tuple[int | str, ...] | list[int | str] = (1,),
-    num_games: int = 1_000,
-    seed: int = 42,
-    n_jobs: int = -1,
-    backend: str = "threading",
-) -> dict[int, dict[str, np.ndarray]]:
-    """
-    Run oracle (min moves) and anti_oracle (max moves) with a random first click
-    over num_games per level. Collects move-count distributions for winning games only.
-
-    Use returned percentile bounds to build an efficiency-normalised win reward:
-        efficiency = (max_ref - agent_moves) / (max_ref - min_ref)
-    """
-    from joblib import Parallel, delayed
-    from tqdm import tqdm
-
-    level_ids = [_normalize_level(level) for level in levels]
-    bound_agents = ("oracle", "anti_oracle")
-    tasks = [
-        (level, agent, seed + level * 10_000_000 + i)
-        for level in level_ids
-        for agent in bound_agents
-        for i in range(num_games)
-    ]
-
-    start = perf_counter()
-    results = [
-        r for r in Parallel(n_jobs=n_jobs, backend=backend)(
-            delayed(_run_agent_game)(level, agent, gseed, random_first=True)
-            for level, agent, gseed in tqdm(tasks, desc="optimality dist", unit="game")
-        )
-        if r is not None
-    ]
-    elapsed = perf_counter() - start
-
-    print(f"benchmark_optimality_distribution: elapsed={elapsed:.2f}s")
-
-    output: dict[int, dict[str, np.ndarray]] = {}
-    for level in level_ids:
-        level_name = MinesweeperEngine.LEVELS[level]
-        print(f"\nlevel {level} ({level_name})")
-        output[level] = {}
-        for agent in bound_agents:
-            wins = [r for r in results if r["level"] == level and r["agent"] == agent and r["won"]]
-            if not wins:
-                print(f"  {agent}: no wins recorded")
-                continue
-            moves = np.array([r["moves"] for r in wins], dtype=np.float64)
-            p5, p25, p50, p75, p95 = np.percentile(moves, [5, 25, 50, 75, 95])
-            print(
-                f"  {agent} ({len(wins)}/{num_games} wins):\n"
-                f"    moves  min={moves.min():.0f}  p5={p5:.1f}  p25={p25:.1f}"
-                f"  median={p50:.1f}  p75={p75:.1f}  p95={p95:.1f}  max={moves.max():.0f}"
-            )
-            output[level][agent] = moves
-
-    return output
 
 
 def benchmark_engine(
@@ -491,6 +353,5 @@ if __name__ == "__main__":
         n_jobs=-1,
         backend="loky",
         # backend="threading",
-        # agent_names=AGENT_NAMES,
-        agent_names=("oracle", "anti_oracle"),
+        agent_names=AGENT_NAMES,
     )
