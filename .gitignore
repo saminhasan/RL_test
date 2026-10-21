@@ -16,6 +16,12 @@ models/*.pt
 !models/dqn-L4-c64x16-20261005-084123-best.pt
 models/*.tmp
 models/*.stop
+models/PAUSED
+models/bayes-*.json
+
+# the dashboard's control token, and benchmark copies
+dashboard-token.txt
+models/*-benchmark.pt
 
 # logs
 *.log

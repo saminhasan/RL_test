@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Minesweeper Training</title>
+<style>
+:root {
+  color-scheme: light;
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+  --page: #f5f5f7;
+  --card: #ffffff;
+  --card-edge: transparent;
+  --ink: #1d1d1f;
+  --ink-2: #6e6e73;
+  --ink-3: #86868b;
+  --grid: #ececef;
+  --axis: #d2d2d7;
+  --hairline: rgba(0, 0, 0, .08);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --band: rgba(42, 120, 214, .11);
+  --ref: #aeaeb2;
+  --accent: #0071e3;
+  --good: #0ca30c;
+  --warning: #fab219;
+  --critical: #d03b3b;
+  --btn2: rgba(0, 0, 0, .05);
+  --seg: rgba(118, 118, 128, .12);
+  --seg-on: #ffffff;
+  --tip: rgba(255, 255, 255, .86);
+  --header: rgba(245, 245, 247, .74);
+  --shadow: 0 1px 1px rgba(0, 0, 0, .02), 0 8px 28px rgba(0, 0, 0, .05);
+  --toast: rgba(29, 29, 31, .92);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #000000;
+    --card: #1c1c1e;
+    --card-edge: rgba(255, 255, 255, .04);
+    --ink: #f5f5f7;
+    --ink-2: #a1a1a6;
+    --ink-3: #8e8e93;
+    --grid: #2c2c2e;
+    --axis: #3a3a3c;
+    --hairline: rgba(255, 255, 255, .1);
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --band: rgba(57, 135, 229, .18);
+    --ref: #636366;
+    --accent: #0a84ff;
+    --btn2: rgba(255, 255, 255, .1);
+    --seg: rgba(118, 118, 128, .24);
+    --seg-on: #636366;
+    --tip: rgba(44, 44, 46, .9);
+    --header: rgba(22, 22, 23, .74);
+    --shadow: none;
+    --toast: rgba(58, 58, 60, .95);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #000000; --card: #1c1c1e; --card-edge: rgba(255, 255, 255, .04); --ink: #f5f5f7; --ink-2: #a1a1a6;
+  --ink-3: #8e8e93; --grid: #2c2c2e; --axis: #3a3a3c; --hairline: rgba(255, 255, 255, .1); --series-1: #3987e5;
+  --series-2: #d95926; --band: rgba(57, 135, 229, .18); --ref: #636366; --accent: #0a84ff;
+  --btn2: rgba(255, 255, 255, .1); --seg: rgba(118, 118, 128, .24); --seg-on: #636366; --tip: rgba(44, 44, 46, .9);
+  --header: rgba(22, 22, 23, .74); --shadow: none; --toast: rgba(58, 58, 60, .95);
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.45 var(--font);
+       -webkit-font-smoothing: antialiased; letter-spacing: -.003em; }
+button { font-family: var(--font); }
+
+/* header */
+.bar { position: sticky; top: 0; z-index: 20; background: var(--header); border-bottom: 1px solid var(--hairline);
+       backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); }
+.bar-inner { max-width: 1180px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center;
+             justify-content: space-between; gap: 12px 16px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.app-icon { width: 36px; height: 36px; border-radius: 9px; flex: none; display: grid; place-items: center;
+            background: linear-gradient(180deg, #48484a, #1d1d1f); box-shadow: inset 0 0 0 .5px rgba(255,255,255,.14); }
+.title { font-weight: 600; font-size: 17px; letter-spacing: -.015em; white-space: nowrap; }
+.sub { color: var(--ink-2); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; padding: 6px 12px;
+        border-radius: 980px; background: var(--btn2); white-space: nowrap; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
+.tone-good { color: var(--good); } .tone-accent { color: var(--series-1); } .tone-warning { color: var(--warning); }
+.tone-critical { color: var(--critical); } .tone-muted { color: var(--ink-3); }
+.pill .text { color: var(--ink); }
+.pulse { animation: pulse 2.2s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 50%, transparent); }
+                   75%, 100% { box-shadow: 0 0 0 7px transparent; } }
+.btn { appearance: none; border: 0; border-radius: 980px; font-size: 14px; font-weight: 500; padding: 8px 18px;
+       cursor: pointer; transition: filter .15s, opacity .15s, transform .1s; white-space: nowrap; }
+.btn:active:not(:disabled) { transform: scale(.97); }
+.btn.primary { background: var(--accent); color: #fff; }
+.btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
+.btn.secondary { background: var(--btn2); color: var(--ink); }
+.btn.secondary:hover:not(:disabled) { filter: brightness(.96); }
+.btn:disabled { opacity: .38; cursor: default; }
+.btn:focus-visible, .linkbtn:focus-visible, .segmented button:focus-visible, svg.chart:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
+
+main { max-width: 1180px; margin: 0 auto; padding: 28px 24px 48px; }
+.card { background: var(--card); border-radius: 20px; box-shadow: var(--shadow); border: 1px solid var(--card-edge); }
+
+/* hero */
+.hero { padding: 28px 32px; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 28px 40px;
+        align-items: center; }
+.eyebrow { font-size: 13px; color: var(--ink-2); font-weight: 500; }
+.hero-num { font-size: 76px; font-weight: 600; letter-spacing: -.04em; line-height: 1; margin: 12px 0 14px; }
+.hero-meta { color: var(--ink-2); font-size: 14px; }
+.delta { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13px; color: var(--ink-2); }
+.delta svg { flex: none; }
+.compare { display: grid; gap: 14px; }
+.cmp-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 64px; align-items: center; gap: 12px; }
+.cmp-name { font-size: 13px; color: var(--ink-2); }
+.cmp-val { font-size: 15px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.track { height: 10px; border-radius: 6px; background: var(--grid); overflow: hidden; }
+.track > i { display: block; height: 100%; border-radius: 6px; transition: width .6s cubic-bezier(.2, .8, .2, 1); }
+.cmp-note { font-size: 13px; color: var(--ink-2); margin-top: 2px; }
+.notice { grid-column: 1 / -1; display: none; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px;
+          background: var(--btn2); font-size: 13.5px; color: var(--ink); }
+.notice.show { display: flex; }
+
+/* tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 16px; margin: 16px 0 36px; }
+.tile { padding: 18px 20px 17px; min-width: 0; }
+.tile .label { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+.tile .value { font-size: 28px; font-weight: 600; letter-spacing: -.025em; margin-top: 6px; line-height: 1.15;
+               white-space: nowrap; }
+.tile .value small { font-size: 17px; font-weight: 500; color: var(--ink-2); letter-spacing: -.01em; margin-left: 2px; }
+.tile .note { font-size: 12.5px; color: var(--ink-3); margin-top: 5px; }
+
+/* sections */
+.section-head { display: flex; align-items: flex-end; justify-content: space-between; margin: 0 4px 14px; gap: 12px;
+                flex-wrap: wrap; }
+h2 { font-size: 22px; font-weight: 600; letter-spacing: -.02em; margin: 0; }
+.section-sub { color: var(--ink-2); font-size: 13.5px; margin-top: 3px; }
+.segmented { display: inline-flex; background: var(--seg); border-radius: 9px; padding: 2px; gap: 2px; }
+.segmented button { border: 0; background: transparent; color: var(--ink); font-size: 13px; font-weight: 500;
+                    padding: 5px 14px; border-radius: 7px; cursor: pointer; transition: background .15s; }
+.segmented button[aria-pressed="true"] { background: var(--seg-on); box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 0 0 .5px rgba(0, 0, 0, .04); }
+.segmented button:disabled { opacity: .35; cursor: default; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; transition: opacity .2s; }
+.grid.loading { opacity: .6; }
+.wide { grid-column: 1 / -1; }
+.spacer { height: 36px; }
+
+/* charts */
+figure.chart { margin: 0; padding: 20px 20px 10px; min-width: 0; }
+.fig-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+.fig-title { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+.fig-sub { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12.5px; color: var(--ink-2); margin: 2px 0 4px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.key { width: 14px; height: 2px; border-radius: 1px; display: inline-block; }
+.linkbtn { border: 0; background: none; color: var(--accent); font-size: 13px; font-weight: 500; cursor: pointer;
+           padding: 2px 6px; border-radius: 6px; white-space: nowrap; }
+.plot { position: relative; }
+svg.chart { display: block; width: 100%; overflow: visible; touch-action: pan-y; }
+svg text { font-family: var(--font); }
+.tick { fill: var(--ink-3); font-size: 11px; font-variant-numeric: tabular-nums; }
+.end-label { fill: var(--ink); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ref-label { fill: var(--ink-2); font-size: 11.5px; }
+.ev-label { fill: var(--ink-3); font-size: 11px; }
+.empty { height: 180px; display: grid; place-items: center; color: var(--ink-3); font-size: 13px; }
+.tip { position: absolute; top: 0; left: 0; pointer-events: none; background: var(--tip); border-radius: 12px;
+       backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+       box-shadow: 0 10px 30px rgba(0, 0, 0, .16), 0 0 0 .5px var(--hairline); padding: 9px 12px 10px; font-size: 12.5px;
+       min-width: 150px; max-width: 260px; opacity: 0; transition: opacity .12s; z-index: 5; }
+.tip.show { opacity: 1; }
+.tip-head { color: var(--ink-2); font-size: 11.5px; margin-bottom: 5px; white-space: nowrap; }
+.tip-row { display: flex; align-items: center; gap: 8px; margin-top: 3px; white-space: nowrap; }
+.tip-row b { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink); }
+.tip-row span { color: var(--ink-2); }
+.tip-ev { color: var(--ink-2); margin-top: 5px; padding-top: 5px; border-top: 1px solid var(--hairline); white-space: normal; }
+.table-wrap { max-height: 268px; overflow: auto; border-radius: 10px; margin: 4px 0 8px; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+th { text-align: right; font-weight: 500; color: var(--ink-2); padding: 6px 10px; position: sticky; top: 0;
+     background: var(--card); border-bottom: 1px solid var(--grid); }
+td { text-align: right; padding: 5px 10px; border-bottom: 1px solid var(--grid); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+
+/* benchmark, timeline, log */
+.panel { padding: 22px 24px; min-width: 0; }
+.panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.bench-meta { font-size: 13px; color: var(--ink-2); }
+.bench td, .bench th { padding: 9px 8px; }
+.bench td:first-child { color: var(--ink); }
+.bench .bar-cell { width: 34%; }
+.mini { height: 6px; border-radius: 3px; background: var(--grid); overflow: hidden; }
+.mini > i { display: block; height: 100%; border-radius: 3px; }
+.progress { height: 4px; border-radius: 2px; background: var(--grid); overflow: hidden; margin: 10px 0 4px; }
+.progress > i { display: block; width: 30%; height: 100%; border-radius: 2px; background: var(--accent);
+                animation: slide 1.4s ease-in-out infinite; }
+@keyframes slide { 0% { transform: translateX(-100%); } 100% { transform: translateX(340%); } }
+.past { margin-top: 14px; font-size: 12.5px; color: var(--ink-2); }
+.downloads { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.downloads a { text-decoration: none; }
+.timeline { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow: auto; }
+.timeline li { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--grid); }
+.timeline li:last-child { border-bottom: 0; }
+.timeline .dot { margin-top: 6px; }
+.tl-text { font-size: 13.5px; }
+.tl-meta { font-size: 12px; color: var(--ink-3); margin-top: 1px; }
+pre.log { margin: 0; font: 12px/1.55 var(--mono); color: var(--ink-2); background: var(--page); border-radius: 12px;
+          padding: 14px 16px; max-height: 340px; overflow: auto; white-space: pre; }
+footer { max-width: 1180px; margin: 0 auto; padding: 0 24px 40px; color: var(--ink-3); font-size: 12px;
+         display: flex; justify-content: space-between; gap: 8px 16px; flex-wrap: wrap; }
+
+/* dialog, toast */
+dialog { border: 0; padding: 0; border-radius: 16px; background: var(--card); color: var(--ink); width: min(360px, calc(100vw - 32px));
+         box-shadow: 0 24px 70px rgba(0, 0, 0, .3); }
+dialog::backdrop { background: rgba(0, 0, 0, .28); backdrop-filter: blur(3px); }
+.dlg { padding: 22px 22px 18px; text-align: center; }
+.dlg h3 { margin: 0 0 6px; font-size: 17px; font-weight: 600; }
+.dlg p { margin: 0 0 18px; color: var(--ink-2); font-size: 13.5px; }
+.dlg .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); background: var(--toast); color: #fff;
+         padding: 11px 18px; border-radius: 14px; font-size: 13.5px; opacity: 0; transition: opacity .2s, transform .2s;
+         pointer-events: none; z-index: 30; max-width: calc(100vw - 32px); box-shadow: 0 10px 30px rgba(0, 0, 0, .25); }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+@media (max-width: 820px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .hero { grid-template-columns: minmax(0, 1fr); padding: 24px 22px; }
+  .hero-num { font-size: 60px; }
+}
+@media (max-width: 560px) {
+  .bar-inner { padding: 10px 16px; }
+  main { padding: 18px 16px 40px; }
+  footer { padding: 0 16px 32px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .tile { padding: 14px 15px; }
+  .tile .value { font-size: 23px; }
+  figure.chart { padding: 16px 14px 8px; }
+  .panel { padding: 18px 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse, .progress > i { animation: none; }
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand">
+      <div class="app-icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="5.2" fill="#fff" stroke="none"/>
+          <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/>
+        </svg>
+      </div>
+      <div style="min-width:0">
+        <div class="title">Minesweeper DQN</div>
+        <div class="sub" id="sub">Connecting…</div>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="pill" id="phase" role="status"><span class="dot tone-muted"></span><span class="text">Connecting</span></span>
+      <button class="btn secondary" id="benchBtn" disabled>Benchmark</button>
+      <button class="btn primary" id="toggleBtn" disabled>Pause</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="card hero" aria-label="Headline">
+    <div>
+      <div class="eyebrow" id="heroEyebrow">Win rate on the evaluation boards</div>
+      <div class="hero-num" id="heroWin">—</div>
+      <div class="hero-meta" id="heroMeta"> </div>
+      <div class="delta" id="heroDelta"></div>
+    </div>
+    <div>
+      <div class="compare" id="compare">
+        <div class="cmp-row"><span class="cmp-name">DQN</span><div class="track"><i id="barDqn" style="width:0;background:var(--series-1)"></i></div><span class="cmp-val" id="valDqn">—</span></div>
+        <div class="cmp-row"><span class="cmp-name">bayes</span><div class="track"><i id="barBayes" style="width:0;background:var(--ref)"></i></div><span class="cmp-val" id="valBayes">—</span></div>
+      </div>
+      <div class="cmp-note" id="cmpNote" style="margin-top:12px"> </div>
+    </div>
+    <div class="notice" id="notice"><span class="dot tone-muted" id="noticeDot" style="margin-top:6px"></span><div id="noticeText"></div></div>
+  </section>
+
+  <section class="tiles" aria-label="Key numbers">
+    <div class="card tile"><div class="label">Clicks trained</div><div class="value" id="tClicks">—</div><div class="note" id="nClicks"> </div></div>
+    <div class="card tile"><div class="label">Speed</div><div class="value" id="tSpeed">—</div><div class="note" id="nSpeed"> </div></div>
+    <div class="card tile"><div class="label">Learning rate</div><div class="value" id="tLr">—</div><div class="note" id="nLr"> </div></div>
+    <div class="card tile"><div class="label">Best so far</div><div class="value" id="tBest">—</div><div class="note" id="nBest"> </div></div>
+    <div class="card tile"><div class="label" id="lGpu">GPU</div><div class="value" id="tGpu">—</div><div class="note" id="nGpu"> </div></div>
+    <div class="card tile"><div class="label">Next evaluation</div><div class="value" id="tNext">—</div><div class="note" id="nNext"> </div></div>
+  </section>
+
+  <div class="section-head">
+    <div><h2>Progress</h2><div class="section-sub">Hard board, 16 × 30 with 99 mines. Evaluations are greedy play on fixed boards that training never sees.</div></div>
+    <div class="segmented" role="group" aria-label="Time range" id="range">
+      <button data-range="all" aria-pressed="true">All</button>
+      <button data-range="7d" aria-pressed="false">7 days</button>
+      <button data-range="24h" aria-pressed="false">24 hours</button>
+      <button data-range="reward" aria-pressed="false">New reward</button>
+    </div>
+  </div>
+
+  <section class="grid" id="charts">
+    <figure class="card chart wide" id="cWin">
+      <div class="fig-head"><div><div class="fig-title">Win rate</div><div class="fig-sub">Share of evaluation games won. The band is the 95% range; the gray line is bayes on the same boards.</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cRev">
+      <div class="fig-head"><div><div class="fig-title">Board cleared</div><div class="fig-sub">Share of safe cells uncovered per evaluation game</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cTrain">
+      <div class="fig-head"><div><div class="fig-title">Training games</div><div class="fig-sub">Last 1,000 games while learning, with exploration</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="legend"><span><i class="key" style="background:var(--series-1)"></i>Board cleared</span><span><i class="key" style="background:var(--series-2)"></i>Won</span></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cTd">
+      <div class="fig-head"><div><div class="fig-title">Learning error</div><div class="fig-sub">TD loss (Huber): how far the network's values are from their targets</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cQ">
+      <div class="fig-head"><div><div class="fig-title">Value estimate</div><div class="fig-sub">Mean Q of the clicks being learned from</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cSpeed">
+      <div class="fig-head"><div><div class="fig-title">Speed</div><div class="fig-sub">Clicks per second, averaged over the session</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart" id="cTemp">
+      <div class="fig-head"><div><div class="fig-title">GPU temperature</div><div class="fig-sub">°C. Above the limit line, training slows itself down.</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+  </section>
+
+  <div class="spacer"></div>
+  <section class="grid">
+    <div class="card panel" id="benchCard">
+      <div class="panel-head">
+        <div><div class="fig-title">Benchmark</div><div class="fig-sub" id="benchSub">The latest checkpoint against bayes, with why each lost game was lost</div></div>
+      </div>
+      <div id="benchBody"><div class="empty" style="height:120px">No benchmark yet. Press Benchmark to run one.</div></div>
+      <div class="downloads" id="downloads" hidden>
+        <a class="btn secondary" id="dlLatest" href="#">Download latest model</a>
+        <a class="btn secondary" id="dlBest" href="#">Download best model</a>
+      </div>
+    </div>
+    <div class="card panel">
+      <div class="panel-head"><div><div class="fig-title">Timeline</div><div class="fig-sub">Starts, stops and changes to training</div></div></div>
+      <ul class="timeline" id="timeline"></ul>
+    </div>
+    <div class="card panel wide">
+      <div class="panel-head"><div><div class="fig-title">Training log</div><div class="fig-sub" id="logSub">The training window's output</div></div></div>
+      <pre class="log" id="log" tabindex="0">…</pre>
+    </div>
+  </section>
+</main>
+
+<footer><span id="footLeft"> </span><span id="footRight"> </span></footer>
+
+<dialog id="dlg">
+  <form method="dialog" class="dlg">
+    <h3 id="dlgTitle">Pause training?</h3>
+    <p id="dlgText">The latest model is saved first.</p>
+    <div class="row"><button class="btn secondary" value="cancel">Cancel</button><button class="btn primary" value="ok" id="dlgOk">Pause</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+const SVGNS = "http://www.w3.org/2000/svg";
+
+// ---------- token ----------
+let TOKEN = "";
+try {
+  const p = new URLSearchParams(location.search);
+  if (p.get("token")) {
+    localStorage.setItem("msw-token", p.get("token"));
+    history.replaceState(null, "", location.pathname);
+  }
+  TOKEN = localStorage.getItem("msw-token") || "";
+} catch (e) { TOKEN = new URLSearchParams(location.search).get("token") || ""; }
+
+// ---------- formatting ----------
+const fmt = {
+  pct(v, d = 1) { return v == null || isNaN(v) ? "—" : (v * 100).toFixed(d) + "%"; },
+  pts(v) { return (Math.abs(v * 100)).toFixed(1) + " pts"; },
+  compact(v) {
+    if (v == null || isNaN(v)) return "—";
+    const a = Math.abs(v), trim = (s) => s.replace(/\.0+$|(\.\d*?)0+$/, "$1");
+    if (a >= 1e9) return trim((v / 1e9).toFixed(2)) + "B";
+    if (a >= 1e6) return trim((v / 1e6).toFixed(a >= 1e8 ? 0 : a >= 1e7 ? 1 : 2)) + "M";
+    if (a >= 1e3) return trim((v / 1e3).toFixed(a >= 1e4 ? 0 : 1)) + "K";
+    return String(Math.round(v));
+  },
+  int(v) { return v == null ? "—" : Math.round(v).toLocaleString("en-US"); },
+  lr(v) {
+    if (v == null) return "—";
+    const [m, e] = v.toExponential(2).split("e");
+    return (+m).toString() + "e" + (+e).toString().replace("-", "−");
+  },
+  num(v, d = 3) { return v == null || isNaN(v) ? "—" : (+v).toFixed(d); },
+  dur(s) {
+    s = Math.max(0, Math.round(s));
+    if (s < 60) return s + " s";
+    if (s < 3600) return Math.round(s / 60) + " min";
+    if (s < 86400) { const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60); return h + " h" + (m ? " " + m + " min" : ""); }
+    const d = Math.floor(s / 86400), h = Math.round((s % 86400) / 3600); return d + " d" + (h ? " " + h + " h" : "");
+  },
+  ago(t) { return t ? fmt.dur(Date.now() / 1000 - t) + " ago" : "—"; },
+  when(t) {
+    if (!t) return "";
+    const d = new Date(t * 1000), now = new Date();
+    const time = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    if (d.toDateString() === now.toDateString()) return "today " + time;
+    return d.toLocaleDateString([], { month: "short", day: "numeric" }) + ", " + time;
+  },
+};
+
+function niceTicks(min, max, count) {
+  const span = max - min || Math.abs(max) || 1;
+  const raw = span / count, mag = Math.pow(10, Math.floor(Math.log10(raw))), r = raw / mag;
+  const step = (r >= 7.5 ? 10 : r >= 3.5 ? 5 : r >= 1.5 ? 2 : 1) * mag;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step, ticks = [];
+  for (let v = lo; v <= hi + step * 1e-6; v += step) ticks.push(Math.abs(v) < step * 1e-6 ? 0 : +v.toPrecision(12));
+  return { lo, hi, ticks };
+}
+
+function svg(tag, attrs, parent) {
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(n);
+  return n;
+}
+function h(tag, cls, text, parent) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  if (parent) parent.appendChild(n);
+  return n;
+}
+
+// ---------- line chart ----------
+// cfg: {series:[{name,color,pts:[{x,y,t}],band:[{x,lo,hi}]}], refs:[{y,label,fmt}], events:[{x,text}],
+//       yFmt, tickFmt, zero, eventLabels, height, xMax (the x range runs at least to here)}
+function lineChart(fig, cfg) {
+  const host = fig.querySelector(".plot");
+  host._cfg = cfg;
+  if (fig._table) { renderTable(fig, cfg); return; }
+  const W = Math.max(260, host.clientWidth), H = cfg.height || 210;
+  const pts = cfg.series.flatMap((s) => s.pts.filter((p) => p.y != null));
+  if (!pts.length) { host.replaceChildren(h("div", "empty", cfg.empty || "No data yet")); return; }
+  const m = { l: 46, r: 58, t: cfg.eventLabels ? 26 : 12, b: 26 };
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  const seeY = (v) => { if (v != null && isFinite(v)) { y0 = Math.min(y0, v); y1 = Math.max(y1, v); } };
+  for (const p of pts) { x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); seeY(p.y); }
+  for (const s of cfg.series) for (const b of s.band || []) { seeY(b.lo); seeY(b.hi); }
+  for (const r of cfg.refs || []) seeY(r.y);
+  if (cfg.xMax != null && cfg.xMax > x1) x1 = cfg.xMax;
+  if (x0 === x1) { x0 -= 1; x1 += 1; }
+  if (cfg.zero) y0 = Math.min(0, y0);
+  if (y0 === y1) { y0 -= Math.abs(y0) * 0.1 || 1; y1 += Math.abs(y1) * 0.1 || 1; }
+  const yt = niceTicks(y0, y1, 4), xt = niceTicks(x0, x1, Math.max(2, Math.floor((W - m.l - m.r) / 110)));
+  const X = (v) => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r);
+  const Y = (v) => m.t + (1 - (v - yt.lo) / (yt.hi - yt.lo)) * (H - m.t - m.b);
+  const tickFmt = cfg.tickFmt || cfg.yFmt;
+
+  const root = svg("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, width: W, height: H, tabindex: 0, role: "img",
+                            "aria-label": fig.querySelector(".fig-title").textContent + " chart; use the arrow keys to read values" });
+  for (const v of yt.ticks) {
+    svg("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v), stroke: "var(--grid)", "stroke-width": 1, "shape-rendering": "crispEdges" }, root);
+    svg("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "tick" }, root).textContent = tickFmt(v);
+  }
+  svg("line", { x1: m.l, x2: W - m.r, y1: H - m.b, y2: H - m.b, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" }, root);
+  for (const v of xt.ticks) {
+    if (v < x0 || v > x1) continue;
+    svg("text", { x: X(v), y: H - m.b + 17, "text-anchor": "middle", class: "tick" }, root).textContent = fmt.compact(v);
+  }
+  // events: thin rules, labelled where there is room
+  let lastLabel = -Infinity;
+  for (const e of (cfg.events || []).filter((e) => e.x >= x0 && e.x <= x1)) {
+    const x = X(e.x);
+    svg("line", { x1: x, x2: x, y1: m.t, y2: H - m.b, stroke: "var(--axis)", "stroke-width": 1, "shape-rendering": "crispEdges" }, root);
+    if (cfg.eventLabels && x - lastLabel > 96) {
+      const right = x > W - m.r - 90;                 // near the right edge the label goes on the left of its rule
+      svg("text", { x: right ? x - 5 : x + 5, y: m.t - 10, class: "ev-label", "text-anchor": right ? "end" : "start" }, root)
+        .textContent = e.short || e.text;
+      lastLabel = x;
+    }
+  }
+  // reference lines (bayes, limits), labelled at the left above the line
+  for (const r of cfg.refs || []) {
+    if (r.y == null) continue;
+    svg("line", { x1: m.l, x2: W - m.r, y1: Y(r.y), y2: Y(r.y), stroke: "var(--ref)", "stroke-width": 1.5 }, root);
+    svg("text", { x: m.l + 6, y: Y(r.y) - 6, class: "ref-label" }, root).textContent = r.label + " " + (r.fmt || cfg.yFmt)(r.y);
+  }
+  // bands, then lines
+  for (const s of cfg.series) {
+    const b = (s.band || []).filter((p) => p.lo != null && p.hi != null);
+    if (b.length > 1) {
+      const d = b.map((p, i) => (i ? "L" : "M") + X(p.x).toFixed(1) + "," + Y(p.hi).toFixed(1)).join("") +
+                b.slice().reverse().map((p) => "L" + X(p.x).toFixed(1) + "," + Y(p.lo).toFixed(1)).join("") + "Z";
+      svg("path", { d, fill: s.bandColor || "var(--band)", stroke: "none" }, root);
+    }
+  }
+  for (const s of cfg.series) {
+    let d = "", pen = false;
+    for (const p of s.pts) {
+      if (p.y == null) { pen = false; continue; }
+      d += (pen ? "L" : "M") + X(p.x).toFixed(1) + "," + Y(p.y).toFixed(1);
+      pen = true;
+    }
+    svg("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, root);
+    if (s.dots) for (const p of s.pts) if (p.y != null)
+      svg("circle", { cx: X(p.x), cy: Y(p.y), r: 4, fill: s.color, stroke: "var(--card)", "stroke-width": 2 }, root);
+  }
+  // end dots and end labels
+  for (const s of cfg.series) {
+    const last = [...s.pts].reverse().find((p) => p.y != null);
+    if (!last) continue;
+    svg("circle", { cx: X(last.x), cy: Y(last.y), r: 4, fill: s.color, stroke: "var(--card)", "stroke-width": 2 }, root);
+    if (!s.noLabel) svg("text", { x: X(last.x) + 8, y: Y(last.y) + 4, class: "end-label" }, root).textContent = cfg.yFmt(last.y);
+  }
+
+  // hover: a crosshair that snaps to the nearest data position
+  const hover = svg("g", { opacity: 0 }, root);
+  const cross = svg("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1, "shape-rendering": "crispEdges" }, hover);
+  const marks = cfg.series.map((s) => svg("circle", { r: 4, fill: s.color, stroke: "var(--card)", "stroke-width": 2 }, hover));
+  const xs = [...new Set(pts.map((p) => p.x))].sort((a, b) => a - b);
+  const tip = h("div", "tip");
+  const nearest = (arr, x) => {
+    let lo = 0, hi = arr.length - 1;
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; (arr[mid].x ?? arr[mid]) < x ? (lo = mid) : (hi = mid); }
+    return Math.abs((arr[lo].x ?? arr[lo]) - x) <= Math.abs((arr[hi].x ?? arr[hi]) - x) ? lo : hi;
+  };
+  let idx = -1;
+  const show = (i) => {
+    idx = Math.max(0, Math.min(xs.length - 1, i));
+    const x = xs[idx];
+    cross.setAttribute("x1", X(x)); cross.setAttribute("x2", X(x));
+    tip.replaceChildren();
+    let t = null;
+    const rows = [];
+    cfg.series.forEach((s, k) => {
+      const valid = s.pts.filter((p) => p.y != null);
+      if (!valid.length) { marks[k].setAttribute("opacity", 0); return; }
+      const p = valid[nearest(valid, x)];
+      marks[k].setAttribute("cx", X(p.x)); marks[k].setAttribute("cy", Y(p.y)); marks[k].setAttribute("opacity", 1);
+      t = t || p.t;
+      rows.push([s.color, cfg.yFmt(p.y), s.name, p.extra]);
+    });
+    h("div", "tip-head", fmt.compact(x) + " clicks" + (t ? " · " + fmt.when(t) : ""), tip);
+    for (const [color, val, name, extra] of rows) {
+      const r = h("div", "tip-row", null, tip);
+      const k = h("i", "key", null, r); k.style.background = color;
+      h("b", null, val, r); h("span", null, name + (extra ? " " + extra : ""), r);
+    }
+    for (const r of cfg.refs || []) {
+      if (r.y == null) continue;
+      const row = h("div", "tip-row", null, tip);
+      const k = h("i", "key", null, row); k.style.background = "var(--ref)";
+      h("b", null, (r.fmt || cfg.yFmt)(r.y), row); h("span", null, r.label, row);
+    }
+    const near = (cfg.events || []).filter((e) => Math.abs(X(e.x) - X(x)) < 14);
+    for (const e of near) h("div", "tip-ev", e.text + " · at " + fmt.compact(e.x), tip);
+    hover.setAttribute("opacity", 1);
+    tip.classList.add("show");
+    const tw = tip.offsetWidth, th = tip.offsetHeight;
+    let left = X(x) + 14; if (left + tw > W) left = X(x) - tw - 14;
+    tip.style.transform = `translate(${Math.max(0, left)}px, ${Math.max(0, Math.min(H - th, m.t))}px)`;
+  };
+  const hide = () => { hover.setAttribute("opacity", 0); tip.classList.remove("show"); idx = -1; };
+  const hit = svg("rect", { x: m.l, y: 0, width: W - m.l - m.r + 30, height: H, fill: "transparent" }, root);
+  hit.addEventListener("pointermove", (ev) => {
+    const box = root.getBoundingClientRect();
+    const px = (ev.clientX - box.left) * (W / box.width);
+    show(nearest(xs, x0 + (px - m.l) / (W - m.l - m.r) * (x1 - x0)));
+  });
+  hit.addEventListener("pointerleave", hide);
+  root.addEventListener("keydown", (ev) => {
+    if (ev.key === "ArrowRight" || ev.key === "ArrowLeft") {
+      ev.preventDefault();
+      show(idx < 0 ? xs.length - 1 : idx + (ev.key === "ArrowRight" ? 1 : -1));
+    } else if (ev.key === "Escape") hide();
+  });
+  root.addEventListener("blur", hide);
+  host.replaceChildren(root, tip);
+}
+
+// the table twin of a chart
+function renderTable(fig, cfg) {
+  const host = fig.querySelector(".plot");
+  const byX = new Map();
+  cfg.series.forEach((s, k) => s.pts.forEach((p) => {
+    if (!byX.has(p.x)) byX.set(p.x, { t: p.t, v: [] });
+    byX.get(p.x).v[k] = p.y;
+  }));
+  const wrap = h("div", "table-wrap"), table = h("table", null, null, wrap);
+  const head = h("tr", null, null, h("thead", null, null, table));
+  h("th", null, "Clicks", head); h("th", null, "Time", head);
+  cfg.series.forEach((s) => h("th", null, s.name, head));
+  const body = h("tbody", null, null, table);
+  [...byX.entries()].sort((a, b) => b[0] - a[0]).slice(0, 400).forEach(([x, r]) => {
+    const tr = h("tr", null, null, body);
+    h("td", null, fmt.int(x), tr); h("td", null, r.t ? fmt.when(r.t) : "—", tr);
+    cfg.series.forEach((s, k) => h("td", null, r.v[k] == null ? "—" : cfg.yFmt(r.v[k]), tr));
+  });
+  host.replaceChildren(byX.size ? wrap : h("div", "empty", "No data yet"));
+}
+
+document.querySelectorAll("figure.chart").forEach((fig) => {
+  const btn = fig.querySelector("[data-table]");
+  btn.addEventListener("click", () => {
+    fig._table = !fig._table;
+    btn.textContent = fig._table ? "Chart" : "Table";
+    const cfg = fig.querySelector(".plot")._cfg;
+    if (cfg) lineChart(fig, cfg);
+  });
+  let pending = false, lastW = 0;
+  new ResizeObserver(() => {
+    const w = fig.querySelector(".plot").clientWidth;
+    if (pending || Math.abs(w - lastW) < 2) return;
+    pending = true;
+    requestAnimationFrame(() => { pending = false; lastW = w; const cfg = fig.querySelector(".plot")._cfg; if (cfg) lineChart(fig, cfg); });
+  }).observe(fig.querySelector(".plot"));
+});
+
+// ---------- data ----------
+let S = null, HIST = null, RANGE = "all", histKey = "", histAt = 0;
+try { RANGE = localStorage.getItem("msw-range") || "all"; } catch (e) {}
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, { ...opts, headers: { "X-Token": TOKEN, ...(opts.headers || {}) }, cache: "no-store" });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok && !("ok" in body)) throw new Error(res.status + "");
+  return body;
+}
+
+const PHASES = {
+  training:   ["Training", "good", true],
+  evaluating: ["Evaluating", "accent", true],
+  starting:   ["Starting", "accent", true],
+  stopping:   ["Saving and stopping", "warning", true],
+  stalled:    ["No progress for 30 min", "warning", false],
+  paused:     ["Paused", "muted", false],
+  stopped:    ["Stopped", "muted", false],
+  down:       ["Not running", "critical", false],
+};
+
+function setText(id, v) { const n = $(id); if (n.textContent !== v) n.textContent = v; }
+function setValue(id, main, unit) {
+  const n = $(id); n.replaceChildren(document.createTextNode(main));
+  if (unit) h("small", null, unit, n);
+}
+
+function targetEvals() {
+  const lv = S && S.status ? S.status.target_level : 4;
+  return (HIST ? HIST.eval : []).filter((e) => e.level === lv);
+}
+function bayesFor(st) { return st && st.bayes ? st.bayes[String(st.target_level)] : null; }
+
+function renderState() {
+  const st = S.status || {}, g = S.gpu || {};
+  const [label, tone, pulse] = PHASES[S.phase] || PHASES.down;
+  const pill = $("phase");
+  pill.replaceChildren();
+  h("span", "dot tone-" + tone + (pulse ? " pulse" : ""), null, pill);
+  h("span", "text", label, pill);
+  document.title = label + " · Minesweeper Training";
+
+  const model = st.model ? `${st.model.channels}×${st.model.layers} net` : "";
+  setText("sub", [S.host, st.device, model].filter(Boolean).join(" · "));
+
+  // buttons
+  const running = ["training", "evaluating", "starting", "stalled"].includes(S.phase);
+  const tb = $("toggleBtn"), bb = $("benchBtn");
+  tb.textContent = S.phase === "stopping" ? "Saving…" : running ? "Pause" : "Resume";
+  tb.disabled = !S.authorized || S.phase === "stopping" || (S.phase === "starting") || (!running && !S.can_start);
+  tb.title = S.authorized ? "" : "Open the dashboard link with the token to control training";
+  const bench = S.benchmark || {};
+  bb.textContent = bench.running ? "Benchmarking…" : "Benchmark";
+  bb.disabled = !S.authorized || !!bench.running || !st.checkpoints;
+  bb.title = tb.title;
+
+  // tiles
+  setText("tClicks", fmt.compact(st.step));
+  const gained = st.step != null && st.session_step != null ? st.step - st.session_step : null;
+  setText("nClicks", gained != null && st.started ? `+${fmt.compact(gained)} since ${fmt.when(st.started)}` : " ");
+  const live = running && S.phase !== "starting";
+  if (st.sps) { setValue("tSpeed", fmt.int(st.sps), "/s"); setText("nSpeed", `${fmt.compact(st.sps * 86400)} clicks a day`); }
+  else { setValue("tSpeed", "—"); setText("nSpeed", " "); }
+  setText("tLr", fmt.lr(st.lr));
+  if (st.lr_patience) {
+    const left = st.lr_patience - (st.evals_since_best || 0);
+    setText("nLr", st.lr <= st.lr_min * 1.0001 ? "at its minimum"
+      : `halves after ${left} more evaluation${left === 1 ? "" : "s"} without a new best`);
+  } else setText("nLr", "fixed");
+  if (st.best) { setText("tBest", fmt.pct(st.best.win)); setText("nBest", `at ${fmt.compact(st.best.step)} clicks · ${fmt.pct(st.best.revealed)} cleared`); }
+  else { setText("tBest", "—"); setText("nBest", "after the first evaluation"); }
+  if (g.temp != null) {
+    setValue("tGpu", fmt.int(g.temp), "°C");
+    const slowed = st.gpu_pause > 0 && live;
+    const lab = $("lGpu"); lab.replaceChildren();
+    if (slowed || g.temp >= 90) h("span", "dot tone-warning", null, lab);
+    lab.appendChild(document.createTextNode(slowed ? "GPU · slowed to cool down" : "GPU"));
+    setText("nGpu", `${fmt.int(g.util)}% busy · ${fmt.int(g.mem_used)} of ${fmt.int(g.mem_total)} MB memory`
+            + (st.max_gpu_temp ? ` · limit ${fmt.int(st.max_gpu_temp)} °C` : ""));
+  } else { setValue("tGpu", "—"); setText("nGpu", "no NVIDIA GPU reading"); }
+  if (live && st.next_eval && st.sps) {
+    setText("tNext", "in " + fmt.dur((st.next_eval - st.step) / st.sps));
+  } else setText("tNext", S.phase === "evaluating" ? "now" : "—");
+  setText("nNext", st.eval_every ? `every ${fmt.compact(st.eval_every)} clicks · ${fmt.int(st.eval_games)} boards` : " ");
+
+  // notice when training is not running
+  const notice = $("notice");
+  const latest = st.checkpoints ? st.checkpoints.latest.split(/[\\/]/).pop() : "";
+  let msg = "";
+  if (S.phase === "paused") msg = `Paused ${fmt.ago(st.updated)} at ${fmt.compact(st.step)} clicks. The model is saved (${latest}); it stays off until you resume.`;
+  else if (S.phase === "stopped") msg = `Stopped ${fmt.ago(st.updated)} at ${fmt.compact(st.step)} clicks (${st.stop_reason || "stopped"}). The model is saved: ${latest}.`;
+  else if (S.phase === "down") msg = `Training is not running and did not stop cleanly; it was last seen ${fmt.ago(st.updated)}. The log below shows its last lines. Resume starts it again from the last save.`;
+  else if (S.phase === "stalled") msg = `No progress reported for ${fmt.ago(st.updated).replace(" ago", "")}. The log below may show why.`;
+  notice.classList.toggle("show", !!msg);
+  $("noticeDot").className = "dot tone-" + (S.phase === "down" ? "critical" : S.phase === "stalled" ? "warning" : "muted");
+  setText("noticeText", msg);
+
+  renderHero();
+  renderBenchmark();
+  $("downloads").hidden = !S.authorized || !st.checkpoints;
+  $("dlLatest").href = "/api/download/latest?token=" + encodeURIComponent(TOKEN);
+  $("dlBest").href = "/api/download/best?token=" + encodeURIComponent(TOKEN);
+  setText("footLeft", st.run ? `Run ${st.run} · updated ${fmt.ago(st.updated)}` : "No run yet");
+  setText("footRight", S.authorized ? "Controls unlocked in this browser" : "View only: open the link with ?token= to use the buttons");
+}
+
+function renderHero() {
+  const st = S.status || {}, evals = targetEvals(), base = bayesFor(st);
+  const last = evals.length ? evals[evals.length - 1] : st.last_eval;
+  setText("heroWin", last ? fmt.pct(last.win) : "—");
+  setText("heroMeta", last ? `±${fmt.pct(last.win_margin)} on ${fmt.int(last.games)} boards · ${fmt.pct(last.revealed)} of the board cleared · at ${fmt.compact(last.step)} clicks` : "Waiting for the first evaluation");
+  const delta = $("heroDelta"); delta.replaceChildren();
+  const prev = evals.length > 1 ? [...evals].slice(0, -1).reverse().find((e) => e.games === last.games) : null;
+  if (prev) {
+    const d = last.win - prev.win, up = d > 0.0005, down = d < -0.0005;
+    const icon = svg("svg", { width: 12, height: 12, viewBox: "0 0 12 12", "aria-hidden": "true" }, delta);
+    if (up || down) svg("path", { d: up ? "M6 2 L10.5 9 H1.5 Z" : "M6 10 L10.5 3 H1.5 Z", fill: up ? "var(--good)" : "var(--critical)" }, icon);
+    else svg("rect", { x: 2, y: 5, width: 8, height: 2, rx: 1, fill: "var(--ink-3)" }, icon);
+    delta.appendChild(document.createTextNode((up ? "Up " : down ? "Down " : "Level, ") + (up || down ? fmt.pts(d) : "") + " since the evaluation before"));
+  }
+  const top = Math.max(0.0001, last ? last.win : 0, base ? base.win : 0);
+  $("barDqn").style.width = last ? (last.win / top * 100).toFixed(1) + "%" : "0";
+  $("barBayes").style.width = base ? (base.win / top * 100).toFixed(1) + "%" : "0";
+  setText("valDqn", last ? fmt.pct(last.win) : "—");
+  setText("valBayes", base ? fmt.pct(base.win) : "—");
+  const boards = !last || !base ? "" : last.games === base.games ? `on the same ${fmt.int(base.games)} boards`
+    : `(bayes on ${fmt.int(base.games)} boards, this evaluation on the first ${fmt.int(last.games)} of them)`;
+  setText("cmpNote", last && base ? `DQN wins ${(last.win / base.win * 100).toFixed(0)}% as often as bayes ${boards}. bayes plays the exact probabilities; the DQN sees only the board.` : " ");
+}
+
+function renderBenchmark() {
+  const bench = S.benchmark || {}, list = HIST ? HIST.benchmarks : [];
+  const body = $("benchBody");
+  if (bench.running) {
+    body.replaceChildren();
+    h("div", "bench-meta", `Playing ${fmt.int(bench.games)} boards, then asking the solver about every lost game… ${fmt.dur(Date.now() / 1000 - bench.started)} so far`, body);
+    h("i", null, null, h("div", "progress", null, body));
+    return;
+  }
+  if (bench.error) { body.replaceChildren(h("div", "bench-meta", bench.error)); return; }
+  if (!list.length) return;
+  const r = list[list.length - 1], d = r.dqn, b = r.bayes;
+  body.replaceChildren();
+  h("div", "bench-meta", `Checkpoint at ${fmt.compact(r.step)} clicks · ${fmt.int(r.games)} boards · ${fmt.when(r.t)} · took ${fmt.dur(r.seconds || 0)}`, body);
+  const leg = h("div", "legend", null, body); leg.style.margin = "10px 0 2px";
+  const k1 = h("span", null, null, leg); h("i", "key", null, k1).style.background = "var(--series-1)"; k1.appendChild(document.createTextNode("DQN"));
+  const k2 = h("span", null, null, leg); h("i", "key", null, k2).style.background = "var(--ref)"; k2.appendChild(document.createTextNode("bayes"));
+  const table = h("table", "bench", null, body);
+  const hr = h("tr", null, null, h("thead", null, null, table));
+  ["", "DQN", "", "bayes", ""].forEach((t) => h("th", null, t, hr));
+  const tb = h("tbody", null, null, table);
+  const rows = [
+    ["Won", d.win, b.win, true],
+    ["Board cleared", d.revealed, b.revealed, true],
+    ["Lost: a safe cell was known", d.missed_safe, 0, true],
+    ["Lost: a safer guess existed", d.risky_guess, 0, true],
+    ["Lost: unlucky guess", d.unlucky, 1 - b.win, true],
+    ["Efficiency of wins", d.efficiency, b.efficiency, false],
+  ];
+  for (const [name, dv, bv, pct] of rows) {
+    const tr = h("tr", null, null, tb);
+    h("td", null, name, tr);
+    const f = (v) => pct ? fmt.pct(v) : fmt.num(v, 2);
+    h("td", null, f(dv), tr);
+    const c1 = h("td", "bar-cell", null, tr), bar1 = h("i", null, null, h("div", "mini", null, c1));
+    bar1.style.width = Math.max(0, Math.min(1, dv || 0)) * 100 + "%"; bar1.style.background = "var(--series-1)";
+    h("td", null, f(bv), tr);
+    const c2 = h("td", "bar-cell", null, tr), bar2 = h("i", null, null, h("div", "mini", null, c2));
+    bar2.style.width = Math.max(0, Math.min(1, bv || 0)) * 100 + "%"; bar2.style.background = "var(--ref)";
+  }
+  h("div", "past", "Efficiency: the oracle's fewest clicks for the board divided by the clicks used, on won games.", body);
+  if (list.length > 1) {
+    h("div", "past", "Earlier: " + list.slice(-6, -1).reverse().map((x) => `${fmt.pct(x.dqn.win)} at ${fmt.compact(x.step)}`).join(" · "), body);
+  }
+}
+
+function eventsFor(hist) {
+  const tags = { lr: "lr", reward: "reward", level: "level" };
+  return hist.events.filter((e) => tags[e.tag]).map((e) => ({
+    x: e.step, text: e.text,
+    short: e.tag === "lr" ? "lr " + fmt.lr(parseFloat(e.text.split(" ").pop())) : e.tag === "reward" ? "new reward" : e.text,
+  }));
+}
+
+function renderHistory() {
+  const st = S ? S.status || {} : {}, base = bayesFor(st), events = eventsFor(HIST);
+  const evals = targetEvals(), train = HIST.train;
+  const pct = (v) => fmt.pct(v), pct0 = (v) => (v * 100).toFixed(0) + "%";
+  const series = (rows, key, name, color) => ({ name, color, pts: rows.map((r) => ({ x: r.step, y: r[key], t: r.t })) });
+  lineChart($("cWin"), {
+    series: [{ ...series(evals, "win", "DQN wins", "var(--series-1)"), dots: evals.length <= 40,
+               band: evals.map((e) => ({ x: e.step, lo: Math.max(0, e.win - (e.win_margin || 0)), hi: e.win + (e.win_margin || 0) })) }],
+    refs: base ? [{ y: base.win, label: "bayes" }] : [], events, yFmt: pct, tickFmt: pct0, zero: true, eventLabels: true, height: 250,
+    xMax: st.step,
+    empty: "No evaluations in this range",
+  });
+  lineChart($("cRev"), {
+    series: [{ ...series(evals, "revealed", "DQN cleared", "var(--series-1)"), dots: evals.length <= 40 }],
+    refs: base ? [{ y: base.revealed, label: "bayes" }] : [], events, yFmt: pct, tickFmt: pct0, zero: true, xMax: st.step,
+    empty: "No evaluations in this range",
+  });
+  lineChart($("cTrain"), {
+    series: [series(train, "revealed", "board cleared", "var(--series-1)"), series(train, "win", "won", "var(--series-2)")],
+    events, yFmt: pct, tickFmt: pct0, zero: true,
+  });
+  lineChart($("cTd"), { series: [series(train, "td", "TD loss", "var(--series-1)")], events, yFmt: (v) => fmt.num(v, 4), tickFmt: (v) => +v.toPrecision(2) + "" });
+  lineChart($("cQ"), { series: [series(train, "q", "mean Q", "var(--series-1)")], events, yFmt: (v) => (v >= 0 ? "+" : "") + fmt.num(v, 3), tickFmt: (v) => +v.toPrecision(2) + "" });
+  lineChart($("cSpeed"), { series: [series(train, "sps", "clicks/s", "var(--series-1)")], events, yFmt: (v) => fmt.int(v), tickFmt: (v) => fmt.compact(v), zero: true });
+  lineChart($("cTemp"), {
+    series: [series(train, "gpu_temp", "GPU °C", "var(--series-1)")],
+    refs: st.max_gpu_temp ? [{ y: st.max_gpu_temp, label: "limit", fmt: (v) => fmt.int(v) + " °C" }] : [],
+    events, yFmt: (v) => fmt.int(v) + " °C", tickFmt: (v) => fmt.int(v), empty: "No temperature readings in this range",
+  });
+  // timeline
+  const tl = $("timeline"); tl.replaceChildren();
+  const tone = { session: "good", stop: "muted", lr: "accent", reward: "accent", level: "accent", note: "muted" };
+  [...HIST.events].reverse().slice(0, 40).forEach((e) => {
+    const li = h("li", null, null, tl);
+    h("span", "dot tone-" + (tone[e.tag] || "muted"), null, li);
+    const d = h("div", null, null, li);
+    h("div", "tl-text", e.text.charAt(0).toUpperCase() + e.text.slice(1), d);
+    h("div", "tl-meta", `${fmt.when(e.t)} · at ${fmt.int(e.step)} clicks`, d);
+  });
+  if (!HIST.events.length) h("li", "tl-meta", "Nothing yet", tl);
+  const rewardBtn = document.querySelector('[data-range="reward"]');
+  rewardBtn.disabled = !HIST.has_reward && RANGE !== "reward";
+}
+
+async function refreshState() {
+  try {
+    S = await api("/api/state");
+    renderState();
+    const key = [S.run, S.status && S.status.step, S.status && S.status.state, RANGE].join("|");
+    if (key !== histKey || Date.now() - histAt > 120000) refreshHistory(key);
+  } catch (e) {
+    const pill = $("phase"); pill.replaceChildren();
+    h("span", "dot tone-critical", null, pill); h("span", "text", "Dashboard unreachable", pill);
+  }
+}
+
+async function refreshHistory(key) {
+  histKey = key || histKey; histAt = Date.now();
+  const grid = $("charts"); grid.classList.add("loading");
+  try {
+    const [hist, all] = await Promise.all([api("/api/history?range=" + RANGE), RANGE === "all" ? null : api("/api/history?range=all")]);
+    HIST = hist;
+    HIST.has_reward = (all || hist).events.some((e) => e.tag === "reward");
+    if (RANGE !== "all" && all) HIST.benchmarks = all.benchmarks;
+    renderHistory();
+    if (S) { renderHero(); renderBenchmark(); }
+  } catch (e) { /* keep the previous render */ }
+  grid.classList.remove("loading");
+}
+
+async function refreshLog() {
+  try {
+    const { lines } = await api("/api/log");
+    const pre = $("log"), atEnd = pre.scrollTop + pre.clientHeight >= pre.scrollHeight - 30;
+    const text = lines && lines.length ? lines.join("\n") : "No log configured.";
+    if (pre.textContent !== text) { pre.textContent = text; if (atEnd) pre.scrollTop = pre.scrollHeight; }
+  } catch (e) {}
+}
+
+// ---------- controls ----------
+function toast(msg) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 4200);
+}
+function ask(title, text, ok) {
+  return new Promise((resolve) => {
+    const d = $("dlg");
+    $("dlgTitle").textContent = title; $("dlgText").textContent = text; $("dlgOk").textContent = ok;
+    d.returnValue = "";
+    d.addEventListener("close", () => resolve(d.returnValue === "ok"), { once: true });
+    d.showModal();
+  });
+}
+async function act(path) {
+  try {
+    const r = await api(path, { method: "POST" });
+    toast(r.message || (r.ok ? "Done" : "That did not work"));
+  } catch (e) { toast("The dashboard could not be reached."); }
+  refreshState();
+}
+$("toggleBtn").addEventListener("click", async () => {
+  if ($("toggleBtn").textContent === "Pause") {
+    if (await ask("Pause training?", "The latest model is saved first, then training stops and stays off until you resume. During an evaluation, it stops once that finishes.", "Pause")) act("/api/pause");
+  } else if (await ask("Resume training?", "Training continues from the last saved model, in its window on the training PC.", "Resume")) act("/api/resume");
+});
+$("benchBtn").addEventListener("click", async () => {
+  if (await ask("Run a benchmark?", "A copy of the latest model plays the benchmark boards next to bayes, and the solver judges every lost game. Training keeps running, a little slower.", "Run")) act("/api/benchmark");
+});
+document.querySelectorAll("#range button").forEach((b) => {
+  b.setAttribute("aria-pressed", String(b.dataset.range === RANGE));
+  b.addEventListener("click", () => {
+    RANGE = b.dataset.range;
+    try { localStorage.setItem("msw-range", RANGE); } catch (e) {}
+    document.querySelectorAll("#range button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    refreshHistory([S && S.run, S && S.status && S.status.step, S && S.status && S.status.state, RANGE].join("|"));
+  });
+});
+
+refreshState(); refreshLog();
+setInterval(refreshState, 5000);
+setInterval(refreshLog, 15000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { refreshState(); refreshLog(); } });
+</script>
+</body>
+</html>

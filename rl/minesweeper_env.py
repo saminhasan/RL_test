@@ -48,40 +48,58 @@ def board_shape(level: int) -> tuple[int, int]:
 
 @dataclass(frozen=True)
 class RewardConfig:
-    """Reward for one click. S = the board's number of safe cells; scaling by S
-    keeps the numbers the same on every board size.
+    """Reward for one click: the goal, plus a progress signal that does not
+    change which way of playing is best.
 
-        progress  + progress * (cells this click uncovered) / S
-        click     - click / S                   on every click
-        win       + win                         when the last safe cell is uncovered
-        mine      - mine                        when a mine is hit (the game ends)
+    The goal, paid when a game ends:
+        win                            for clearing the board
+        credit * progress * cleared    for the share of the safe cells uncovered (1 for a win)
+    credit 0 makes winning the only goal; credit > 0 also counts how much of the
+    board a lost game cleared (partial credit).
 
-    Why these terms, with defaults progress 0.5, click 0.25, win 1, mine 0.5:
+    Paid on every click, potential-based shaping (Ng, Harada & Russell 1999):
+        gamma * Phi(after) - Phi(before),
+        Phi = progress * (share of the safe cells uncovered), and 0 once the game is over
 
-    * Winning matters most. A won game returns at least 1 + 0.5 - 0.25 = 1.25;
-      a lost game at most 0.5 - 0.5 = 0.
-    * A signal on every safe click, not only at the end: progress pays for what
-      each click uncovers, so a big opening pays more right away.
-    * It can't be gamed by clicking more. Over a whole won game, progress always
-      adds up to exactly `progress` (each safe cell is uncovered once), however
-      many clicks it took. A flat bonus per safe click would instead teach the
-      agent to take many small clicks.
-    * Fewer moves is better: each click costs click / S, so a wasted click (a
-      number that an opening would have uncovered anyway) lowers the return.
-    * Never worth dying to stop paying click costs: a safe click uncovers at
-      least one cell, so it nets at least (progress - click) / S > 0.
-    * Nothing hidden is used: no mine positions, no solver, no oracle count. The
-      automatic first click is not the agent's move and earns nothing.
+    Click by click:
+    * a safe click pays for the cells it uncovers, about progress * cells / S
+      (S = the board's safe cells), so every click teaches something;
+    * hitting a mine takes back the unbanked part of it, (1 - credit) * progress * cleared;
+    * winning keeps all of it and adds `win`.
+
+    Summed with the discount over a game, the shaping cancels out: the return is
+    gamma^(clicks - 1) * (win * won + credit * progress * cleared at the end),
+    minus Phi of the first board (where the automatic first click left off). So:
+    * the best way to play is the one that is best for the goal above, exactly
+      as without shaping (shaping speeds up learning and changes nothing else);
+    * with credit 0, dying late is no better than dying early;
+    * the discount gamma makes a quicker win worth a little more (about 0.1% per
+      click at 0.999), so fewer clicks breaks ties without ever being worth a
+      risk; and no reward can be had by giving up;
+    * nothing hidden is used: no mine positions, no solver, no oracle count.
+
+    gamma must be the discount the agent learns with (the trainer passes its own).
     """
 
-    progress: float = 0.5
-    click: float = 0.25
     win: float = 1.0
-    mine: float = 0.5
+    progress: float = 1.0
+    credit: float = 0.0
+    gamma: float = 0.999
 
     def __post_init__(self) -> None:
-        if not self.progress > self.click >= 0:
-            raise ValueError("need progress > click >= 0, or dying could beat a safe click")
+        if not (self.win > 0 and self.progress >= 0 and 0 <= self.credit <= 1 and 0 < self.gamma <= 1):
+            raise ValueError("need win > 0, progress >= 0, 0 <= credit <= 1 and 0 < gamma <= 1")
+
+    def potential(self, engine: MinesweeperEngine) -> float:
+        if engine.state == engine.OVER:
+            return 0.0
+        return self.progress * engine.revealed_safe_cells / engine.total_safe_cells
+
+    def goal(self, engine: MinesweeperEngine) -> float:
+        """The goal's payment once a game is over (0 while it runs)."""
+        if engine.state != engine.OVER:
+            return 0.0
+        return self.win * engine.won + self.credit * self.progress * engine.revealed_safe_cells / engine.total_safe_cells
 
 
 def first_click(board_seed: int, n_cells: int) -> int:
@@ -163,20 +181,14 @@ class MinesweeperEnv(gym.Env):
     def step(self, action):
         eng = self.engine
         row, col = divmod(int(action), self.canvas[1])
-        cfg, safe = self.reward_config, eng.total_safe_cells
+        cfg = self.reward_config
+        before = cfg.potential(eng)
         self._clicks += 1
         truncated = self._clicks >= self.rows * self.cols
-        if row >= self.rows or col >= self.cols or eng.revealed[row, col]:   # wasted click: nothing happens
-            return encode(eng, self._obs, self._view).copy(), -cfg.click / safe, False, truncated, self._info()
-        uncovered = eng.reveal_count(row, col)
-        reward = -cfg.click / safe
-        if eng.hit_mine:
-            reward -= cfg.mine
-        else:
-            reward += cfg.progress * uncovered / safe
-            if eng.won:
-                reward += cfg.win
+        if not (row >= self.rows or col >= self.cols or eng.revealed[row, col]):   # else a wasted click: nothing happens
+            eng.reveal_count(row, col)
         terminated = eng.state == eng.OVER
+        reward = cfg.goal(eng) + cfg.gamma * cfg.potential(eng) - before
         return encode(eng, self._obs, self._view).copy(), float(reward), terminated, truncated and not terminated, self._info()
 
     def render(self) -> str | None:

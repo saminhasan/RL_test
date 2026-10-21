@@ -21,6 +21,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from rl.journal import replace_with_retry
+
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
 DEFAULT_CONFIG = {"channels": 64, "layers": 16, "kernel": 3}
 N_PLANES = 12
@@ -81,7 +83,7 @@ def save_checkpoint(path: Path, q: QNetwork, extra: dict | None = None) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(".tmp")
     torch.save({"config": q.config, "state_dict": q.state_dict(), **(extra or {})}, tmp)
-    tmp.replace(path)                                                   # never a half-written checkpoint
+    replace_with_retry(tmp, path)                                       # never a half-written checkpoint
     return path
 
 

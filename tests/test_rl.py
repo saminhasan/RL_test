@@ -36,39 +36,52 @@ def test_first_click_is_automatic_and_the_same_per_board_seed() -> None:
         assert obs[0].ravel()[first_click(info["board_seed"], 480)] != 0   # the clicked cell is revealed
 
 
-def test_reward_adds_up_as_designed() -> None:
-    cfg = RewardConfig()
-    env = MinesweeperEnv(level=2, reward=cfg, seed=3)
-    rng = np.random.default_rng(0)
-    seen_win = seen_loss = False
-    for _ in range(400):
-        obs, info = env.reset()
-        safe = env.engine.total_safe_cells
-        start_revealed = env.engine.revealed_safe_cells
-        total, clicks, done = 0.0, 0, False
-        while not done:
-            hidden = np.flatnonzero(info["action_mask"])
-            safe_cells = hidden[~env.engine._mines_flat[hidden]]
-            a = rng.choice(safe_cells if rng.random() < 0.97 else hidden)   # mostly safe, so some games are won
-            obs, r, done, _, info = env.step(a)
-            total += r
-            clicks += 1
-        progress = cfg.progress * (env.engine.revealed_safe_cells - start_revealed) / safe
-        if info["won"]:
-            seen_win = True
-            assert np.isclose(total, cfg.win + progress - cfg.click * clicks / safe)
-        else:
-            seen_loss = True
-            assert np.isclose(total, progress - cfg.mine - cfg.click * clicks / safe)
-    assert seen_win and seen_loss
+def test_reward_shaping_cancels_out_over_a_game() -> None:
+    """The discounted return is gamma^(clicks - 1) * (win * won + credit * progress * cleared)
+    minus Phi of the first board: with credit 0, however much of the board a lost game uncovered."""
+    for credit in (0.0, 0.5):
+        cfg = RewardConfig(win=1.0, progress=1.0, credit=credit, gamma=0.99)
+        env = MinesweeperEnv(level=2, reward=cfg, seed=3)
+        rng = np.random.default_rng(0)
+        seen_win = seen_late_loss = False
+        for _ in range(300):
+            obs, info = env.reset()
+            safe = env.engine.total_safe_cells
+            phi0 = env.engine.revealed_safe_cells / safe
+            ret, clicks, done = 0.0, 0, False
+            while not done:
+                hidden = np.flatnonzero(info["action_mask"])
+                safe_cells = hidden[~env.engine._mines_flat[hidden]]
+                before = env.engine.revealed_safe_cells
+                a = rng.choice(safe_cells if rng.random() < 0.97 else hidden)   # mostly safe, so some games are won
+                obs, r, done, _, info = env.step(a)
+                if not done:                                                   # a safe click pays for what it uncovers
+                    gained = (env.engine.revealed_safe_cells - before) / safe
+                    assert np.isclose(r, cfg.gamma * gained - (1 - cfg.gamma) * before / safe)
+                ret += cfg.gamma ** clicks * r
+                clicks += 1
+            goal = float(info["won"]) + credit * info["revealed_fraction"]
+            assert np.isclose(ret, cfg.gamma ** (clicks - 1) * goal - phi0)
+            seen_win |= info["won"]
+            seen_late_loss |= not info["won"] and info["revealed_fraction"] > 0.5
+        assert seen_win and seen_late_loss
 
 
-def test_reward_config_rejects_settings_that_reward_dying() -> None:
-    try:
-        RewardConfig(progress=0.1, click=0.2)
-    except ValueError:
-        return
-    raise AssertionError("expected ValueError")
+def test_wasted_click_changes_nothing_and_never_pays() -> None:
+    env = MinesweeperEnv(level=2, seed=0)
+    obs, info = env.reset()
+    revealed = int(np.flatnonzero(~info["action_mask"])[0])
+    obs2, r, term, trunc, _ = env.step(revealed)
+    assert np.array_equal(obs2, obs) and r < 0 and not term
+
+
+def test_reward_config_rejects_bad_settings() -> None:
+    for bad in (dict(win=0.0), dict(progress=-1.0), dict(credit=1.5), dict(gamma=0.0), dict(gamma=1.5)):
+        try:
+            RewardConfig(**bad)
+        except ValueError:
+            continue
+        raise AssertionError(f"expected ValueError for {bad}")
 
 
 def test_qnet_only_picks_hidden_cells_and_checkpoints_round_trip() -> None:
@@ -113,10 +126,36 @@ def test_short_training_run_completes_and_saves() -> None:
         q, ckpt = load_checkpoint(latest)
         assert ckpt["global_step"] >= 3000 and ckpt["eval_history"] and ckpt["stage"] == 1
         assert ckpt["canvas"] == (9, 9)
+
+        from rl import journal                                             # what the dashboard reads
+        status = journal.read_status(RUNS_DIR / ckpt["run_name"])
+        assert status["state"] == "stopped" and status["step"] == ckpt["global_step"]
+        rows = journal.read(RUNS_DIR / ckpt["run_name"])
+        assert len(rows["eval"]) == len(ckpt["eval_history"])
+        assert [e["tag"] for e in rows["events"]] == ["session", "level", "stop"]
     finally:
-        for p in MODELS_DIR.glob(f"{ckpt['run_name']}*"):
+        for p in [*MODELS_DIR.glob(f"{ckpt['run_name']}*"), *MODELS_DIR.glob("bayes-L1-*.json"), MODELS_DIR / "bayes-L2-40.json"]:
             p.unlink()
         shutil.rmtree(RUNS_DIR / ckpt["run_name"], ignore_errors=True)
+
+
+def test_journal_keeps_the_newer_copy_of_replayed_steps() -> None:
+    import tempfile
+    from pathlib import Path
+
+    from rl.journal import Journal, read
+
+    with tempfile.TemporaryDirectory() as d:
+        j = Journal(Path(d))
+        j.event(0, "started", "session")
+        for step in (10, 20, 30):
+            j.log("train", step, win=0.1)
+        j.log("eval", 25, win=0.2)
+        j.event(20, "resumed", "session")                                  # a crash: back to the step-20 checkpoint
+        j.log("train", 30, win=0.3)
+        rows = read(Path(d))
+        assert [(r["step"], r["win"]) for r in rows["train"]] == [(10, 0.1), (20, 0.1), (30, 0.3)]
+        assert rows["eval"] == [] and [e["text"] for e in rows["events"]] == ["started", "resumed"]
 
 
 def test_small_board_on_a_bigger_canvas() -> None:
