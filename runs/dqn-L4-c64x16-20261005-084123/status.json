@@ -1,0 +1,94 @@
+{
+ "updated": 1792609190.0351126,
+ "state": "stopped",
+ "run": "dqn-L4-c64x16-20261005-084123",
+ "pid": 5280,
+ "host": "DESKTOP-CUQNPID",
+ "device": "NVIDIA GeForce GTX 1050",
+ "started": 1792572818.3402627,
+ "session_step": 6104768,
+ "step": 7559936,
+ "total_steps": 1000000000,
+ "level": 4,
+ "target_level": 4,
+ "epsilon": 0.02,
+ "lr": 1e-05,
+ "lr_patience": 20,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 2,
+ "sps": 39,
+ "sps_recent": 55.546921795237736,
+ "games": {
+  "return": -0.02717543307086617,
+  "won": 0.01,
+  "revealed": 0.29023622047244096,
+  "length": 47.121
+ },
+ "td": 0.0037815538235008717,
+ "q": 0.49153947830200195,
+ "gpu_temp": 92.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 95.0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.044,
+  "win_margin": 0.012711925990973988,
+  "efficiency": 0.8676767423328419,
+  "revealed": 0.35265616797900257,
+  "step": 7500032,
+  "level": 4,
+  "lr": 1e-05,
+  "reward": {
+   "win": 1.0,
+   "progress": 1.0,
+   "credit": 0.0,
+   "gamma": 0.999
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.068,
+  "win_margin": 0.015603372763604668,
+  "efficiency": 0.8653974127056534,
+  "revealed": 0.4267795275590551,
+  "step": 7000000,
+  "level": 4,
+  "lr": 1e-05,
+  "reward": {
+   "win": 1.0,
+   "progress": 1.0,
+   "credit": 0.0,
+   "gamma": 0.999
+  }
+ },
+ "bayes": {
+  "4": {
+   "games": 1000,
+   "win": 0.341,
+   "win_margin": 0.02938163559776753,
+   "efficiency": 0.9158481661176857,
+   "revealed": 0.6087690288713912
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 250000,
+ "next_eval": 7750000,
+ "reward": {
+  "win": 1.0,
+  "progress": 1.0,
+  "credit": 0.0,
+  "gamma": 0.999
+ },
+ "bf16": false,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "C:\\Users\\james\\OneDrive\\Desktop\\grunt work\\RL_test\\models\\dqn-L4-c64x16-20261005-084123-latest.pt",
+  "best": "C:\\Users\\james\\OneDrive\\Desktop\\grunt work\\RL_test\\models\\dqn-L4-c64x16-20261005-084123-best.pt"
+ },
+ "stop_reason": "stopped by stop file"
+}

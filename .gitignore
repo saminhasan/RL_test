@@ -14,6 +14,7 @@ build/
 models/*.pt
 !models/dqn-L4-c64x16-20261005-084123-latest.pt
 !models/dqn-L4-c64x16-20261005-084123-best.pt
+!models/dqn-L4-c64x16-20261005-084123-best-oldreward.pt
 models/*.tmp
 models/*.stop
 models/PAUSED

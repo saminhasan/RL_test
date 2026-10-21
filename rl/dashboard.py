@@ -210,7 +210,7 @@ class Dashboard:
                 return "stopping"
             if status.get("state") in ("evaluating", "starting"):
                 return status["state"]
-            return "stalled" if time.time() - status.get("updated", 0) > 30 * 60 else "training"
+            return "stalled" if time.time() - status.get("updated", 0) > 10 * 60 else "training"
         if time.time() - self.resume_asked < 180:
             return "starting"
         if PAUSED.exists():

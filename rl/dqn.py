@@ -128,6 +128,8 @@ class Args:
     """games per evaluation"""
     checkpoint_every: int = 25_000
     """timesteps between saves of the latest state"""
+    status_every: float = 5.0
+    """seconds between updates of the run's status for the dashboard"""
     resume: str = ""
     """continue from this checkpoint (the replay buffer starts empty again)"""
     lr_patience: int = 0
@@ -305,6 +307,7 @@ def train(args: Args) -> Path:
             started=session_start, session_step=start_step, step=global_step, total_steps=args.total_timesteps,
             level=stages[stage][0], target_level=target_level, epsilon=epsilon, lr=lr, lr_patience=args.lr_patience,
             lr_decay=args.lr_decay, lr_min=args.lr_min, evals_since_best=evals_since_best, sps=sps,
+            sps_recent=(global_step - pace[0][1]) / (time.time() - pace[0][0]) if len(pace) > 1 else None,
             games={k: float(np.mean(v)) for k, v in episodes.items() if v}, td=td_loss, q=q_mean,
             gpu_temp=gpu_temp, gpu_pause=guard.pause, max_gpu_temp=args.max_gpu_temp,
             last_eval=eval_history[-1] if eval_history else None, best=best_eval, bayes=bayes,
@@ -359,6 +362,8 @@ def train(args: Args) -> Path:
     next_eval = (global_step // args.eval_every + 1) * args.eval_every
     next_ckpt = (global_step // args.checkpoint_every + 1) * args.checkpoint_every
     next_print = global_step + 10_000
+    next_status = time.time() + args.status_every
+    pace = deque([(time.time(), global_step)], maxlen=max(2, int(60 / args.status_every) + 1))   # speed over the last minute
     next_target = global_step + args.target_network_frequency
     td_loss = q_mean = float("nan")
     stopped = "finished"
@@ -505,6 +510,10 @@ def train(args: Args) -> Path:
             if stop_file.exists():
                 stopped = "stopped by stop file"
                 break
+            if time.time() >= next_status:   # MINESWEEPER: the dashboard's live numbers
+                next_status = time.time() + args.status_every
+                pace.append((time.time(), global_step))
+                report("training")
             guard()   # MINESWEEPER
     except KeyboardInterrupt:
         stopped = "interrupted"

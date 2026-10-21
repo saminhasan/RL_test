@@ -651,7 +651,7 @@ const PHASES = {
   evaluating: ["Evaluating", "accent", true],
   starting:   ["Starting", "accent", true],
   stopping:   ["Saving and stopping", "warning", true],
-  stalled:    ["No progress for 30 min", "warning", false],
+  stalled:    ["No update for 10 min", "warning", false],
   paused:     ["Paused", "muted", false],
   stopped:    ["Stopped", "muted", false],
   down:       ["Not running", "critical", false],
@@ -697,7 +697,8 @@ function renderState() {
   const gained = st.step != null && st.session_step != null ? st.step - st.session_step : null;
   setText("nClicks", gained != null && st.started ? `+${fmt.compact(gained)} since ${fmt.when(st.started)}` : " ");
   const live = running && S.phase !== "starting";
-  if (st.sps) { setValue("tSpeed", fmt.int(st.sps), "/s"); setText("nSpeed", `${fmt.compact(st.sps * 86400)} clicks a day`); }
+  const speed = st.sps_recent || st.sps;
+  if (speed && live) { setValue("tSpeed", fmt.int(speed), "/s"); setText("nSpeed", `${fmt.compact(speed * 86400)} clicks a day · last minute`); }
   else { setValue("tSpeed", "—"); setText("nSpeed", " "); }
   setText("tLr", fmt.lr(st.lr));
   if (st.lr_patience) {
@@ -716,8 +717,8 @@ function renderState() {
     setText("nGpu", `${fmt.int(g.util)}% busy · ${fmt.int(g.mem_used)} of ${fmt.int(g.mem_total)} MB memory`
             + (st.max_gpu_temp ? ` · limit ${fmt.int(st.max_gpu_temp)} °C` : ""));
   } else { setValue("tGpu", "—"); setText("nGpu", "no NVIDIA GPU reading"); }
-  if (live && st.next_eval && st.sps) {
-    setText("tNext", "in " + fmt.dur((st.next_eval - st.step) / st.sps));
+  if (live && st.next_eval && speed) {
+    setText("tNext", "in " + fmt.dur((st.next_eval - st.step) / speed));
   } else setText("tNext", S.phase === "evaluating" ? "now" : "—");
   setText("nNext", st.eval_every ? `every ${fmt.compact(st.eval_every)} clicks · ${fmt.int(st.eval_games)} boards` : " ");
 
@@ -868,7 +869,8 @@ async function refreshState() {
   try {
     S = await api("/api/state");
     renderState();
-    const key = [S.run, S.status && S.status.step, S.status && S.status.state, RANGE].join("|");
+    const st = S.status || {};
+    const key = [S.run, Math.floor((st.step || 0) / 10000), st.last_eval && st.last_eval.step, st.state, RANGE].join("|");
     if (key !== histKey || Date.now() - histAt > 120000) refreshHistory(key);
   } catch (e) {
     const pill = $("phase"); pill.replaceChildren();
@@ -934,13 +936,13 @@ document.querySelectorAll("#range button").forEach((b) => {
     RANGE = b.dataset.range;
     try { localStorage.setItem("msw-range", RANGE); } catch (e) {}
     document.querySelectorAll("#range button").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    refreshHistory([S && S.run, S && S.status && S.status.step, S && S.status && S.status.state, RANGE].join("|"));
+    refreshHistory("");
   });
 });
 
 refreshState(); refreshLog();
 setInterval(refreshState, 5000);
-setInterval(refreshLog, 15000);
+setInterval(refreshLog, 5000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden) { refreshState(); refreshLog(); } });
 </script>
 </body>
