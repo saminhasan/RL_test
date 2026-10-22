@@ -318,6 +318,10 @@ dialog::backdrop { background: rgba(0, 0, 0, .28); backdrop-filter: blur(3px); }
       <div class="fig-head"><div><div class="fig-title">Board cleared</div><div class="fig-sub">Share of safe cells uncovered per evaluation game</div></div><button class="linkbtn" data-table>Table</button></div>
       <div class="plot"></div>
     </figure>
+    <figure class="card chart" id="cEff">
+      <div class="fig-head"><div><div class="fig-title">Efficiency of wins</div><div class="fig-sub">The fewest clicks the board allowed, divided by the clicks used, on won evaluation games</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
     <figure class="card chart" id="cTrain">
       <div class="fig-head"><div><div class="fig-title">Training games</div><div class="fig-sub">Last 1,000 games while learning, with exploration</div></div><button class="linkbtn" data-table>Table</button></div>
       <div class="legend"><span><i class="key" style="background:var(--series-1)"></i>Board cleared</span><span><i class="key" style="background:var(--series-2)"></i>Won</span></div>
@@ -841,6 +845,11 @@ function renderHistory() {
     series: [{ ...series(evals, "revealed", "DQN cleared", "var(--series-1)"), dots: evals.length <= 40 }],
     refs: base ? [{ y: base.revealed, label: "bayes" }] : [], events, yFmt: pct, tickFmt: pct0, zero: true, xMax: st.step,
     empty: "No evaluations in this range",
+  });
+  lineChart($("cEff"), {
+    series: [{ ...series(evals, "efficiency", "DQN efficiency", "var(--series-1)"), dots: evals.length <= 40 }],
+    refs: base && base.efficiency != null ? [{ y: base.efficiency, label: "bayes", fmt: (v) => fmt.num(v, 2) }] : [],
+    events, yFmt: (v) => fmt.num(v, 3), tickFmt: (v) => fmt.num(v, 2), xMax: st.step, empty: "No evaluations in this range",
   });
   lineChart($("cTrain"), {
     series: [series(train, "revealed", "board cleared", "var(--series-1)"), series(train, "win", "won", "var(--series-2)")],
