@@ -81,6 +81,41 @@ def test_mine_penalty_alone_scores_each_click() -> None:
             assert r == (-1.0 if was_mine else 0.0)
 
 
+def test_reveal_reward_pays_for_uncovered_cells() -> None:
+    env = MinesweeperEnv(level=2, reward=RewardConfig(win=0.0, progress=0.0, mine=10.0, reveal=1.0, gamma=0.0), seed=7)
+    rng = np.random.default_rng(3)
+    for _ in range(50):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            a = rng.choice(np.flatnonzero(info["action_mask"]))
+            was_mine, before = bool(env.engine._mines_flat[a]), env.engine.revealed_safe_cells
+            obs, r, done, _, info = env.step(a)
+            gained = (env.engine.revealed_safe_cells - before) / env.engine.total_safe_cells
+            assert np.isclose(r, -10.0 if was_mine else gained) and (was_mine or gained > 0)
+
+
+def test_reward_second_stage_switches_on() -> None:
+    import shutil
+
+    from rl import journal
+    from rl.dqn import RUNS_DIR, Args, train
+    from rl.qnet import MODELS_DIR
+
+    a = Args(exp_name="unit-stage", curriculum="1", total_timesteps=1600, num_envs=8, channels=8, layers=2, loss="bce",
+             reward_win=0, reward_progress=0, reward_mine=10, reward_reveal=1, reveal_from=800, gamma=0,
+             learning_starts=200, eval_every=100_000, eval_games=20, checkpoint_every=100_000, cuda=False, n_step=1,
+             per_alpha=0.0)
+    _, ck = load_checkpoint(train(a))
+    try:
+        assert ck["reward"]["reveal"] == 1.0
+        assert any(e["text"].startswith("stage 2") for e in journal.read(RUNS_DIR / ck["run_name"])["events"])
+    finally:
+        for p in [*MODELS_DIR.glob(f"{ck['run_name']}*"), *MODELS_DIR.glob("bayes-L1-*.json")]:
+            p.unlink()
+        shutil.rmtree(RUNS_DIR / ck["run_name"], ignore_errors=True)
+
+
 def test_wasted_click_changes_nothing_and_never_pays() -> None:
     env = MinesweeperEnv(level=2, seed=0)
     obs, info = env.reset()
@@ -170,6 +205,30 @@ def test_journal_keeps_the_newer_copy_of_replayed_steps() -> None:
         rows = read(Path(d))
         assert [(r["step"], r["win"]) for r in rows["train"]] == [(10, 0.1), (20, 0.1), (30, 0.3)]
         assert rows["eval"] == [] and [e["text"] for e in rows["events"]] == ["started", "resumed"]
+
+
+def test_cross_entropy_and_pooling_train_and_resume() -> None:
+    import shutil
+
+    from rl.dqn import RUNS_DIR, Args, train
+    from rl.qnet import MODELS_DIR
+
+    a = Args(exp_name="unit-bce", curriculum="1", total_timesteps=1200, num_envs=8, channels=8, layers=5, pool_every=2,
+             loss="bce", reward_win=0, reward_progress=0, reward_mine=1, gamma=0, learning_starts=300,
+             eval_every=100_000, eval_games=20, checkpoint_every=100_000, cuda=False, n_step=1, per_alpha=0.0)
+    first = train(a)
+    q, ck = load_checkpoint(first)
+    assert q.config["pool_every"] == 2 and any(".pool." in k for k in ck["state_dict"])
+    # phase 2: a new run from it, playing for the win with look-ahead
+    b = Args(**{**vars(a), "exp_name": "unit-bce-win", "init": str(first), "reward_win": 1.0, "reward_mine": 0.0,
+                "gamma": 0.99, "pool_every": 0})
+    second = train(b)
+    q2, ck2 = load_checkpoint(second)
+    assert q2.config["pool_every"] == 2 and ck2["global_step"] >= 1200
+    for c in (ck, ck2):
+        for p in [*MODELS_DIR.glob(f"{c['run_name']}*"), *MODELS_DIR.glob("bayes-L1-*.json")]:
+            p.unlink()
+        shutil.rmtree(RUNS_DIR / c["run_name"], ignore_errors=True)
 
 
 def test_small_board_on_a_bigger_canvas() -> None:

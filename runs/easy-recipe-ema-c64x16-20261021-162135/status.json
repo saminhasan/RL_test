@@ -1,0 +1,97 @@
+{
+ "updated": 1792626655.5975685,
+ "state": "stopped",
+ "run": "easy-recipe-ema-c64x16-20261021-162135",
+ "pid": 5536,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792624897.3436263,
+ "session_step": 0,
+ "step": 3000000,
+ "total_steps": 3000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 3.125e-06,
+ "lr_patience": 3,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 1,
+ "sps": 1706,
+ "sps_recent": 1725.2183638247104,
+ "games": {
+  "return": -0.186,
+  "won": 0.814,
+  "revealed": 0.8652394366197182,
+  "length": 18.54
+ },
+ "td": 0.003494107164442539,
+ "q": -0.010666608810424805,
+ "gpu_temp": 65.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.821,
+  "win_margin": 0.023760422858190047,
+  "efficiency": 0.7568055180886673,
+  "revealed": 0.858661971830986,
+  "step": 3000000,
+  "level": 2,
+  "lr": 3.125e-06,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.854,
+  "win_margin": 0.021885750030556414,
+  "efficiency": 0.788809417828617,
+  "revealed": 0.8909436619718311,
+  "step": 2300032,
+  "level": 2,
+  "lr": 1.25e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 3100000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\easy-recipe-ema-c64x16-20261021-162135-latest.pt",
+  "best": "D:\\RL_test\\models\\easy-recipe-ema-c64x16-20261021-162135-best.pt"
+ },
+ "stop_reason": "finished"
+}

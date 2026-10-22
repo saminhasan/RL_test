@@ -1,0 +1,97 @@
+{
+ "updated": 1792632876.885013,
+ "state": "stopped",
+ "run": "med-bce-pool-c64x16-20261021-172033",
+ "pid": 34528,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792628434.9388463,
+ "session_step": 0,
+ "step": 2552064,
+ "total_steps": 3000000,
+ "level": 3,
+ "target_level": 3,
+ "epsilon": 0.005,
+ "lr": 2.5e-05,
+ "lr_patience": 3,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 2,
+ "sps": 574,
+ "sps_recent": 765.0894560447945,
+ "games": {
+  "return": -0.456,
+  "won": 0.544,
+  "revealed": 0.7223101851851852,
+  "length": 59.635
+ },
+ "td": 0.007010879460722208,
+ "q": -0.005450066644698381,
+ "gpu_temp": 60.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.673,
+  "win_margin": 0.029076188773634,
+  "efficiency": 0.780727461091946,
+  "revealed": 0.7674675925925926,
+  "step": 2500032,
+  "level": 3,
+  "lr": 2.5e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.704,
+  "win_margin": 0.028293603065003937,
+  "efficiency": 0.7746112570108175,
+  "revealed": 0.8012777777777778,
+  "step": 2300032,
+  "level": 3,
+  "lr": 2.5e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "3": {
+   "games": 1000,
+   "win": 0.713,
+   "win_margin": 0.028037661271939213,
+   "efficiency": 0.9089510135277442,
+   "revealed": 0.805287037037037
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 2600000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 585729
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\med-bce-pool-c64x16-20261021-172033-latest.pt",
+  "best": "D:\\RL_test\\models\\med-bce-pool-c64x16-20261021-172033-best.pt"
+ },
+ "stop_reason": "stopped by stop file"
+}

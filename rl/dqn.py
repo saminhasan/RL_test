@@ -28,6 +28,7 @@
 # Resuming with the same learning rate on the command line carries on with the
 # learning rate the run had reached; a different one replaces it.
 import copy
+import dataclasses
 import os
 import random
 import socket
@@ -80,12 +81,22 @@ class Args:
     """share of the progress a lost game keeps (0 = winning is the only goal)"""
     reward_mine: float = 0.0
     """penalty for hitting a mine (with gamma 0 and no other terms: learn each cell's chance of being a mine)"""
+    reward_reveal: float = 0.0
+    """paid on each safe click: this times the share of the board's safe cells it uncovered"""
+    reveal_from: int = 0
+    """MINESWEEPER: the click count at which the reveal reward starts (a second stage; 0 = from the start).
+    At the switch the replay memory is emptied (its clicks were scored without it) and the learning rate restarts"""
 
     # MINESWEEPER: the network
     channels: int = 64
     """channels per conv layer"""
     layers: int = 16
     """conv layers (all but the first have a residual shortcut)"""
+    pool_every: int = 0
+    """every this many residual layers also see the whole board (global pooling, as in KataGo); 0 = off"""
+    loss: str = "huber"
+    """huber, or bce: each click's value is a logit between the worst and the best outcome of a game
+    (minus reward_mine and reward_win), learned with cross-entropy; needs reward_progress 0"""
 
     # Algorithm specific arguments
     total_timesteps: int = 300_000
@@ -259,19 +270,41 @@ def train(args: Args) -> Path:
     rng = np.random.default_rng(args.seed)
 
     # env setup
-    reward = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,   # MINESWEEPER
-                          mine=args.reward_mine, gamma=args.gamma)
+    # MINESWEEPER: the reward; with --reveal-from the reveal part starts later (a second stage)
+    full_reward = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
+                               mine=args.reward_mine, reveal=args.reward_reveal, gamma=args.gamma)
+    reward = full_reward if seed_offset >= args.reveal_from else dataclasses.replace(full_reward, reveal=0.0)
     envs = gym.vector.SyncVectorEnv(
         [make_env(stages[stage][0], args.seed * 10_000 + i + seed_offset, reward, canvas) for i in range(args.num_envs)],
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
 
-    init = load_checkpoint(args.init, "cpu")[1] if args.init and not ckpt else None   # MINESWEEPER
-    config = (ckpt or init or {}).get("config") or {"channels": args.channels, "layers": args.layers}
+    # MINESWEEPER: a new run can start from another run's network; layers it lacks (global pooling) start switched off
+    init = load_checkpoint(args.init, "cpu")[1] if args.init and not ckpt else None
+    if ckpt:
+        config = ckpt["config"]
+    elif init:
+        config = {**init["config"], **({"pool_every": args.pool_every} if args.pool_every else {})}
+    else:
+        config = {"channels": args.channels, "layers": args.layers, "pool_every": args.pool_every}
     q_network = QNetwork(config).to(device)
     if init:
-        q_network.load_state_dict(init["state_dict"])
+        added = q_network.load_state_dict(init["state_dict"], strict=False).missing_keys
+        if added:
+            print(f"started from {args.init}; new layers, switched off at first: {', '.join(added)}", flush=True)
+
+    # MINESWEEPER: with the cross-entropy loss the network's outputs are logits of the value,
+    # which runs from the worst outcome (a mine) to the best (a win)
+    if args.loss == "bce":
+        if args.reward_progress != 0:
+            raise ValueError("--loss bce needs --reward-progress 0 (values must stay between -mine and win)")
+        lo, hi = -args.reward_mine, args.reward_win + args.reward_reveal
+    elif args.loss != "huber":
+        raise ValueError(f"unknown --loss {args.loss!r}")
+
+    def to_value(z: torch.Tensor) -> torch.Tensor:
+        return lo + (hi - lo) * torch.sigmoid(z) if args.loss == "bce" else z
     if amp["enabled"]:   # MINESWEEPER: channels-last memory helps bf16 on newer GPUs, but is 1.7x slower in fp32 on a GTX 1050
         q_network = q_network.to(memory_format=torch.channels_last)
     optimizer = optim.Adam(q_network.parameters(), lr=args.learning_rate)
@@ -417,6 +450,19 @@ def train(args: Args) -> Path:
             # MINESWEEPER: curriculum by step count
             while stages[stage][1] is not None and global_step >= stages[stage][1]:
                 advance_stage()
+            # MINESWEEPER: second stage of the reward
+            if reward != full_reward and global_step >= args.reveal_from:
+                reward = full_reward
+                envs.call("set_reward", reward)
+                rb = PrioritizedReplayBuffer(args.buffer_size, alpha=args.per_alpha) if args.per_alpha > 0 \
+                    else ReplayBuffer(args.buffer_size)
+                learning_starts = global_step + args.learning_starts
+                lr, evals_since_best, best_eval, best_score = args.learning_rate, 0, None, (-1.0, -1.0)
+                for group in optimizer.param_groups:
+                    group["lr"] = lr
+                print(f"stage 2 from step {global_step:,}: reveal reward {args.reward_reveal:g} on; "
+                      f"replay memory emptied, learning rate {lr:.2g}", flush=True)
+                journal.event(global_step, f"stage 2: reveal reward {args.reward_reveal:g}", "reward")
 
             # ALGO LOGIC: put action logic here
             epsilon = linear_schedule(args.start_e, args.end_e, explore_steps, global_step)
@@ -471,17 +517,21 @@ def train(args: Args) -> Path:
                             # MINESWEEPER: Double DQN -- online net picks the next cell, target net scores it
                             next_actions = greedy(q_network(b_next_obs).float(), b_next_obs)
                             next_q = target_network(b_next_obs).float().gather(1, next_actions[:, None]).squeeze(1)
-                            td_target = b_rewards + b_discount * next_q
+                            td_target = b_rewards + b_discount * to_value(next_q)
                         else:   # MINESWEEPER: no discount, nothing to look ahead to
                             td_target = b_rewards
                     with torch.autocast(**amp):
                         old_val = q_network(b_obs).float().gather(1, b_actions[:, None]).squeeze(1)
-                    # MINESWEEPER: Huber, weighted for prioritized replay; new priorities = |TD error|
-                    elementwise = F.smooth_l1_loss(old_val, td_target, reduction="none")
+                    # MINESWEEPER: Huber (or cross-entropy), weighted for prioritized replay; new priorities = |TD error|
+                    if args.loss == "bce":
+                        share = ((td_target - lo) / (hi - lo)).clamp(0, 1)   # where the target sits between worst and best
+                        elementwise = F.binary_cross_entropy_with_logits(old_val, share, reduction="none")
+                    else:
+                        elementwise = F.smooth_l1_loss(old_val, td_target, reduction="none")
                     if args.per_alpha > 0:
                         loss = (torch.from_numpy(data["weights"]).to(device) * elementwise).mean()
                         rb.update_priorities(data["indexes"],
-                                             (td_target - old_val).abs().detach().cpu().numpy() + args.per_eps)
+                                             (td_target - to_value(old_val)).abs().detach().cpu().numpy() + args.per_eps)
                     else:
                         loss = elementwise.mean()
 
@@ -493,7 +543,7 @@ def train(args: Args) -> Path:
                     if policy is not q_network:   # MINESWEEPER: the moving average follows
                         with torch.no_grad():
                             torch._foreach_lerp_(list(policy.parameters()), list(q_network.parameters()), 1 - args.ema)
-                td_loss, q_mean = loss.item(), old_val.mean().item()
+                td_loss, q_mean = loss.item(), to_value(old_val.detach()).mean().item()
 
                 # update target network
                 if global_step >= next_target:

@@ -58,6 +58,10 @@ class RewardConfig:
     credit 0 makes winning the only goal; credit > 0 also counts how much of the
     board a lost game cleared (partial credit).
 
+    Paid on every safe click, for good whatever happens later:
+        reveal * (cells it uncovered) / S
+    (a plain reward, not shaping: it does change what is best, towards clicks that open more).
+
     The mine penalty on its own (mine 1, win 0, progress 0) with gamma 0 makes
     the value of a click minus the chance that the cell is a mine, learned only
     from how the agent's own clicks turned out: the greedy agent then clicks the
@@ -92,12 +96,14 @@ class RewardConfig:
     progress: float = 1.0
     credit: float = 0.0
     mine: float = 0.0
+    reveal: float = 0.0
     gamma: float = 0.999
 
     def __post_init__(self) -> None:
-        if not (min(self.win, self.progress, self.mine) >= 0 and self.win + self.mine > 0
+        if not (min(self.win, self.progress, self.mine, self.reveal) >= 0 and self.win + self.mine + self.reveal > 0
                 and 0 <= self.credit <= 1 and 0 <= self.gamma <= 1):
-            raise ValueError("need win, progress, mine >= 0 with win or mine > 0, 0 <= credit <= 1, 0 <= gamma <= 1")
+            raise ValueError("need win, progress, mine, reveal >= 0 with win, mine or reveal > 0, "
+                             "0 <= credit <= 1, 0 <= gamma <= 1")
 
     def potential(self, engine: MinesweeperEngine) -> float:
         if engine.state == engine.OVER:
@@ -168,6 +174,10 @@ class MinesweeperEnv(gym.Env):
         self._on_board = np.zeros(self.canvas, bool)
         self._on_board[:rows, :cols] = True
 
+    def set_reward(self, reward: RewardConfig) -> None:
+        """Score clicks with `reward` from the next click on."""
+        self.reward_config = reward
+
     def set_level(self, level: int) -> None:
         """Switch board size from the next game on (the current game finishes first)."""
         self._pending_level = level
@@ -195,10 +205,13 @@ class MinesweeperEnv(gym.Env):
         before = cfg.potential(eng)
         self._clicks += 1
         truncated = self._clicks >= self.rows * self.cols
+        uncovered = 0
         if not (row >= self.rows or col >= self.cols or eng.revealed[row, col]):   # else a wasted click: nothing happens
-            eng.reveal_count(row, col)
+            uncovered = eng.reveal_count(row, col)
         terminated = eng.state == eng.OVER
         reward = cfg.goal(eng) + cfg.gamma * cfg.potential(eng) - before
+        if cfg.reveal and not eng.hit_mine:
+            reward += cfg.reveal * uncovered / eng.total_safe_cells
         return encode(eng, self._obs, self._view).copy(), float(reward), terminated, truncated and not terminated, self._info()
 
     def render(self) -> str | None:

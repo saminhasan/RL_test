@@ -242,6 +242,7 @@ class Dashboard:
     # -- controls
 
     def pause(self) -> tuple[bool, str]:
+        self.resume_asked = 0.0
         PAUSED.write_text(time.strftime("paused from the dashboard %Y-%m-%d %H:%M:%S\n"))
         run = self.run_name()
         status = journal.read_status(RUNS_DIR / run) if run else None
