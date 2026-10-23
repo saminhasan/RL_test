@@ -29,6 +29,7 @@
 # learning rate the run had reached; a different one replaces it.
 import copy
 import dataclasses
+import math
 import os
 import random
 import socket
@@ -85,7 +86,30 @@ class Args:
     """paid on each safe click: this times the share of the board's safe cells it uncovered"""
     reveal_from: int = 0
     """MINESWEEPER: the click count at which the reveal reward starts (a second stage; 0 = from the start).
-    At the switch the replay memory is emptied (its clicks were scored without it) and the learning rate restarts"""
+    At the switch the replay memory is emptied (its clicks were scored without it), the learning rate
+    restarts, and the network as it was is kept as models/<run>-stage1.pt"""
+    stage2_mine: float = 0.0
+    """MINESWEEPER: the mine penalty from --reveal-from on (0 = keep --reward-mine)"""
+    reward_safe: float = 0.0
+    """paid on each safe click, a flat amount (negative = a small cost per click)"""
+    reward_late: float = 0.0
+    """paid on each safe click: this times (g_after^late_power - g_before^late_power), g = share of safe cells uncovered"""
+    late_power: float = 1.0
+    """how strongly the late reward favours the end of the game (1 = evenly)"""
+    reward_burst: float = 0.0
+    """paid on each safe click, growing exponentially with the share of the board it opens (all of it: this much)"""
+    burst_rate: float = 5.0
+    """how steeply the burst reward grows"""
+    wall: float = 0.0
+    """MINESWEEPER: refuse to train unless a mine costs at least this many times the most any click can earn (0 = no check)"""
+    skip_coin_flips: bool = False
+    """MINESWEEPER: clicks on coin flips (forced guesses with no better cell, found with the exact solver) cost
+    nothing and are left out of the replay memory; needs --n-step 1"""
+    stage2_from: int = 0
+    """MINESWEEPER: the click count at which --stage2 takes over (0 = no second stage); at the switch the replay
+    memory is emptied, the learning rate restarts, and the network as it was is kept as models/<run>-stage1.pt"""
+    stage2: str = ""
+    """MINESWEEPER: the reward settings that change at --stage2-from, e.g. "mine=100,safe=-0.01,late=10,late_power=10" """
 
     # MINESWEEPER: the network
     channels: int = 64
@@ -153,11 +177,22 @@ class Args:
     """MINESWEEPER: the learning rate is multiplied by this when it drops"""
     lr_min: float = 1e-6
     """MINESWEEPER: the learning rate never drops below this"""
+    lr_mode: str = "halve"
+    """MINESWEEPER: halve (after lr_patience evaluations without a new best), or restart: the learning rate decays
+    exponentially from --learning-rate towards --lr-floor, and jumps back up after lr_patience evaluations
+    without a new best"""
+    lr_floor: float = 1e-5
+    """MINESWEEPER: where the restart schedule decays to and holds"""
+    lr_decay_clicks: int = 200_000
+    """MINESWEEPER: the restart schedule's decay time (clicks to fall about two thirds of the way to the floor)"""
     ema: float = 0.0
     """MINESWEEPER: act, evaluate and save a moving average of the weights, updated by this
     much per gradient step (e.g. 0.999; 0 = off)"""
     augment: bool = False
     """MINESWEEPER: also learn from flipped (and, on square boards, rotated) copies of replayed boards"""
+    eval_breakdown: bool = False
+    """MINESWEEPER: evaluations also judge every lost game with the exact solver (missed safe cell, riskier guess,
+    coin flip, bad luck) and report the win rate without coin flips; measuring only, a little slower"""
     max_gpu_temp: float = 0
     """MINESWEEPER: slow down while the GPU is hotter than this, in degrees C (0 = off)"""
 
@@ -209,9 +244,16 @@ def mirror(obs, next_obs, actions, rng):
     return obs.contiguous(), next_obs.contiguous(), r * cols + c
 
 
-def make_env(level, seed, reward, canvas):
+def value_range(reward: RewardConfig) -> tuple[float, float]:
+    """MINESWEEPER: the worst and the best a click can score under `reward` (the cross-entropy loss maps
+    values into this range): a mine at worst, at best a win plus everything a safe click can earn."""
+    return min(-reward.mine, reward.safe), reward.win + reward.reveal + reward.late + max(reward.safe, 0.0)
+
+
+def make_env(level, seed, reward, canvas, skip_coin_flips=False):
     def thunk():
-        return MinesweeperEnv(level=level, reward=reward, seed=seed, canvas=canvas)   # MINESWEEPER
+        return MinesweeperEnv(level=level, reward=reward, seed=seed, canvas=canvas,   # MINESWEEPER
+                              skip_coin_flips=skip_coin_flips)
 
     return thunk
 
@@ -271,11 +313,27 @@ def train(args: Args) -> Path:
 
     # env setup
     # MINESWEEPER: the reward; with --reveal-from the reveal part starts later (a second stage)
-    full_reward = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
-                               mine=args.reward_mine, reveal=args.reward_reveal, gamma=args.gamma)
-    reward = full_reward if seed_offset >= args.reveal_from else dataclasses.replace(full_reward, reveal=0.0)
+    base = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
+                        mine=args.reward_mine, reveal=args.reward_reveal, safe=args.reward_safe, late=args.reward_late,
+                        late_power=args.late_power, gamma=args.gamma)
+    if args.stage2:                    # --stage2-from with --stage2 "name=value,..."
+        switch_at = args.stage2_from
+        stage1, full_reward = base, dataclasses.replace(base, **{
+            k.strip(): float(v) for k, v in (item.split("=") for item in args.stage2.split(","))})
+    else:                              # the older form: --reveal-from (and --stage2-mine)
+        switch_at = args.reveal_from
+        stage1 = dataclasses.replace(base, reveal=0.0) if args.reveal_from else base
+        full_reward = dataclasses.replace(base, mine=args.stage2_mine or base.mine)
+    reward = full_reward if seed_offset >= switch_at else stage1
+    for r in (stage1, full_reward):    # MINESWEEPER: the wall rule
+        if args.wall and r.mine < args.wall * r.max_click():
+            raise ValueError(f"--wall {args.wall:g}: a mine costs {r.mine:g}, but a click can earn up to "
+                             f"{r.max_click():g} (needs at least {args.wall * r.max_click():g})")
+    if args.skip_coin_flips and args.n_step != 1:
+        raise ValueError("--skip-coin-flips needs --n-step 1")
     envs = gym.vector.SyncVectorEnv(
-        [make_env(stages[stage][0], args.seed * 10_000 + i + seed_offset, reward, canvas) for i in range(args.num_envs)],
+        [make_env(stages[stage][0], args.seed * 10_000 + i + seed_offset, reward, canvas, args.skip_coin_flips)
+         for i in range(args.num_envs)],
         autoreset_mode=gym.vector.AutoresetMode.SAME_STEP,
     )
     assert isinstance(envs.single_action_space, gym.spaces.Discrete), "only discrete action space is supported"
@@ -299,7 +357,7 @@ def train(args: Args) -> Path:
     if args.loss == "bce":
         if args.reward_progress != 0:
             raise ValueError("--loss bce needs --reward-progress 0 (values must stay between -mine and win)")
-        lo, hi = -args.reward_mine, args.reward_win + args.reward_reveal
+        lo, hi = value_range(reward)
     elif args.loss != "huber":
         raise ValueError(f"unknown --loss {args.loss!r}")
 
@@ -312,6 +370,7 @@ def train(args: Args) -> Path:
     # MINESWEEPER: the network that plays (and is saved and evaluated): the weights' moving average, or the weights
     policy = copy.deepcopy(q_network) if args.ema > 0 else q_network
     global_step, eval_history, best_eval = 0, [], None
+    restart_step = 0   # MINESWEEPER: where the restart learning-rate schedule last jumped up
     lr, evals_since_best = args.learning_rate, 0
     if ckpt:
         q_network.load_state_dict(ckpt.get("online") or ckpt["state_dict"])
@@ -325,6 +384,7 @@ def train(args: Args) -> Path:
         for group in optimizer.param_groups:
             group["lr"] = lr
         global_step, eval_history = ckpt["global_step"], ckpt.get("eval_history", [])
+        restart_step = ckpt.get("restart_step", global_step)
         # MINESWEEPER: the best so far counts only evaluations comparable with the ones to come:
         # same boards, same reward
         comparable = [e for e in eval_history if e.get("level") == target_level and e.get("games") == args.eval_games
@@ -358,7 +418,7 @@ def train(args: Args) -> Path:
             **({"online": q_network.state_dict()} if policy is not q_network else {}),
             "global_step": global_step, "run_name": run_name, "args": vars(args), "stage": stage,
             "canvas": canvas, "reward": asdict(reward), "eval_history": eval_history, "bayes": bayes,
-            "explore_steps": explore_steps, "lr": lr, "evals_since_best": evals_since_best,
+            "explore_steps": explore_steps, "lr": lr, "evals_since_best": evals_since_best, "restart_step": restart_step,
         })
 
     # MINESWEEPER: the state the dashboard shows, rewritten at every progress line
@@ -381,11 +441,11 @@ def train(args: Args) -> Path:
             checkpoints={"latest": str(latest), "best": str(best)}, **extra)
 
     def evaluate(level: int) -> dict:
-        nonlocal best_score, best_eval, evals_since_best, lr
+        nonlocal best_score, best_eval, evals_since_best, lr, restart_step
         base = bayes_on(level)
         report("evaluating")
         res = summarize(play_q(policy, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas,
-                               bf16=args.bf16))
+                               bf16=args.bf16, breakdown=args.eval_breakdown))
         res.update(step=global_step, level=level, lr=lr, reward=asdict(reward))
         eval_history.append(res)
         journal.log("eval", global_step, **{k: v for k, v in res.items() if k != "step"})
@@ -402,7 +462,13 @@ def train(args: Args) -> Path:
             else:
                 # MINESWEEPER: a plateau; each earlier drop of the learning rate brought a new climb
                 evals_since_best += 1
-                if args.lr_patience and evals_since_best >= args.lr_patience and lr > args.lr_min:
+                if args.lr_mode == "restart" and args.lr_patience and evals_since_best >= args.lr_patience:
+                    restart_step, evals_since_best = global_step, 0     # back up to the peak, to decay again
+                    print(f"learning rate back up to {args.learning_rate:.3g} from step {global_step:,}: no new best in "
+                          f"{args.lr_patience} evaluations", flush=True)
+                    journal.event(global_step, f"learning rate boost {args.learning_rate:.2g}", "lr")
+                elif args.lr_mode != "restart" and args.lr_patience and evals_since_best >= args.lr_patience \
+                        and lr > args.lr_min:
                     lr, evals_since_best = max(args.lr_min, lr * args.lr_decay), 0
                     for group in optimizer.param_groups:
                         group["lr"] = lr
@@ -451,18 +517,29 @@ def train(args: Args) -> Path:
             while stages[stage][1] is not None and global_step >= stages[stage][1]:
                 advance_stage()
             # MINESWEEPER: second stage of the reward
-            if reward != full_reward and global_step >= args.reveal_from:
+            if reward != full_reward and global_step >= switch_at:
+                save(MODELS_DIR / f"{run_name}-stage1.pt")
                 reward = full_reward
                 envs.call("set_reward", reward)
+                if args.loss == "bce":
+                    lo, hi = value_range(reward)
                 rb = PrioritizedReplayBuffer(args.buffer_size, alpha=args.per_alpha) if args.per_alpha > 0 \
                     else ReplayBuffer(args.buffer_size)
                 learning_starts = global_step + args.learning_starts
                 lr, evals_since_best, best_eval, best_score = args.learning_rate, 0, None, (-1.0, -1.0)
+                restart_step = global_step
                 for group in optimizer.param_groups:
                     group["lr"] = lr
-                print(f"stage 2 from step {global_step:,}: reveal reward {args.reward_reveal:g} on; "
-                      f"replay memory emptied, learning rate {lr:.2g}", flush=True)
-                journal.event(global_step, f"stage 2: reveal reward {args.reward_reveal:g}", "reward")
+                changed = ", ".join(f"{k} {v:g}" for k, v in asdict(reward).items() if v != asdict(stage1)[k])
+                print(f"stage 2 from step {global_step:,}: {changed}; replay memory emptied, learning rate {lr:.2g}; "
+                      f"stage 1 kept as {run_name}-stage1.pt", flush=True)
+                journal.event(global_step, f"stage 2: {changed}", "reward")
+
+            if args.lr_mode == "restart":   # MINESWEEPER: decay from the peak towards the floor
+                lr = args.lr_floor + (args.learning_rate - args.lr_floor) * math.exp(
+                    -(global_step - restart_step) / args.lr_decay_clicks)
+                for group in optimizer.param_groups:
+                    group["lr"] = lr
 
             # ALGO LOGIC: put action logic here
             epsilon = linear_schedule(args.start_e, args.end_e, explore_steps, global_step)
@@ -492,6 +569,10 @@ def train(args: Args) -> Path:
             for idx in np.flatnonzero(terminations | truncations):
                 real_next_obs[idx] = infos["final_obs"][idx]
             for i in range(args.num_envs):   # MINESWEEPER: multi-step transitions
+                if args.skip_coin_flips:     # MINESWEEPER: a coin flip teaches nothing; leave it out
+                    ended = terminations[i] or truncations[i]
+                    if (infos["final_info"]["coin_flip"][i] if ended else infos["coin_flip"][i]):
+                        continue
                 for transition in nstep.push(i, obs[i], int(actions[i]), float(rewards[i]), real_next_obs[i],
                                              bool(terminations[i]), bool(truncations[i])):
                     rb.add(*transition)

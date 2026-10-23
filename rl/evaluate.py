@@ -9,8 +9,10 @@ play identical games.
     breakdown   -- why lost games were lost, judged by the exact solver:
                      missed_safe  a provably safe cell existed, it clicked something else
                      risky_guess  it had to guess, but not on one of the safest cells
-                     unlucky      it took one of the safest guesses and hit a mine
-                   bayes only ever loses the unlucky way.
+                     coin_flip    it had to guess and no cell was better (rl.minesweeper_env.is_coin_flip)
+                     unlucky      it took one of the safest guesses (not a coin flip) and hit a mine
+                   bayes only ever loses the last two ways. win_skill is the win rate
+                   leaving out the games lost on a coin flip.
 
 The solver and the oracle appear here and nowhere in training.
 
@@ -32,7 +34,7 @@ import torch
 
 from engine import MinesweeperEngine
 from rl.baseline import play_bayes, record
-from rl.minesweeper_env import encode, start_game
+from rl.minesweeper_env import encode, is_coin_flip, start_game
 from rl.qnet import MODELS_DIR, greedy, load_checkpoint
 
 EVAL_SEED0 = 10_000_000_000
@@ -81,14 +83,16 @@ def play_q(q, level: int, board_seeds, device, n_envs: int = 256, breakdown: boo
                 eng = engines[i]
                 r, c = divmod(int(a), ccols)              # a canvas cell; only on-board hidden cells are picked
                 if breakdown:
-                    p = np.nan_to_num(eng.mine_probs, nan=np.inf)
-                    pmin, picked = p.min(), p[r, c]
+                    raw = eng.mine_probs
+                    p = np.nan_to_num(raw, nan=np.inf)
+                    pmin, picked, flip = p.min(), p[r, c], is_coin_flip(raw)
                 eng.reveal_count(r, c)
                 if eng.state == eng.OVER:
                     rec = record(eng, seed_of[i])
                     if breakdown and not eng.won:
                         rec["lost_by"] = ("missed_safe" if pmin <= 1e-9 else
-                                          "risky_guess" if picked > pmin + 1e-9 else "unlucky")
+                                          "risky_guess" if picked > pmin + 1e-9 else
+                                          "coin_flip" if flip else "unlucky")
                     records.append(rec)
                     start(i)
                 else:
@@ -111,8 +115,9 @@ def summarize(records: list[dict]) -> dict:
         "revealed":   float(np.mean([r["revealed_fraction"] for r in records])) if n else float("nan"),
     }
     if any("lost_by" in r for r in records):
-        for k in ("missed_safe", "risky_guess", "unlucky"):
+        for k in ("missed_safe", "risky_guess", "coin_flip", "unlucky"):
             out[k] = sum(r.get("lost_by") == k for r in records) / n
+        out["win_skill"] = win / (1 - out["coin_flip"]) if out["coin_flip"] < 1 else float("nan")
     return out
 
 
@@ -121,15 +126,16 @@ def format_row(name: str, s: dict) -> str:
            f"revealed {s['revealed']*100:5.1f}%   ({s['games']} games)")
     if "unlucky" in s:
         row += (f"\n{'':26s} lost by: missed safe {s['missed_safe']*100:4.1f}%   risky guess "
-                f"{s['risky_guess']*100:4.1f}%   unlucky {s['unlucky']*100:4.1f}%")
+                f"{s['risky_guess']*100:4.1f}%   coin flip {s.get('coin_flip', float('nan'))*100:4.1f}%   "
+                f"unlucky {s['unlucky']*100:4.1f}%   | win without coin flips {s.get('win_skill', float('nan'))*100:5.2f}%")
     return row
 
 
 def bayes_summary(level: int, games: int) -> dict:
     """bayes on the evaluation boards, from models/bayes-L<level>-<games>.json once it has played them."""
     cache = MODELS_DIR / f"bayes-L{level}-{games}.json"
-    if cache.exists():
-        return json.loads(cache.read_text())
+    if cache.exists() and "coin_flip" in (cached := json.loads(cache.read_text())):
+        return cached
     res = summarize(play_bayes(level, eval_board_seeds(level, games)))
     cache.write_text(json.dumps(res, indent=1))
     return res

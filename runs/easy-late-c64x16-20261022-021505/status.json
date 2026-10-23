@@ -1,0 +1,109 @@
+{
+ "updated": 1792662519.7670808,
+ "state": "stopped",
+ "run": "easy-late-c64x16-20261022-021505",
+ "pid": 28132,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792660506.3391798,
+ "session_step": 0,
+ "step": 2000000,
+ "total_steps": 2000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 0.0001,
+ "lr_patience": 5,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 0,
+ "sps": 993,
+ "sps_recent": 940.7326190818358,
+ "games": {
+  "return": -10.072861448565577,
+  "won": 0.818,
+  "revealed": 0.8682816901408451,
+  "length": 16.025
+ },
+ "td": 0.3094920516014099,
+ "q": -0.3725309371948242,
+ "gpu_temp": 56.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.843,
+  "win_margin": 0.022548605313854782,
+  "efficiency": 0.8881124675175591,
+  "revealed": 0.8773239436619719,
+  "step": 2000000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 100.0,
+   "reveal": 0.0,
+   "safe": -0.01,
+   "late": 10.0,
+   "late_power": 10.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.843,
+  "win_margin": 0.022548605313854782,
+  "efficiency": 0.8881124675175591,
+  "revealed": 0.8773239436619719,
+  "step": 2000000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 100.0,
+   "reveal": 0.0,
+   "safe": -0.01,
+   "late": 10.0,
+   "late_power": 10.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 2100000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 100.0,
+  "reveal": 0.0,
+  "safe": -0.01,
+  "late": 10.0,
+  "late_power": 10.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\easy-late-c64x16-20261022-021505-latest.pt",
+  "best": "D:\\RL_test\\models\\easy-late-c64x16-20261022-021505-best.pt"
+ },
+ "stop_reason": "finished"
+}

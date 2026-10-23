@@ -21,6 +21,8 @@
   --hairline: rgba(0, 0, 0, .08);
   --series-1: #2a78d6;
   --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
   --band: rgba(42, 120, 214, .11);
   --ref: #aeaeb2;
   --accent: #0071e3;
@@ -49,6 +51,8 @@
     --hairline: rgba(255, 255, 255, .1);
     --series-1: #3987e5;
     --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #c98500;
     --band: rgba(57, 135, 229, .18);
     --ref: #636366;
     --accent: #0a84ff;
@@ -65,7 +69,7 @@
   color-scheme: dark;
   --page: #000000; --card: #1c1c1e; --card-edge: rgba(255, 255, 255, .04); --ink: #f5f5f7; --ink-2: #a1a1a6;
   --ink-3: #8e8e93; --grid: #2c2c2e; --axis: #3a3a3c; --hairline: rgba(255, 255, 255, .1); --series-1: #3987e5;
-  --series-2: #d95926; --band: rgba(57, 135, 229, .18); --ref: #636366; --accent: #0a84ff;
+  --series-2: #d95926; --series-3: #199e70; --series-4: #c98500; --band: rgba(57, 135, 229, .18); --ref: #636366; --accent: #0a84ff;
   --btn2: rgba(255, 255, 255, .1); --seg: rgba(118, 118, 128, .24); --seg-on: #636366; --tip: rgba(44, 44, 46, .9);
   --header: rgba(22, 22, 23, .74); --shadow: none; --toast: rgba(58, 58, 60, .95);
 }
@@ -297,6 +301,7 @@ dialog::backdrop { background: rgba(0, 0, 0, .28); backdrop-filter: blur(3px); }
     <div class="card tile"><div class="label">Best so far</div><div class="value" id="tBest">—</div><div class="note" id="nBest"> </div></div>
     <div class="card tile"><div class="label" id="lGpu">GPU</div><div class="value" id="tGpu">—</div><div class="note" id="nGpu"> </div></div>
     <div class="card tile"><div class="label">Next evaluation</div><div class="value" id="tNext">—</div><div class="note" id="nNext"> </div></div>
+    <div class="card tile"><div class="label">Reward now</div><div class="value" id="tReward">—</div><div class="note" id="nReward"> </div></div>
   </section>
 
   <div class="section-head">
@@ -316,6 +321,11 @@ dialog::backdrop { background: rgba(0, 0, 0, .28); backdrop-filter: blur(3px); }
     </figure>
     <figure class="card chart" id="cRev">
       <div class="fig-head"><div><div class="fig-title">Board cleared</div><div class="fig-sub">Share of safe cells uncovered per evaluation game</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="plot"></div>
+    </figure>
+    <figure class="card chart wide" id="cLost">
+      <div class="fig-head"><div><div class="fig-title">Why games are lost</div><div class="fig-sub">Share of evaluation games lost each way, judged by the exact solver (measuring only). Coin flips: forced guesses with no better cell; bad luck: it took one of the safest cells.</div></div><button class="linkbtn" data-table>Table</button></div>
+      <div class="legend"><span><i class="key" style="background:var(--series-1)"></i>Missed a safe cell</span><span><i class="key" style="background:var(--series-2)"></i>Riskier guess than needed</span><span><i class="key" style="background:var(--series-3)"></i>Coin flip</span><span><i class="key" style="background:var(--series-4)"></i>Bad luck</span></div>
       <div class="plot"></div>
     </figure>
     <figure class="card chart" id="cEff">
@@ -729,6 +739,17 @@ function renderState() {
     setText("tNext", "in " + fmt.dur((st.next_eval - st.step) / speed));
   } else setText("tNext", S.phase === "evaluating" ? "now" : "—");
   setText("nNext", st.eval_every ? `every ${fmt.compact(st.eval_every)} clicks · ${fmt.int(st.eval_games)} boards` : " ");
+  const rw = st.reward || {};
+  setText("tReward", rw.mine != null ? `mine −${+rw.mine}` : "—");
+  const parts = [];
+  if (rw.safe) parts.push(`click ${rw.safe > 0 ? "+" : ""}${+rw.safe}`);
+  if (rw.late) parts.push(`late ${+rw.late} (power ${+rw.late_power})`);
+  if (rw.burst) parts.push(`burst ${+rw.burst}`);
+  if (rw.reveal) parts.push(`reveal ${+rw.reveal}`);
+  if (rw.win) parts.push(`win +${+rw.win}`);
+  if (rw.progress) parts.push(`progress ${+rw.progress}`);
+  parts.push(rw.gamma ? `look-ahead ${+rw.gamma}` : "no look-ahead");
+  setText("nReward", parts.join(" · "));
 
   // notice when training is not running
   const notice = $("notice");
@@ -836,8 +857,11 @@ function renderHistory() {
   const series = (rows, key, name, color) => ({ name, color, pts: rows.map((r) => ({ x: r.step, y: r[key], t: r.t })) });
   lineChart($("cWin"), {
     series: [{ ...series(evals, "win", "DQN wins", "var(--series-1)"), dots: evals.length <= 40,
-               band: evals.map((e) => ({ x: e.step, lo: Math.max(0, e.win - (e.win_margin || 0)), hi: e.win + (e.win_margin || 0) })) }],
-    refs: base ? [{ y: base.win, label: "bayes" }] : [], events, yFmt: pct, tickFmt: pct0, zero: true, eventLabels: true, height: 250,
+               band: evals.map((e) => ({ x: e.step, lo: Math.max(0, e.win - (e.win_margin || 0)), hi: e.win + (e.win_margin || 0) })) },
+             ...(evals.some((e) => e.win_skill != null)
+                 ? [{ ...series(evals.filter((e) => e.win_skill != null), "win_skill", "DQN wins, coin flips left out", "var(--series-2)") }] : [])],
+    refs: base ? [{ y: base.win, label: "bayes" }, ...(base.win_skill != null ? [{ y: base.win_skill, label: "bayes, coin flips left out" }] : [])] : [],
+    events, yFmt: pct, tickFmt: pct0, zero: true, eventLabels: true, height: 250,
     xMax: st.step,
     empty: "No evaluations in this range",
   });
@@ -845,6 +869,15 @@ function renderHistory() {
     series: [{ ...series(evals, "revealed", "DQN cleared", "var(--series-1)"), dots: evals.length <= 40 }],
     refs: base ? [{ y: base.revealed, label: "bayes" }] : [], events, yFmt: pct, tickFmt: pct0, zero: true, xMax: st.step,
     empty: "No evaluations in this range",
+  });
+  const judged = evals.filter((e) => e.coin_flip != null);
+  lineChart($("cLost"), {
+    series: [series(judged, "missed_safe", "missed a safe cell", "var(--series-1)"),
+             series(judged, "risky_guess", "riskier guess", "var(--series-2)"),
+             series(judged, "coin_flip", "coin flip", "var(--series-3)"),
+             series(judged, "unlucky", "bad luck", "var(--series-4)")],
+    events, yFmt: pct, tickFmt: pct0, zero: true, xMax: st.step,
+    empty: "No judged evaluations yet (the run needs --eval-breakdown)",
   });
   lineChart($("cEff"), {
     series: [{ ...series(evals, "efficiency", "DQN efficiency", "var(--series-1)"), dots: evals.length <= 40 }],

@@ -1,0 +1,100 @@
+{
+ "updated": 1792642510.3809538,
+ "state": "stopped",
+ "run": "easy-stage3-c64x16-20261021-205018",
+ "pid": 6616,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792641019.81739,
+ "session_step": 0,
+ "step": 1000000,
+ "total_steps": 1000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 3e-05,
+ "lr_patience": 5,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 1,
+ "sps": 671,
+ "sps_recent": 655.349879732682,
+ "games": {
+  "return": 1.302788732394366,
+  "won": 0.825,
+  "revealed": 0.8864788732394365,
+  "length": 16.009
+ },
+ "td": 0.42865774035453796,
+ "q": 1.8788530826568604,
+ "gpu_temp": 48.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.854,
+  "win_margin": 0.021885750030556414,
+  "efficiency": 0.8889507548013003,
+  "revealed": 0.8963239436619719,
+  "step": 1000000,
+  "level": 2,
+  "lr": 3e-05,
+  "reward": {
+   "win": 5.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 20.0,
+   "reveal": 1.0,
+   "gamma": 0.9
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.855,
+  "win_margin": 0.02182343602643727,
+  "efficiency": 0.8857994283118238,
+  "revealed": 0.8949295774647887,
+  "step": 900032,
+  "level": 2,
+  "lr": 3e-05,
+  "reward": {
+   "win": 5.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 20.0,
+   "reveal": 1.0,
+   "gamma": 0.9
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 1100000,
+ "reward": {
+  "win": 5.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 20.0,
+  "reveal": 1.0,
+  "gamma": 0.9
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\easy-stage3-c64x16-20261021-205018-latest.pt",
+  "best": "D:\\RL_test\\models\\easy-stage3-c64x16-20261021-205018-best.pt"
+ },
+ "stop_reason": "finished"
+}

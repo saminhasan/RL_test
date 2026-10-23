@@ -19,6 +19,7 @@ models/*.pt
 !models/med-recipe-ema-c64x16-20261021-131344-best.pt
 !models/med-bce-c64x16-20261021-172033-latest.pt
 !models/med-bce-c64x16-20261021-172033-best.pt
+!models/easy-wall3-c64x16-20261022-042541-best.pt
 models/*.tmp
 models/*.stop
 models/PAUSED

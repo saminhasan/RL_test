@@ -1,0 +1,120 @@
+{
+ "updated": 1792677396.0295107,
+ "state": "stopped",
+ "run": "med-wall3-c64x16-20261022-063116",
+ "pid": 39848,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792675878.0789578,
+ "session_step": 0,
+ "step": 1000000,
+ "total_steps": 1000000,
+ "level": 3,
+ "target_level": 3,
+ "epsilon": 0.005,
+ "lr": 1.9384190336445826e-05,
+ "lr_patience": 4,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 1,
+ "sps": 659,
+ "sps_recent": 655.3005316797799,
+ "games": {
+  "return": -38.627557971841206,
+  "won": 0.566,
+  "revealed": 0.7484444444444446,
+  "length": 61.93
+ },
+ "td": 0.062124766409397125,
+ "q": -1.2666417360305786,
+ "gpu_temp": 70.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.681,
+  "win_margin": 0.02888849844488287,
+  "efficiency": 0.7754377995056844,
+  "revealed": 0.7888425925925926,
+  "step": 1000000,
+  "level": 3,
+  "lr": 1.9384190336445826e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 100.0,
+   "reveal": 0.0,
+   "safe": -0.001,
+   "late": 0.5,
+   "late_power": 10.0,
+   "burst": 0.0,
+   "burst_rate": 5.0,
+   "gamma": 0.9
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.702,
+  "win_margin": 0.028348674635686234,
+  "efficiency": 0.7662337067895528,
+  "revealed": 0.7995694444444444,
+  "step": 500032,
+  "level": 3,
+  "lr": 5.2166495984094116e-06,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 100.0,
+   "reveal": 0.0,
+   "safe": -0.001,
+   "late": 0.5,
+   "late_power": 10.0,
+   "burst": 0.0,
+   "burst_rate": 5.0,
+   "gamma": 0.9
+  }
+ },
+ "bayes": {
+  "3": {
+   "games": 1000,
+   "win": 0.713,
+   "win_margin": 0.028037661271939213,
+   "efficiency": 0.9089510135277442,
+   "revealed": 0.805287037037037,
+   "missed_safe": 0.0,
+   "risky_guess": 0.0,
+   "coin_flip": 0.07,
+   "unlucky": 0.217,
+   "win_skill": 0.7666666666666667
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 1100000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 100.0,
+  "reveal": 0.0,
+  "safe": -0.001,
+  "late": 0.5,
+  "late_power": 10.0,
+  "burst": 0.0,
+  "burst_rate": 5.0,
+  "gamma": 0.9
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\med-wall3-c64x16-20261022-063116-latest.pt",
+  "best": "D:\\RL_test\\models\\med-wall3-c64x16-20261022-063116-best.pt"
+ },
+ "stop_reason": "finished"
+}

@@ -60,7 +60,15 @@ class RewardConfig:
 
     Paid on every safe click, for good whatever happens later:
         reveal * (cells it uncovered) / S
-    (a plain reward, not shaping: it does change what is best, towards clicks that open more).
+        safe                                         a flat amount (a small cost when negative)
+        late * (g_after ** late_power - g_before ** late_power)
+        burst * (exp(burst_rate * k / S) - 1) / (exp(burst_rate) - 1)     k = cells this click uncovered
+    where g is the share of the safe cells uncovered so far. The burst part
+    grows exponentially with how much one click opens: next to nothing for a
+    few cells, `burst` for the whole board at once. With a large
+    late_power the early game is worth almost nothing and the last few cells
+    almost all of it; over a whole won game the late part adds up to at most
+    `late`. (Plain rewards, not shaping: they change what is best.)
 
     The mine penalty on its own (mine 1, win 0, progress 0) with gamma 0 makes
     the value of a click minus the chance that the cell is a mine, learned only
@@ -97,13 +105,24 @@ class RewardConfig:
     credit: float = 0.0
     mine: float = 0.0
     reveal: float = 0.0
+    safe: float = 0.0
+    late: float = 0.0
+    late_power: float = 1.0
+    burst: float = 0.0
+    burst_rate: float = 5.0
     gamma: float = 0.999
 
     def __post_init__(self) -> None:
-        if not (min(self.win, self.progress, self.mine, self.reveal) >= 0 and self.win + self.mine + self.reveal > 0
+        if not (min(self.win, self.progress, self.mine, self.reveal, self.late, self.burst) >= 0
+                and self.late_power > 0 and self.burst_rate > 0
+                and self.win + self.mine + self.reveal + self.late + self.burst + abs(self.safe) > 0
                 and 0 <= self.credit <= 1 and 0 <= self.gamma <= 1):
-            raise ValueError("need win, progress, mine, reveal >= 0 with win, mine or reveal > 0, "
+            raise ValueError("need win, progress, mine, reveal, late >= 0 and some reward, late_power > 0, "
                              "0 <= credit <= 1, 0 <= gamma <= 1")
+
+    def max_click(self) -> float:
+        """The most any one click can earn, besides avoiding a mine."""
+        return self.win + self.reveal + self.late + self.burst + max(self.safe, 0.0)
 
     def potential(self, engine: MinesweeperEngine) -> float:
         if engine.state == engine.OVER:
@@ -116,6 +135,17 @@ class RewardConfig:
             return 0.0
         return (self.win * engine.won - self.mine * engine.hit_mine
                 + self.credit * self.progress * engine.revealed_safe_cells / engine.total_safe_cells)
+
+
+def is_coin_flip(probs: np.ndarray) -> bool:
+    """A forced guess with no better answer (judged from the exact mine chances, NaN on uncovered cells):
+    no covered cell is safe, and either all of them are equally likely to be a mine or even the
+    safest is at least a coin flip."""
+    p = probs[np.isfinite(probs)]
+    if p.size == 0:
+        return False
+    low = float(p.min())
+    return low > 1e-9 and (float(p.max()) - low < 1e-9 or low >= 0.5 - 1e-9)
 
 
 def first_click(board_seed: int, n_cells: int) -> int:
@@ -151,7 +181,12 @@ class MinesweeperEnv(gym.Env):
     metadata = {"render_modes": ["ansi"]}
 
     def __init__(self, level: int = 4, reward: RewardConfig | None = None, seed: int | None = None,
-                 canvas: tuple[int, int] | None = None, render_mode: str | None = None) -> None:
+                 canvas: tuple[int, int] | None = None, render_mode: str | None = None,
+                 skip_coin_flips: bool = False) -> None:
+        # skip_coin_flips: before each click the exact solver checks for a coin flip (is_coin_flip);
+        # a mine hit there costs nothing, and info["coin_flip"] tells the trainer to leave the click out
+        self.skip_coin_flips = skip_coin_flips
+        self._coin_flip = False
         self.canvas = tuple(canvas) if canvas else board_shape(level)
         self.reward_config = reward or RewardConfig()
         self.render_mode = render_mode
@@ -196,6 +231,7 @@ class MinesweeperEnv(gym.Env):
             board_seed = int(self._boards.integers(2**31))
         self.board_seed = start_game(self.engine, board_seed)
         self._clicks = 0
+        self._coin_flip = False
         return encode(self.engine, self._obs, self._view).copy(), self._info()
 
     def step(self, action):
@@ -203,6 +239,8 @@ class MinesweeperEnv(gym.Env):
         row, col = divmod(int(action), self.canvas[1])
         cfg = self.reward_config
         before = cfg.potential(eng)
+        g_before = eng.revealed_safe_cells / eng.total_safe_cells
+        self._coin_flip = self.skip_coin_flips and is_coin_flip(eng.mine_probs)
         self._clicks += 1
         truncated = self._clicks >= self.rows * self.cols
         uncovered = 0
@@ -210,8 +248,13 @@ class MinesweeperEnv(gym.Env):
             uncovered = eng.reveal_count(row, col)
         terminated = eng.state == eng.OVER
         reward = cfg.goal(eng) + cfg.gamma * cfg.potential(eng) - before
-        if cfg.reveal and not eng.hit_mine:
-            reward += cfg.reveal * uncovered / eng.total_safe_cells
+        if uncovered and not eng.hit_mine:
+            g_after = eng.revealed_safe_cells / eng.total_safe_cells
+            reward += (cfg.reveal * uncovered / eng.total_safe_cells + cfg.safe
+                       + cfg.late * (g_after ** cfg.late_power - g_before ** cfg.late_power)
+                       + cfg.burst * np.expm1(cfg.burst_rate * uncovered / eng.total_safe_cells) / np.expm1(cfg.burst_rate))
+        if self._coin_flip:
+            reward = 0.0
         return encode(eng, self._obs, self._view).copy(), float(reward), terminated, truncated and not terminated, self._info()
 
     def render(self) -> str | None:
@@ -236,6 +279,7 @@ class MinesweeperEnv(gym.Env):
             "moves":             eng.move_count,
             "revealed_fraction": eng.revealed_safe_cells / eng.total_safe_cells,
             "min_moves":         eng.min_win_moves,   # oracle count: for measuring only
+            "coin_flip":         self._coin_flip,     # this click was a coin flip (only with skip_coin_flips)
         }
 
     def reward_dict(self) -> dict:

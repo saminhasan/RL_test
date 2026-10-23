@@ -1,0 +1,100 @@
+{
+ "updated": 1792638305.7471929,
+ "state": "stopped",
+ "run": "easy-2stage-c64x16-20261021-193615",
+ "pid": 25060,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792636576.9047186,
+ "session_step": 0,
+ "step": 2000000,
+ "total_steps": 2000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 5e-05,
+ "lr_patience": 5,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 1,
+ "sps": 1157,
+ "sps_recent": 1032.5297034772584,
+ "games": {
+  "return": -3.7858873239436623,
+  "won": 0.779,
+  "revealed": 0.8390281690140846,
+  "length": 15.623
+ },
+ "td": 0.20901523530483246,
+ "q": -0.30043572187423706,
+ "gpu_temp": 45.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.819,
+  "win_margin": 0.02386367411778832,
+  "efficiency": 0.8603528531521993,
+  "revealed": 0.8413239436619719,
+  "step": 2000000,
+  "level": 2,
+  "lr": 5e-05,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 20.0,
+   "reveal": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.852,
+  "win_margin": 0.02200932515094454,
+  "efficiency": 0.8477334295442666,
+  "revealed": 0.8865633802816901,
+  "step": 1400000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 20.0,
+   "reveal": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 2100000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 20.0,
+  "reveal": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\easy-2stage-c64x16-20261021-193615-latest.pt",
+  "best": "D:\\RL_test\\models\\easy-2stage-c64x16-20261021-193615-best.pt"
+ },
+ "stop_reason": "finished"
+}

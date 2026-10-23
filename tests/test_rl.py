@@ -95,6 +95,85 @@ def test_reveal_reward_pays_for_uncovered_cells() -> None:
             assert np.isclose(r, -10.0 if was_mine else gained) and (was_mine or gained > 0)
 
 
+def test_late_reward_favours_the_end_of_the_game() -> None:
+    cfg = RewardConfig(win=0.0, progress=0.0, mine=100.0, safe=-0.01, late=10.0, late_power=10.0, gamma=0.0)
+    env = MinesweeperEnv(level=2, reward=cfg, seed=11)
+    rng = np.random.default_rng(5)
+    seen_win = False
+    for _ in range(200):
+        obs, info = env.reset()
+        safe = env.engine.total_safe_cells
+        g0, total, done = env.engine.revealed_safe_cells / safe, 0.0, False
+        clicks = 0
+        while not done:
+            hidden = np.flatnonzero(info["action_mask"])
+            safe_cells = hidden[~env.engine._mines_flat[hidden]]
+            a = rng.choice(safe_cells if rng.random() < 0.98 else hidden)
+            was_mine, before = bool(env.engine._mines_flat[a]), env.engine.revealed_safe_cells / safe
+            obs, r, done, _, info = env.step(a)
+            after = env.engine.revealed_safe_cells / safe
+            assert np.isclose(r, -100.0 if was_mine else 10 * (after ** 10 - before ** 10) - 0.01)
+            total += r
+            clicks += 1
+        if info["won"]:
+            seen_win = True
+            assert np.isclose(total, 10 * (1 - g0 ** 10) - 0.01 * clicks) and total <= 10
+    assert seen_win
+
+
+def test_burst_coin_flip_and_wall() -> None:
+    from rl.minesweeper_env import is_coin_flip
+
+    cfg = RewardConfig(win=0.0, progress=0.0, mine=100.0, burst=0.5, burst_rate=5.0, gamma=0.0)
+    assert cfg.max_click() == 0.5
+    env = MinesweeperEnv(level=2, reward=cfg, seed=13)
+    rng = np.random.default_rng(2)
+    for _ in range(30):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            a = rng.choice(np.flatnonzero(info["action_mask"]))
+            was_mine, before = bool(env.engine._mines_flat[a]), env.engine.revealed_safe_cells
+            obs, r, done, _, info = env.step(a)
+            k = env.engine.revealed_safe_cells - before
+            want = -100.0 if was_mine else 0.5 * np.expm1(5 * k / env.engine.total_safe_cells) / np.expm1(5)
+            assert np.isclose(r, want)
+    nan = float("nan")
+    assert is_coin_flip(np.array([[nan, 0.5], [0.5, nan]]))             # a 50/50
+    assert is_coin_flip(np.array([[0.3, 0.3], [0.3, nan]]))             # all the same
+    assert not is_coin_flip(np.array([[0.0, 0.5], [0.5, nan]]))         # a safe cell exists
+    assert not is_coin_flip(np.array([[0.2, 0.5], [0.5, nan]]))         # a better guess exists
+    # with skipping, a coin-flip click costs nothing and says so
+    env = MinesweeperEnv(level=2, reward=RewardConfig(win=0.0, progress=0.0, mine=10.0, gamma=0.0), seed=1,
+                         skip_coin_flips=True)
+    seen = False
+    for _ in range(300):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            flip = is_coin_flip(env.engine.mine_probs)
+            hidden = np.flatnonzero(info["action_mask"])
+            safe_cells = hidden[~env.engine._mines_flat[hidden]]    # mostly safe clicks, so games reach the end
+            obs, r, done, _, info = env.step(rng.choice(safe_cells if rng.random() < 0.97 else hidden))
+            assert info["coin_flip"] == flip and (r == 0.0 if flip else True)
+            seen |= flip
+    assert seen
+    from rl.dqn import Args, train
+    try:
+        train(Args(exp_name="unit-wall", curriculum="1", total_timesteps=64, num_envs=8, channels=8, layers=2,
+                   reward_win=0, reward_progress=0, reward_mine=10, reward_late=1, wall=100, cuda=False))
+    except ValueError as e:
+        assert "--wall" in str(e)
+    else:
+        raise AssertionError("expected the wall rule to refuse")
+    finally:
+        import shutil
+
+        from rl.dqn import RUNS_DIR
+        for d in RUNS_DIR.glob("unit-wall-*"):
+            shutil.rmtree(d, ignore_errors=True)
+
+
 def test_reward_second_stage_switches_on() -> None:
     import shutil
 
@@ -103,12 +182,22 @@ def test_reward_second_stage_switches_on() -> None:
     from rl.qnet import MODELS_DIR
 
     a = Args(exp_name="unit-stage", curriculum="1", total_timesteps=1600, num_envs=8, channels=8, layers=2, loss="bce",
-             reward_win=0, reward_progress=0, reward_mine=10, reward_reveal=1, reveal_from=800, gamma=0,
+             reward_win=0, reward_progress=0, reward_mine=10, reward_reveal=1, reveal_from=800, stage2_mine=20, gamma=0,
              learning_starts=200, eval_every=100_000, eval_games=20, checkpoint_every=100_000, cuda=False, n_step=1,
              per_alpha=0.0)
     _, ck = load_checkpoint(train(a))
+    b = Args(**{**vars(a), "exp_name": "unit-stage-b", "reveal_from": 0, "stage2_mine": 0.0, "reward_reveal": 0.0,
+                "reward_safe": 0.01, "stage2_from": 800, "stage2": "mine=100,safe=-0.01,late=10,late_power=10",
+                "skip_coin_flips": True, "lr_mode": "restart", "lr_floor": 1e-5, "lr_decay_clicks": 400})
+    _, ckb = load_checkpoint(train(b))
+    assert ckb["reward"]["mine"] == 100.0 and ckb["reward"]["late"] == 10.0 and ckb["reward"]["safe"] == -0.01
+    for p in MODELS_DIR.glob(f"{ckb['run_name']}*"):
+        p.unlink()
+    shutil.rmtree(RUNS_DIR / ckb["run_name"], ignore_errors=True)
     try:
-        assert ck["reward"]["reveal"] == 1.0
+        assert ck["reward"]["reveal"] == 1.0 and ck["reward"]["mine"] == 20.0
+        _, ck1 = load_checkpoint(MODELS_DIR / f"{ck['run_name']}-stage1.pt")
+        assert ck1["reward"]["mine"] == 10.0 and ck1["reward"]["reveal"] == 0.0 and ck1["global_step"] >= 800
         assert any(e["text"].startswith("stage 2") for e in journal.read(RUNS_DIR / ck["run_name"])["events"])
     finally:
         for p in [*MODELS_DIR.glob(f"{ck['run_name']}*"), *MODELS_DIR.glob("bayes-L1-*.json")]:

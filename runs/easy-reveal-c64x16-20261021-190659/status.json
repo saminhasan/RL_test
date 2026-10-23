@@ -1,0 +1,100 @@
+{
+ "updated": 1792635387.1888971,
+ "state": "stopped",
+ "run": "easy-reveal-c64x16-20261021-190659",
+ "pid": 24244,
+ "host": "MSI",
+ "device": "NVIDIA GeForce RTX 4060 Laptop GPU",
+ "started": 1792634820.2925193,
+ "session_step": 0,
+ "step": 630336,
+ "total_steps": 100000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 5e-05,
+ "lr_patience": 5,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 0,
+ "sps": 1112,
+ "sps_recent": 1099.6340869341143,
+ "games": {
+  "return": -1.241,
+  "won": 0.81,
+  "revealed": 0.8652957746478873,
+  "length": 15.931
+ },
+ "td": 0.32028043270111084,
+ "q": -0.06846950948238373,
+ "gpu_temp": 45.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.836,
+  "win_margin": 0.022949917786345118,
+  "efficiency": 0.8848921508174467,
+  "revealed": 0.8696197183098591,
+  "step": 600000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 10.0,
+   "reveal": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.846,
+  "win_margin": 0.02237183529351135,
+  "efficiency": 0.8046501548182674,
+  "revealed": 0.8796338028169014,
+  "step": 100032,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 10.0,
+   "reveal": 1.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 700000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 10.0,
+  "reveal": 1.0,
+  "gamma": 0.0
+ },
+ "bf16": true,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "D:\\RL_test\\models\\easy-reveal-c64x16-20261021-190659-latest.pt",
+  "best": "D:\\RL_test\\models\\easy-reveal-c64x16-20261021-190659-best.pt"
+ },
+ "stop_reason": "stopped by stop file"
+}
