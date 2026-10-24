@@ -70,9 +70,18 @@ oracle actions, mine-layout labels, or extra first-click privilege.
 ```powershell
 .venv\Scripts\python.exe -m rl.reward_sweep --phase inference
 .venv\Scripts\python.exe -m rl.reward_sweep --phase screen
+.venv\Scripts\python.exe -m rl.auxiliary_sweep --wait-for-screen
 .venv\Scripts\python.exe -m rl.experiment_eval --model models/<frozen-finalist>.pt --split test --games 10000 --output experiments/reward-study-20261024/final-test.json
 ```
 
 Create `experiments/reward-study-20261024/STOP` to stop study work cleanly. This
 control is separate from the original run. Completed experiment artifacts stay
 on disk and rerunning the same command resumes or skips completed work.
+
+The auxiliary batch waits for the first screen, then runs six equal-budget
+experiments from the pure-risk checkpoint. It compares separate conditional
+opening predictions and optional consistency losses from public clues and the
+public mine count. These losses do not use the solver or hidden-layout labels.
+Each case uses seed 201 and 500k additional clicks. Policy opening coefficients
+are selected on validation only. See `separated_heads_design.md` for assumptions
+and `RESULTS.md` for the evolving comparison table.

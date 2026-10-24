@@ -38,3 +38,5 @@ experiments/**/STOP
 experiments/**/.runner.lock
 experiments/**/runner.lock
 experiments/**/checkpoints/
+experiments/**/*.pt
+experiments/**/*.tmp
