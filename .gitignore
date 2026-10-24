@@ -31,3 +31,10 @@ models/*-benchmark.pt
 
 # logs
 *.log
+
+# Recomputable experiment caches and local process control
+experiments/**/bayes-cache/
+experiments/**/STOP
+experiments/**/.runner.lock
+experiments/**/runner.lock
+experiments/**/checkpoints/

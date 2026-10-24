@@ -1,0 +1,204 @@
+{
+  "board": {
+    "rows": 3,
+    "cols": 3,
+    "mines": 2
+  },
+  "device": "cpu",
+  "python": "3.13.14",
+  "source_sha256": {
+    "experiments\\reward-study-20261024\\tiny_objective.py": "59988accc875c0ff688ccc538f4976ce9b2dc89fe74a2b3bcdc9c93bb471e55b",
+    "rl\\exact_tiny.py": "832b72fe2386113dbddd6c0b4dadfa80a4f71e71c38da7589a981da23f5084de"
+  },
+  "first_click": "safe; immediate wins redealt; uniformly average all first cells",
+  "immediate_score": "-P(mine) + E[newly revealed safe cells]/(ratio*S)",
+  "ties": "uniform among exactly tied rational expected immediate scores",
+  "perfect_win": 0.8134920634920635,
+  "bayes_exact_zero_win": 0.7724867724867726,
+  "immediate_win": {
+    "10": 0.7724867724867724,
+    "100": 0.7724867724867724,
+    "1000": 0.7724867724867724,
+    "1000000": 0.7724867724867724
+  },
+  "immediate_win_fraction": {
+    "10": "146/189",
+    "100": "146/189",
+    "1000": "146/189",
+    "1000000": "146/189"
+  },
+  "first_cells": [
+    {
+      "first_cell": 0,
+      "nodes": 638,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8214285714285714,
+      "bayes_exact_zero_win": 0.738095238095238,
+      "immediate_win": {
+        "10": 0.7380952380952381,
+        "100": 0.7380952380952381,
+        "1000": 0.7380952380952381,
+        "1000000": 0.7380952380952381
+      },
+      "immediate_win_fraction": {
+        "10": "31/42",
+        "100": "31/42",
+        "1000": "31/42",
+        "1000000": "31/42"
+      }
+    },
+    {
+      "first_cell": 1,
+      "nodes": 646,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8571428571428572,
+      "bayes_exact_zero_win": 0.8571428571428572,
+      "immediate_win": {
+        "10": 0.8571428571428571,
+        "100": 0.8571428571428571,
+        "1000": 0.8571428571428571,
+        "1000000": 0.8571428571428571
+      },
+      "immediate_win_fraction": {
+        "10": "6/7",
+        "100": "6/7",
+        "1000": "6/7",
+        "1000000": "6/7"
+      }
+    },
+    {
+      "first_cell": 2,
+      "nodes": 638,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8214285714285714,
+      "bayes_exact_zero_win": 0.738095238095238,
+      "immediate_win": {
+        "10": 0.7380952380952381,
+        "100": 0.7380952380952381,
+        "1000": 0.7380952380952381,
+        "1000000": 0.7380952380952381
+      },
+      "immediate_win_fraction": {
+        "10": "31/42",
+        "100": "31/42",
+        "1000": "31/42",
+        "1000000": "31/42"
+      }
+    },
+    {
+      "first_cell": 3,
+      "nodes": 646,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8571428571428572,
+      "bayes_exact_zero_win": 0.8571428571428572,
+      "immediate_win": {
+        "10": 0.8571428571428571,
+        "100": 0.8571428571428571,
+        "1000": 0.8571428571428571,
+        "1000000": 0.8571428571428571
+      },
+      "immediate_win_fraction": {
+        "10": "6/7",
+        "100": "6/7",
+        "1000": "6/7",
+        "1000000": "6/7"
+      }
+    },
+    {
+      "first_cell": 4,
+      "nodes": 433,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.6071428571428572,
+      "bayes_exact_zero_win": 0.5714285714285714,
+      "immediate_win": {
+        "10": 0.5714285714285714,
+        "100": 0.5714285714285714,
+        "1000": 0.5714285714285714,
+        "1000000": 0.5714285714285714
+      },
+      "immediate_win_fraction": {
+        "10": "4/7",
+        "100": "4/7",
+        "1000": "4/7",
+        "1000000": "4/7"
+      }
+    },
+    {
+      "first_cell": 5,
+      "nodes": 646,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8571428571428572,
+      "bayes_exact_zero_win": 0.8571428571428572,
+      "immediate_win": {
+        "10": 0.8571428571428571,
+        "100": 0.8571428571428571,
+        "1000": 0.8571428571428571,
+        "1000000": 0.8571428571428571
+      },
+      "immediate_win_fraction": {
+        "10": "6/7",
+        "100": "6/7",
+        "1000": "6/7",
+        "1000000": "6/7"
+      }
+    },
+    {
+      "first_cell": 6,
+      "nodes": 638,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8214285714285714,
+      "bayes_exact_zero_win": 0.738095238095238,
+      "immediate_win": {
+        "10": 0.7380952380952381,
+        "100": 0.7380952380952381,
+        "1000": 0.7380952380952381,
+        "1000000": 0.7380952380952381
+      },
+      "immediate_win_fraction": {
+        "10": "31/42",
+        "100": "31/42",
+        "1000": "31/42",
+        "1000000": "31/42"
+      }
+    },
+    {
+      "first_cell": 7,
+      "nodes": 646,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8571428571428572,
+      "bayes_exact_zero_win": 0.8571428571428572,
+      "immediate_win": {
+        "10": 0.8571428571428571,
+        "100": 0.8571428571428571,
+        "1000": 0.8571428571428571,
+        "1000000": 0.8571428571428571
+      },
+      "immediate_win_fraction": {
+        "10": "6/7",
+        "100": "6/7",
+        "1000": "6/7",
+        "1000000": "6/7"
+      }
+    },
+    {
+      "first_cell": 8,
+      "nodes": 638,
+      "nonwinning_first_layouts": 28,
+      "perfect_win": 0.8214285714285714,
+      "bayes_exact_zero_win": 0.738095238095238,
+      "immediate_win": {
+        "10": 0.7380952380952381,
+        "100": 0.7380952380952381,
+        "1000": 0.7380952380952381,
+        "1000000": 0.7380952380952381
+      },
+      "immediate_win_fraction": {
+        "10": "31/42",
+        "100": "31/42",
+        "1000": "31/42",
+        "1000000": "31/42"
+      }
+    }
+  ],
+  "caveat": "Toy objective diagnostic only. Tiny Bayes uses exact zero probabilities; live Bayes uses a product approximation. No neural training or easy-board superiority is demonstrated."
+}

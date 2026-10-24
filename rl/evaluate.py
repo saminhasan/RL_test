@@ -40,8 +40,8 @@ from rl.qnet import MODELS_DIR, greedy, load_checkpoint
 EVAL_SEED0 = 10_000_000_000
 
 
-def eval_board_seeds(level: int, n: int) -> range:
-    start = EVAL_SEED0 + level * 10_000_000
+def eval_board_seeds(level: int, n: int, *, seed0: int = EVAL_SEED0) -> range:
+    start = seed0 + level * 10_000_000
     return range(start, start + n)
 
 
@@ -131,12 +131,13 @@ def format_row(name: str, s: dict) -> str:
     return row
 
 
-def bayes_summary(level: int, games: int) -> dict:
+def bayes_summary(level: int, games: int, *, seed0: int = EVAL_SEED0) -> dict:
     """bayes on the evaluation boards, from models/bayes-L<level>-<games>.json once it has played them."""
-    cache = MODELS_DIR / f"bayes-L{level}-{games}.json"
+    suffix = "" if seed0 == EVAL_SEED0 else f"-s{seed0}"
+    cache = MODELS_DIR / f"bayes-L{level}-{games}{suffix}.json"
     if cache.exists() and "coin_flip" in (cached := json.loads(cache.read_text())):
         return cached
-    res = summarize(play_bayes(level, eval_board_seeds(level, games)))
+    res = summarize(play_bayes(level, eval_board_seeds(level, games, seed0=seed0)))
     cache.write_text(json.dumps(res, indent=1))
     return res
 

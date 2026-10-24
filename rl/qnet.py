@@ -31,7 +31,7 @@ import torch.nn.functional as F
 from rl.journal import replace_with_retry
 
 MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
-DEFAULT_CONFIG = {"channels": 64, "layers": 16, "kernel": 3, "pool_every": 0}
+DEFAULT_CONFIG = {"channels": 64, "layers": 16, "kernel": 3, "pool_every": 0, "fp32_head": False}
 N_PLANES = 12
 
 
@@ -84,7 +84,40 @@ class QNetwork(nn.Module):
         h = self.body[1](self.body[0](x))
         for block in self.body[2:]:
             h = block(h, on_board)
+        if self.config["fp32_head"]:
+            with torch.autocast(h.device.type, enabled=False):
+                return self.head(h.float()).flatten(1)
         return self.head(h).flatten(1)
+
+
+class SymmetryEnsemble(nn.Module):
+    """Average the same board's rotations/reflections, mapping scores back to cells.
+
+    For BCE checkpoints average probabilities before returning their logits, so
+    this averages expected values rather than log odds. Uses only visible input.
+    """
+
+    def __init__(self, model: nn.Module, probabilities: bool = False) -> None:
+        super().__init__()
+        self.model, self.probabilities = model, probabilities
+
+    def forward(self, obs: torch.Tensor) -> torch.Tensor:
+        rows, cols = obs.shape[-2:]
+        scores = []
+        for transpose in ((False, True) if rows == cols else (False,)):
+            for flip_rows, flip_cols in ((False, False), (True, False), (False, True), (True, True)):
+                x = obs.transpose(-2, -1) if transpose else obs
+                axes = tuple(a for a, flip in ((-2, flip_rows), (-1, flip_cols)) if flip)
+                if axes:
+                    x = x.flip(axes)
+                y = self.model(x.contiguous()).float().reshape(-1, *x.shape[-2:])
+                if axes:
+                    y = y.flip(axes)
+                if transpose:
+                    y = y.transpose(-2, -1)
+                scores.append(y.sigmoid() if self.probabilities else y)
+        mean = torch.stack(scores).mean(0).flatten(1)
+        return torch.logit(mean.clamp(1e-7, 1 - 1e-7)) if self.probabilities else mean
 
 
 def legal(obs: torch.Tensor) -> torch.Tensor:

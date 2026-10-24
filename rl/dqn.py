@@ -67,6 +67,8 @@ class Args:
     """if toggled, cuda will be enabled by default"""
     bf16: bool = True
     """MINESWEEPER: bf16 maths on the GPU (needs an RTX 30-series or newer); --no-bf16 for older cards"""
+    deterministic: bool = False
+    """MINESWEEPER: deterministic torch kernels for controlled experiment repeats"""
 
     # MINESWEEPER: the game
     curriculum: str = "2:200000,3:600000,4"
@@ -123,6 +125,8 @@ class Args:
     """conv layers (all but the first have a residual shortcut)"""
     pool_every: int = 0
     """every this many residual layers also see the whole board (global pooling, as in KataGo); 0 = off"""
+    fp32_head: bool = False
+    """MINESWEEPER: keep the final value projection in fp32 while the convolution body uses bf16"""
     loss: str = "huber"
     """huber, or bce: each click's value is a logit between the worst and the best outcome of a game
     (minus reward_mine and reward_win), learned with cross-entropy; needs reward_progress 0"""
@@ -168,6 +172,8 @@ class Args:
     """timesteps between evaluations on fixed boards"""
     eval_games: int = 300
     """games per evaluation"""
+    eval_seed0: int = 10_000_000_000
+    """MINESWEEPER: evaluation seed base; use a reserved validation block while tuning experiments"""
     checkpoint_every: int = 25_000
     """timesteps between saves of the latest state"""
     status_every: float = 5.0
@@ -256,6 +262,30 @@ def value_range(reward: RewardConfig) -> tuple[float, float]:
     return min(-reward.mine, reward.safe), reward.max_click()
 
 
+def reward_schedule(args: Args) -> tuple[int, RewardConfig, RewardConfig]:
+    """Build both reward stages in one place, including every CLI reward term."""
+    base = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
+                        mine=args.reward_mine, reveal=args.reward_reveal, reveal_scale=args.reward_reveal_scale,
+                        reveal_scale_start=args.reward_reveal_scale_start, safe=args.reward_safe,
+                        late=args.reward_late, late_power=args.late_power,
+                        burst=args.reward_burst, burst_rate=args.burst_rate, gamma=args.gamma)
+    if args.stage2:
+        full = dataclasses.replace(base, **{
+            k.strip(): float(v) for k, v in (item.split("=") for item in args.stage2.split(","))})
+        stages = args.stage2_from, base, full
+    else:
+        stages = (args.reveal_from, dataclasses.replace(base, reveal=0.0) if args.reveal_from else base,
+                  dataclasses.replace(base, mine=args.stage2_mine or base.mine))
+    for reward in stages[1:]:
+        if reward.gamma != args.gamma:
+            raise ValueError("--stage2 cannot change gamma; the environment and learner must use the same discount")
+        if args.loss == "bce" and reward.progress:
+            raise ValueError("--loss bce needs --reward-progress 0 in every stage")
+        if args.loss == "bce" and args.gamma > 0 and reward.safe:
+            raise ValueError("BCE lookahead with repeated --reward-safe payments needs return bounds; use Huber")
+    return stages
+
+
 def make_env(level, seed, reward, canvas, skip_coin_flips=False):
     def thunk():
         return MinesweeperEnv(level=level, reward=reward, seed=seed, canvas=canvas,   # MINESWEEPER
@@ -270,9 +300,16 @@ def linear_schedule(start_e: float, end_e: float, duration: int, t: int):
 
 
 def train(args: Args) -> Path:
+    if args.deterministic:
+        os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+    torch.use_deterministic_algorithms(args.deterministic)
+    torch.backends.cudnn.deterministic = args.deterministic
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
     amp = dict(device_type=device.type, dtype=torch.bfloat16, enabled=device.type == "cuda" and args.bf16)
-    torch.backends.cudnn.benchmark = True
+    torch.backends.cudnn.benchmark = not args.deterministic
+    if args.deterministic:
+        torch.backends.cudnn.allow_tf32 = False
+        torch.backends.cuda.matmul.allow_tf32 = False
 
     # MINESWEEPER: resume, or a new run
     ckpt = None
@@ -319,19 +356,7 @@ def train(args: Args) -> Path:
 
     # env setup
     # MINESWEEPER: the reward; with --reveal-from the reveal part starts later (a second stage)
-    base = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
-                        mine=args.reward_mine, reveal=args.reward_reveal, reveal_scale=args.reward_reveal_scale,
-                        reveal_scale_start=args.reward_reveal_scale_start,
-                        safe=args.reward_safe, late=args.reward_late,
-                        late_power=args.late_power, gamma=args.gamma)
-    if args.stage2:                    # --stage2-from with --stage2 "name=value,..."
-        switch_at = args.stage2_from
-        stage1, full_reward = base, dataclasses.replace(base, **{
-            k.strip(): float(v) for k, v in (item.split("=") for item in args.stage2.split(","))})
-    else:                              # the older form: --reveal-from (and --stage2-mine)
-        switch_at = args.reveal_from
-        stage1 = dataclasses.replace(base, reveal=0.0) if args.reveal_from else base
-        full_reward = dataclasses.replace(base, mine=args.stage2_mine or base.mine)
+    switch_at, stage1, full_reward = reward_schedule(args)
     reward = full_reward if seed_offset >= switch_at else stage1
     for r in (stage1, full_reward):    # MINESWEEPER: the wall rule
         if args.wall and r.mine < args.wall * r.max_click():
@@ -351,9 +376,11 @@ def train(args: Args) -> Path:
     if ckpt:
         config = ckpt["config"]
     elif init:
-        config = {**init["config"], **({"pool_every": args.pool_every} if args.pool_every else {})}
+        config = {**init["config"], **({"pool_every": args.pool_every} if args.pool_every else {}),
+                  **({"fp32_head": True} if args.fp32_head else {})}
     else:
-        config = {"channels": args.channels, "layers": args.layers, "pool_every": args.pool_every}
+        config = {"channels": args.channels, "layers": args.layers, "pool_every": args.pool_every,
+                  "fp32_head": args.fp32_head}
     q_network = QNetwork(config).to(device)
     if init:
         added = q_network.load_state_dict(init["state_dict"], strict=False).missing_keys
@@ -396,6 +423,7 @@ def train(args: Args) -> Path:
         # MINESWEEPER: the best so far counts only evaluations comparable with the ones to come:
         # same boards, same reward
         comparable = [e for e in eval_history if e.get("level") == target_level and e.get("games") == args.eval_games
+                      and e.get("seed0", 10_000_000_000) == args.eval_seed0
                       and e.get("reward") == asdict(reward)]
         best_eval = max(comparable, key=lambda e: (e["win"], e["revealed"]), default=None)
     best_score = (best_eval["win"], best_eval["revealed"]) if best_eval else (-1.0, -1.0)
@@ -410,11 +438,13 @@ def train(args: Args) -> Path:
     nstep = NStep(args.n_step, args.gamma, args.num_envs)
 
     # MINESWEEPER: fixed evaluation boards per level, and bayes on them (measuring only)
-    bayes: dict[int, dict] = {k: v for k, v in (ckpt or {}).get("bayes", {}).items() if isinstance(k, int)}
+    same_eval_seeds = not ckpt or ckpt.get("args", {}).get("eval_seed0", 10_000_000_000) == args.eval_seed0
+    bayes: dict[int, dict] = {k: v for k, v in (ckpt or {}).get("bayes", {}).items()
+                             if isinstance(k, int) and same_eval_seeds}
 
     def bayes_on(level: int) -> dict:
         if bayes.get(level, {}).get("games") != args.eval_games:
-            bayes[level] = bayes_summary(level, args.eval_games)
+            bayes[level] = bayes_summary(level, args.eval_games, seed0=args.eval_seed0)
             print(format_row(f"bayes, level {level} (same boards)", bayes[level]), flush=True)
         return bayes[level]
 
@@ -452,9 +482,9 @@ def train(args: Args) -> Path:
         nonlocal best_score, best_eval, evals_since_best, lr, restart_step
         base = bayes_on(level)
         report("evaluating")
-        res = summarize(play_q(policy, level, eval_board_seeds(level, args.eval_games), device, canvas=canvas,
+        res = summarize(play_q(policy, level, eval_board_seeds(level, args.eval_games, seed0=args.eval_seed0), device, canvas=canvas,
                                bf16=args.bf16, breakdown=args.eval_breakdown))
-        res.update(step=global_step, level=level, lr=lr, reward=asdict(reward))
+        res.update(step=global_step, level=level, lr=lr, reward=asdict(reward), seed0=args.eval_seed0)
         eval_history.append(res)
         journal.log("eval", global_step, **{k: v for k, v in res.items() if k != "step"})
         print(format_row(f"eval L{level} at step {global_step:,}", res) + f"   (bayes {base['win']*100:.1f}%)",
