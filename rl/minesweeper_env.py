@@ -63,7 +63,11 @@ class RewardConfig:
         safe                                         a flat amount (a small cost when negative)
         late * (g_after ** late_power - g_before ** late_power)
         burst * (exp(burst_rate * k / S) - 1) / (exp(burst_rate) - 1)     k = cells this click uncovered
-    where g is the share of the safe cells uncovered so far. The burst part
+    where g is the share of the safe cells uncovered so far. With reveal_scale > 0
+    the reveal part is also multiplied by a factor that grows in a straight line
+    with g_after, from reveal_scale_start at the start of the game to
+    reveal_scale at the end (start 0, scale 100: the progress in percent), so
+    late clicks earn far more. The burst part
     grows exponentially with how much one click opens: next to nothing for a
     few cells, `burst` for the whole board at once. With a large
     late_power the early game is worth almost nothing and the last few cells
@@ -105,6 +109,8 @@ class RewardConfig:
     credit: float = 0.0
     mine: float = 0.0
     reveal: float = 0.0
+    reveal_scale: float = 0.0
+    reveal_scale_start: float = 0.0
     safe: float = 0.0
     late: float = 0.0
     late_power: float = 1.0
@@ -113,7 +119,8 @@ class RewardConfig:
     gamma: float = 0.999
 
     def __post_init__(self) -> None:
-        if not (min(self.win, self.progress, self.mine, self.reveal, self.late, self.burst) >= 0
+        if not (min(self.win, self.progress, self.mine, self.reveal, self.reveal_scale, self.reveal_scale_start,
+                    self.late, self.burst) >= 0
                 and self.late_power > 0 and self.burst_rate > 0
                 and self.win + self.mine + self.reveal + self.late + self.burst + abs(self.safe) > 0
                 and 0 <= self.credit <= 1 and 0 <= self.gamma <= 1):
@@ -122,7 +129,9 @@ class RewardConfig:
 
     def max_click(self) -> float:
         """The most any one click can earn, besides avoiding a mine."""
-        return self.win + self.reveal + self.late + self.burst + max(self.safe, 0.0)
+        top = max(self.reveal_scale, self.reveal_scale_start) if self.reveal_scale else 1.0
+        return (self.win + self.reveal * top + self.late + self.burst
+                + max(self.safe, 0.0))
 
     def potential(self, engine: MinesweeperEngine) -> float:
         if engine.state == engine.OVER:
@@ -250,7 +259,8 @@ class MinesweeperEnv(gym.Env):
         reward = cfg.goal(eng) + cfg.gamma * cfg.potential(eng) - before
         if uncovered and not eng.hit_mine:
             g_after = eng.revealed_safe_cells / eng.total_safe_cells
-            reward += (cfg.reveal * uncovered / eng.total_safe_cells + cfg.safe
+            scale = cfg.reveal_scale_start + (cfg.reveal_scale - cfg.reveal_scale_start) * g_after if cfg.reveal_scale else 1.0
+            reward += (cfg.reveal * uncovered / eng.total_safe_cells * scale + cfg.safe
                        + cfg.late * (g_after ** cfg.late_power - g_before ** cfg.late_power)
                        + cfg.burst * np.expm1(cfg.burst_rate * uncovered / eng.total_safe_cells) / np.expm1(cfg.burst_rate))
         if self._coin_flip:

@@ -90,6 +90,11 @@ class Args:
     restarts, and the network as it was is kept as models/<run>-stage1.pt"""
     stage2_mine: float = 0.0
     """MINESWEEPER: the mine penalty from --reveal-from on (0 = keep --reward-mine)"""
+    reward_reveal_scale: float = 0.0
+    """multiply the reveal reward by a factor growing in a straight line with the game's progress after the click,
+    from --reward-reveal-scale-start at the start to this at the end (start 0, this 100: progress in percent; 0 = off)"""
+    reward_reveal_scale_start: float = 0.0
+    """the reveal reward's factor at the start of the game (see --reward-reveal-scale)"""
     reward_safe: float = 0.0
     """paid on each safe click, a flat amount (negative = a small cost per click)"""
     reward_late: float = 0.0
@@ -178,9 +183,10 @@ class Args:
     lr_min: float = 1e-6
     """MINESWEEPER: the learning rate never drops below this"""
     lr_mode: str = "halve"
-    """MINESWEEPER: halve (after lr_patience evaluations without a new best), or restart: the learning rate decays
+    """MINESWEEPER: halve (after lr_patience evaluations without a new best); restart: the learning rate decays
     exponentially from --learning-rate towards --lr-floor, and jumps back up after lr_patience evaluations
-    without a new best"""
+    without a new best; or exp: it falls exponentially from --learning-rate at the first click to --lr-floor
+    at --total-timesteps, and nothing else changes it"""
     lr_floor: float = 1e-5
     """MINESWEEPER: where the restart schedule decays to and holds"""
     lr_decay_clicks: int = 200_000
@@ -247,7 +253,7 @@ def mirror(obs, next_obs, actions, rng):
 def value_range(reward: RewardConfig) -> tuple[float, float]:
     """MINESWEEPER: the worst and the best a click can score under `reward` (the cross-entropy loss maps
     values into this range): a mine at worst, at best a win plus everything a safe click can earn."""
-    return min(-reward.mine, reward.safe), reward.win + reward.reveal + reward.late + max(reward.safe, 0.0)
+    return min(-reward.mine, reward.safe), reward.max_click()
 
 
 def make_env(level, seed, reward, canvas, skip_coin_flips=False):
@@ -314,7 +320,9 @@ def train(args: Args) -> Path:
     # env setup
     # MINESWEEPER: the reward; with --reveal-from the reveal part starts later (a second stage)
     base = RewardConfig(win=args.reward_win, progress=args.reward_progress, credit=args.reward_credit,
-                        mine=args.reward_mine, reveal=args.reward_reveal, safe=args.reward_safe, late=args.reward_late,
+                        mine=args.reward_mine, reveal=args.reward_reveal, reveal_scale=args.reward_reveal_scale,
+                        reveal_scale_start=args.reward_reveal_scale_start,
+                        safe=args.reward_safe, late=args.reward_late,
                         late_power=args.late_power, gamma=args.gamma)
     if args.stage2:                    # --stage2-from with --stage2 "name=value,..."
         switch_at = args.stage2_from
@@ -467,7 +475,7 @@ def train(args: Args) -> Path:
                     print(f"learning rate back up to {args.learning_rate:.3g} from step {global_step:,}: no new best in "
                           f"{args.lr_patience} evaluations", flush=True)
                     journal.event(global_step, f"learning rate boost {args.learning_rate:.2g}", "lr")
-                elif args.lr_mode != "restart" and args.lr_patience and evals_since_best >= args.lr_patience \
+                elif args.lr_mode == "halve" and args.lr_patience and evals_since_best >= args.lr_patience \
                         and lr > args.lr_min:
                     lr, evals_since_best = max(args.lr_min, lr * args.lr_decay), 0
                     for group in optimizer.param_groups:
@@ -535,6 +543,10 @@ def train(args: Args) -> Path:
                       f"stage 1 kept as {run_name}-stage1.pt", flush=True)
                 journal.event(global_step, f"stage 2: {changed}", "reward")
 
+            if args.lr_mode == "exp":       # MINESWEEPER: from the start rate to the floor over the whole run
+                lr = args.learning_rate * (args.lr_floor / args.learning_rate) ** min(1.0, global_step / args.total_timesteps)
+                for group in optimizer.param_groups:
+                    group["lr"] = lr
             if args.lr_mode == "restart":   # MINESWEEPER: decay from the peak towards the floor
                 lr = args.lr_floor + (args.learning_rate - args.lr_floor) * math.exp(
                     -(global_step - restart_step) / args.lr_decay_clicks)

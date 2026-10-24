@@ -174,6 +174,37 @@ def test_burst_coin_flip_and_wall() -> None:
             shutil.rmtree(d, ignore_errors=True)
 
 
+def test_reveal_reward_scaled_by_progress() -> None:
+    cfg = RewardConfig(win=0.0, progress=0.0, mine=1000.0, reveal=10.0, reveal_scale=100.0, gamma=0.0)
+    assert cfg.max_click() == 1000.0
+    env = MinesweeperEnv(level=2, reward=cfg, seed=21)
+    rng = np.random.default_rng(8)
+    for _ in range(40):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            a = rng.choice(np.flatnonzero(info["action_mask"]))
+            safe = env.engine.total_safe_cells
+            was_mine, before = bool(env.engine._mines_flat[a]), env.engine.revealed_safe_cells / safe
+            obs, r, done, _, info = env.step(a)
+            after = env.engine.revealed_safe_cells / safe
+            assert np.isclose(r, -1000.0 if was_mine else 10 * (after - before) * 100 * after)
+    # a straight line from 1 at the start to 50 at the end
+    cfg = RewardConfig(win=0.0, progress=0.0, mine=5000.0, reveal=10.0, reveal_scale=50.0, reveal_scale_start=1.0, gamma=0.0)
+    assert cfg.max_click() == 500.0
+    env = MinesweeperEnv(level=2, reward=cfg, seed=22)
+    for _ in range(40):
+        obs, info = env.reset()
+        done = False
+        while not done:
+            a = rng.choice(np.flatnonzero(info["action_mask"]))
+            safe = env.engine.total_safe_cells
+            was_mine, before = bool(env.engine._mines_flat[a]), env.engine.revealed_safe_cells / safe
+            obs, r, done, _, info = env.step(a)
+            after = env.engine.revealed_safe_cells / safe
+            assert np.isclose(r, -5000.0 if was_mine else 10 * (after - before) * (1 + 49 * after))
+
+
 def test_reward_second_stage_switches_on() -> None:
     import shutil
 
