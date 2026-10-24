@@ -19,10 +19,17 @@ def pct(value):
     return f"{100 * value:.2f}%" if value is not None else "pending"
 
 
+def efficiency(value):
+    return f"{value:.3f}" if value is not None else "n/a"
+
+
 def main():
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     current = load(STUDY / "status.json") or {}
     auxiliary_current = load(STUDY / "auxiliary-status.json") or {}
+    confirmation = load(STUDY / "confirmation/summary.json")
+    confirmation_status = load(STUDY / "confirmation-status.json") or {}
+    test_opened = bool(list(STUDY.glob("confirmation/seed-*/test.json")))
     progress = current.get("progress") or {}
     inference = []
     for path in sorted(STUDY.glob("baseline-validation-*.json")):
@@ -74,14 +81,21 @@ def main():
                "total_steps": progress.get("total_steps")},
                "inference": inference, "candidates": candidates,
                "auxiliary_current": auxiliary_current, "auxiliary": auxiliary,
-               "test_split_opened": False,
-               "success": False,
-               "interpretation": "Validation is for selection; no repeatable win-rate advantage is established."}
+               "confirmation": confirmation, "confirmation_status": confirmation_status,
+               "test_split_opened": test_opened,
+               "success": bool(confirmation and confirmation.get("success")),
+               "interpretation": confirmation["conclusion"] if confirmation else
+                   "Validation is for selection; no repeatable win-rate advantage is established."}
     lines = ["# Reward study results", "", f"Updated {now}.", "",
              "Baseline code checkpoint: `13e3083`, tag `reward-study-baseline-20261024`.", "",
-             "**No repeatable win-rate advantage over Bayes has been established.** "
-             "All numbers below are validation results; the final test split is still unused.", ""]
-    if current:
+             "**" + (confirmation["conclusion"] if confirmation else
+                       "No repeatable win-rate advantage over Bayes has been established.") + "**", "",
+             "Screening numbers below are validation results. " +
+             ("The preselected confirmation comparison has opened the test split." if test_opened else
+              "The final test split is still unused."), ""]
+    if current.get("phase") == "confirmation":
+        lines += [f"Current: **confirmation**, {current.get('state')}, seed {current.get('seed', 'pending')}.", ""]
+    elif current:
         lines += [f"Current: **{current.get('variant')}**, {current.get('state')}, "
                   f"{progress.get('step', 0):,} / {progress.get('total_steps', 0):,} clicks.", ""]
     if auxiliary_current.get("state") == "waiting_for_screen":
@@ -95,7 +109,7 @@ def main():
             paired = item["paired"]
             low, high = paired["win_difference_ci95"]
             lines.append(f"| [{item['name']}]({item['result']}) | {pct(item['win'])} | "
-                         f"{item['efficiency']:.3f} | {paired['win_difference'] * 100:+.2f} points | "
+                         f"{efficiency(item['efficiency'])} | {paired['win_difference'] * 100:+.2f} points | "
                          f"[{low * 100:+.2f}, {high * 100:+.2f}] |")
         lines += [""]
     lines += ["## Equal-budget training screen", "",
@@ -111,7 +125,7 @@ def main():
         for model in item["models"]:
             lines.append(f"| [{item['name']}]({item['result']}) | {item['state']} | "
                          f"{model['checkpoint']} at {model['step']:,} | {pct(model['win'])} | "
-                         f"{model['efficiency']:.3f} | {model['paired']['win_difference'] * 100:+.2f} points |")
+                         f"{efficiency(model['efficiency'])} | {model['paired']['win_difference'] * 100:+.2f} points |")
     if auxiliary:
         lines += ["", "## Separate safety/opening heads and public consistency", "",
                   "Each checkpoint's displayed lambda is selected from its validation grid. "
@@ -125,7 +139,21 @@ def main():
             for model in item["models"]:
                 lines.append(f"| [{item['name']}]({model['result']}) | {item['state']} | "
                              f"{model['checkpoint']} | {model['lambda']:g} | {pct(model['win'])} | "
-                             f"{model['efficiency']:.3f} | {model['paired']['win_difference'] * 100:+.2f} points |")
+                             f"{efficiency(model['efficiency'])} | {model['paired']['win_difference'] * 100:+.2f} points |")
+    if confirmation:
+        lines += ["", "## Frozen-policy confirmation on test boards", "",
+                  "Each repeat uses fresh training data and the same frozen pretrained initialization. "
+                  "The recipe, checkpoint rule and inference settings were fixed before testing.", "",
+                  "| Training seed | Wins | Bayes wins | Efficiency | Paired win gap | 95% interval |",
+                  "| --- | ---: | ---: | ---: | ---: | ---: |"]
+        for row in confirmation["repeats"]:
+            pair = row["paired_vs_bayes"]
+            low, high = pair["win_difference_ci95"]
+            lines.append(f"| {row['seed']} | {pct(row['summary']['win'])} | {pct(row['bayes']['win'])} | "
+                         f"{efficiency(row['summary']['efficiency'])} | {pair['win_difference'] * 100:+.2f} points | "
+                         f"[{low * 100:+.2f}, {high * 100:+.2f}] |")
+        lines += ["", "See [confirmation report](confirmation/summary.md) and "
+                  "[sealed selection plan](confirmation/selection-plan.json).", ""]
     lines += ["", "## Interpretation", "",
               "Changing the immediate reward ratio alone cannot train future-win predictions "
               "when gamma is zero. The screen also includes terminal win/loss objectives with "

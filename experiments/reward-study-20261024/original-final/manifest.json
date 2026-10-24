@@ -1,0 +1,16 @@
+{
+  "run": "easy-exp2-c64x16-20261024-040042",
+  "completed_steps": 10000000,
+  "models": [
+    {
+      "path": "models\\reward-study-20261024-original-final-best.pt",
+      "sha256": "7f7188814044dfeec9f4f8a3105dcacca2514cd5e5b0ce256561de7b7fe11771",
+      "step": 5600000
+    },
+    {
+      "path": "models\\reward-study-20261024-original-final-latest.pt",
+      "sha256": "fd8ba562f7278bf48744740b653f3b5f2960374d7c3a28d0f522ec49ddcb9fa2",
+      "step": 10000000
+    }
+  ]
+}

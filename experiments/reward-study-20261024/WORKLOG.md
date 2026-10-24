@@ -4,12 +4,32 @@ The requested work is ongoing: preserve the current repo/run and investigate
 repeatable learned-agent gains over the full Bayesian policy. No superiority
 claim has been established. The reserved test split remains unused.
 
+The user explicitly confirmed board-cell and mine-count inputs only. Keep
+solver probabilities confined to evaluation/diagnostics. Do not introduce
+solver-assisted policy inputs or solver-derived training targets.
+
+The original run finished naturally at 10M clicks: best legacy evaluation
+85.8% at 5.6M; final 81.2%. `original-final/` and frozen local models retain it.
+
+Recovery: the main controller encountered a Windows atomic JSON replacement
+sharing error during `burst2`; the child finished and retained its checkpoints.
+The queued auxiliary sweep acquired the released lock and finished all six
+cases before the incomplete reward screen was resumed. Resume now uses
+`python -m rl.study_io reward --phase screen`, preserving frozen source bytes
+and recording the writer-only retry wrapper in `io-supervision.jsonl`.
+
+The confirmation stage is `rl.confirm_study`: it waits for all 13+6 cases,
+freezes a validation-selected recipe and policy, trains seeds 202/203/204, seals
+every checkpoint, then opens 10k test boards. Its training-only CUDA smoke
+passed and opened zero test boards. Use the `study_io confirm` wrapper.
+
 ## Checkpoints and active work
 
 - Branch: `reward-study-20261024`.
 - Original-code/run snapshot: commit `13e3083`, tag
   `reward-study-baseline-20261024`.
 - Controlled experiment implementation: commit `1c44cb8`.
+- Outcome-head/consistency experiment implementation: commit `7e164b7`.
 - Original `easy-exp2-c64x16-20261024-040042` continues independently. Its live
   files and process have not been targeted for stopping or replacement.
 - Frozen best/latest models are `models/reward-study-20261024-baseline-*.pt`.
@@ -79,10 +99,11 @@ The prototype passed focused CPU tests, checkpoint/resume and CLI evaluation
 checks, plus a 1,024-click CUDA gradient/validation smoke. The smoke's 20-game
 score is too small to interpret as a performance result.
 
-An auxiliary sweep is being prepared in `rl/auxiliary_sweep.py`: safety control,
+An auxiliary sweep is queued in `rl/auxiliary_sweep.py`: safety control,
 zero auxiliary alone, zero-driven policy, public consistency alone, and two
-combined weights. It should wait for the main screen and preserve one study
-training child at a time. Initialize from the immutable pure-risk model:
+combined weights. It is running with `--wait-for-screen`, waiting for the main
+campaign lock and preserving one study training child at a time. Its live
+state is in `auxiliary-status.json`. It uses the immutable pure-risk model:
 
 `screen/risk_only-s101-n500000-v2000/checkpoints/latest.pt`
 

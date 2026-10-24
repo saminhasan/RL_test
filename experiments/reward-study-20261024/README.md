@@ -69,8 +69,9 @@ oracle actions, mine-layout labels, or extra first-click privilege.
 
 ```powershell
 .venv\Scripts\python.exe -m rl.reward_sweep --phase inference
-.venv\Scripts\python.exe -m rl.reward_sweep --phase screen
-.venv\Scripts\python.exe -m rl.auxiliary_sweep --wait-for-screen
+.venv\Scripts\python.exe -m rl.study_io reward --phase screen
+.venv\Scripts\python.exe -m rl.study_io auxiliary --wait-for-screen
+.venv\Scripts\python.exe -m rl.study_io confirm --wait-for-sweeps
 .venv\Scripts\python.exe -m rl.experiment_eval --model models/<frozen-finalist>.pt --split test --games 10000 --output experiments/reward-study-20261024/final-test.json
 ```
 
@@ -85,3 +86,12 @@ public mine count. These losses do not use the solver or hidden-layout labels.
 Each case uses seed 201 and 500k additional clicks. Policy opening coefficients
 are selected on validation only. See `separated_heads_design.md` for assumptions
 and `RESULTS.md` for the evolving comparison table.
+
+`rl.study_io` adds bounded retries for Windows sharing locks during atomic JSON
+publication. It leaves the frozen algorithm source and existing experiment
+seals unchanged; `io-supervision.jsonl` records wrapper hashes and invocations.
+The original controller encountered this Windows error during `burst2`. Its
+trained checkpoint was recovered and the remaining trials resumed without
+changing their training configuration. The auxiliary cases completed in the
+intervening period; their independent initialization and click budgets remain
+unchanged.
