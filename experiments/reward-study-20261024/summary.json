@@ -1,0 +1,1323 @@
+{
+  "updated_utc": "2026-10-25T01:16:02+00:00",
+  "current": {
+    "variant": "future_win3",
+    "state": "training",
+    "step": 92352,
+    "total_steps": 500000
+  },
+  "inference": [
+    {
+      "name": "bf16",
+      "win": 0.851,
+      "efficiency": 0.8601559729925726,
+      "paired": {
+        "games": 2000,
+        "model_only_wins": 148,
+        "bayes_only_wins": 218,
+        "both_win": 1554,
+        "both_lose": 80,
+        "win_difference": -0.035,
+        "win_difference_ci95": [
+          -0.0535,
+          -0.0165
+        ],
+        "mcnemar_exact_two_sided_p": 0.00029840907577960825,
+        "model_better_exact_one_sided_p": 0.9999012417477621,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "result": "baseline-validation-bf16.json"
+    },
+    {
+      "name": "fp32",
+      "win": 0.849,
+      "efficiency": 0.8590471705026901,
+      "paired": {
+        "games": 2000,
+        "model_only_wins": 148,
+        "bayes_only_wins": 222,
+        "both_win": 1550,
+        "both_lose": 80,
+        "win_difference": -0.037,
+        "win_difference_ci95": [
+          -0.0555,
+          -0.0185
+        ],
+        "mcnemar_exact_two_sided_p": 0.0001408282053056749,
+        "model_better_exact_one_sided_p": 0.999954180462108,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "result": "baseline-validation-fp32.json"
+    },
+    {
+      "name": "fp32head",
+      "win": 0.8495,
+      "efficiency": 0.8574364851463183,
+      "paired": {
+        "games": 2000,
+        "model_only_wins": 150,
+        "bayes_only_wins": 223,
+        "both_win": 1549,
+        "both_lose": 78,
+        "win_difference": -0.0365,
+        "win_difference_ci95": [
+          -0.0555,
+          -0.0175
+        ],
+        "mcnemar_exact_two_sided_p": 0.00018482111403104104,
+        "model_better_exact_one_sided_p": 0.9999393430046405,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "result": "baseline-validation-fp32head.json"
+    },
+    {
+      "name": "symmetry-bf16",
+      "win": 0.8585,
+      "efficiency": 0.873526572934417,
+      "paired": {
+        "games": 2000,
+        "model_only_wins": 150,
+        "bayes_only_wins": 205,
+        "both_win": 1567,
+        "both_lose": 78,
+        "win_difference": -0.0275,
+        "win_difference_ci95": [
+          -0.04551249999999999,
+          -0.0095
+        ],
+        "mcnemar_exact_two_sided_p": 0.004092845173825071,
+        "model_better_exact_one_sided_p": 0.9985478316840171,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "result": "baseline-validation-symmetry-bf16.json"
+    },
+    {
+      "name": "symmetry-fp32",
+      "win": 0.856,
+      "efficiency": 0.8740309311800039,
+      "paired": {
+        "games": 2000,
+        "model_only_wins": 142,
+        "bayes_only_wins": 202,
+        "both_win": 1570,
+        "both_lose": 86,
+        "win_difference": -0.03,
+        "win_difference_ci95": [
+          -0.048,
+          -0.012
+        ],
+        "mcnemar_exact_two_sided_p": 0.0014317686574753252,
+        "model_better_exact_one_sided_p": 0.9995110524109692,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "result": "baseline-validation-symmetry-fp32.json"
+    }
+  ],
+  "candidates": [
+    {
+      "name": "burst2",
+      "state": "complete",
+      "run": "reward-study-20261024-burst2-s101-n500000-p7f1a7b55c857-c64x16-20261024-065315",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 300032,
+          "win": 0.8475,
+          "efficiency": 0.8325897665510963,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 157,
+            "bayes_only_wins": 234,
+            "both_win": 1538,
+            "both_lose": 71,
+            "win_difference": -0.0385,
+            "win_difference_ci95": [
+              -0.0575,
+              -0.0195
+            ],
+            "mcnemar_exact_two_sided_p": 0.0001157657913547251,
+            "model_better_exact_one_sided_p": 0.9999620594318656,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8415,
+          "efficiency": 0.8366504832872503,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 157,
+            "bayes_only_wins": 246,
+            "both_win": 1526,
+            "both_lose": 71,
+            "win_difference": -0.0445,
+            "win_difference_ci95": [
+              -0.064,
+              -0.025
+            ],
+            "mcnemar_exact_two_sided_p": 1.0805377589357615e-05,
+            "model_better_exact_one_sided_p": 0.9999966222921678,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\burst2-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "burst5",
+      "state": "complete",
+      "run": "reward-study-20261024-burst5-s101-n500000-paf09ca2997bc-c64x16-20261024-112217",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 200000,
+          "win": 0.846,
+          "efficiency": 0.8195299487990392,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 146,
+            "bayes_only_wins": 226,
+            "both_win": 1546,
+            "both_lose": 82,
+            "win_difference": -0.04,
+            "win_difference_ci95": [
+              -0.0585,
+              -0.0215
+            ],
+            "mcnemar_exact_two_sided_p": 3.945016300627643e-05,
+            "model_better_exact_one_sided_p": 0.9999875431911597,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8155,
+          "efficiency": 0.815532085808932,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 146,
+            "bayes_only_wins": 287,
+            "both_win": 1485,
+            "both_lose": 82,
+            "win_difference": -0.0705,
+            "win_difference_ci95": [
+              -0.0905,
+              -0.0505
+            ],
+            "mcnemar_exact_two_sided_p": 1.1403702863261918e-11,
+            "model_better_exact_one_sided_p": 0.9999999999971386,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\burst5-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "future_win1",
+      "state": "complete",
+      "run": "reward-study-20261024-future_win1-s101-n500000-p438f54fc34cd-c64x16-20261024-112824",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 500032,
+          "win": 0.8665,
+          "efficiency": 0.7229740046511295,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 123,
+            "bayes_only_wins": 162,
+            "both_win": 1610,
+            "both_lose": 105,
+            "win_difference": -0.0195,
+            "win_difference_ci95": [
+              -0.036,
+              -0.003
+            ],
+            "mcnemar_exact_two_sided_p": 0.024220234570872214,
+            "model_better_exact_one_sided_p": 0.9911686232932778,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8665,
+          "efficiency": 0.7229740046511295,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 123,
+            "bayes_only_wins": 162,
+            "both_win": 1610,
+            "both_lose": 105,
+            "win_difference": -0.0195,
+            "win_difference_ci95": [
+              -0.036,
+              -0.003
+            ],
+            "mcnemar_exact_two_sided_p": 0.024220234570872214,
+            "model_better_exact_one_sided_p": 0.9911686232932778,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\future_win1-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "future_win3",
+      "state": "training",
+      "run": "reward-study-20261024-future_win3-s101-n500000-pd385ea112266-c64x16-20261024-181329",
+      "models": []
+    },
+    {
+      "name": "late10",
+      "state": "complete",
+      "run": "reward-study-20261024-late10-s101-n500000-pdbe254795cc0-c64x16-20261024-064115",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 400000,
+          "win": 0.8535,
+          "efficiency": 0.8621459515206998,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 166,
+            "bayes_only_wins": 231,
+            "both_win": 1541,
+            "both_lose": 62,
+            "win_difference": -0.0325,
+            "win_difference_ci95": [
+              -0.052,
+              -0.013
+            ],
+            "mcnemar_exact_two_sided_p": 0.0012890382749756017,
+            "model_better_exact_one_sided_p": 0.9995490226254844,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.854,
+          "efficiency": 0.8622014598097931,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 166,
+            "bayes_only_wins": 230,
+            "both_win": 1542,
+            "both_lose": 62,
+            "win_difference": -0.032,
+            "win_difference_ci95": [
+              -0.051,
+              -0.0125
+            ],
+            "mcnemar_exact_two_sided_p": 0.0015142682359155551,
+            "model_better_exact_one_sided_p": 0.9994680958429821,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\late10-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "late2",
+      "state": "complete",
+      "run": "reward-study-20261024-late2-s101-n500000-p82b0f20f5d19-c64x16-20261024-063049",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 400000,
+          "win": 0.844,
+          "efficiency": 0.8615296706622724,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 158,
+            "bayes_only_wins": 242,
+            "both_win": 1530,
+            "both_lose": 70,
+            "win_difference": -0.042,
+            "win_difference_ci95": [
+              -0.0615,
+              -0.0225
+            ],
+            "mcnemar_exact_two_sided_p": 3.123796495542547e-05,
+            "model_better_exact_one_sided_p": 0.9999900209728517,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8445,
+          "efficiency": 0.8657175609778006,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 232,
+            "both_win": 1540,
+            "both_lose": 79,
+            "win_difference": -0.0415,
+            "win_difference_ci95": [
+              -0.0605,
+              -0.0225
+            ],
+            "mcnemar_exact_two_sided_p": 2.480720880760815e-05,
+            "model_better_exact_one_sided_p": 0.9999922069422739,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\late2-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "old_precision_control",
+      "state": "complete",
+      "run": "reward-study-20261024-old_precision_control-s101-n500000-p4a9cd1c59e78-c64x16-20261024-054850",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 300032,
+          "win": 0.8485,
+          "efficiency": 0.8631089448978733,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 144,
+            "bayes_only_wins": 219,
+            "both_win": 1553,
+            "both_lose": 84,
+            "win_difference": -0.0375,
+            "win_difference_ci95": [
+              -0.056,
+              -0.019
+            ],
+            "mcnemar_exact_two_sided_p": 9.749455112136419e-05,
+            "model_better_exact_one_sided_p": 0.9999687069121218,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.858,
+          "efficiency": 0.8624992429174434,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 155,
+            "bayes_only_wins": 211,
+            "both_win": 1561,
+            "both_lose": 73,
+            "win_difference": -0.028,
+            "win_difference_ci95": [
+              -0.0465,
+              -0.0095
+            ],
+            "mcnemar_exact_two_sided_p": 0.0039806666531466825,
+            "model_better_exact_one_sided_p": 0.9985813097638624,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\old_precision_control-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "precise_ratio100",
+      "state": "complete",
+      "run": "reward-study-20261024-precise_ratio100-s101-n500000-p1e8f365a1750-c64x16-20261024-055611",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 300032,
+          "win": 0.835,
+          "efficiency": 0.84852540159435,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 143,
+            "bayes_only_wins": 245,
+            "both_win": 1527,
+            "both_lose": 85,
+            "win_difference": -0.051,
+            "win_difference_ci95": [
+              -0.07,
+              -0.032
+            ],
+            "mcnemar_exact_two_sided_p": 2.522044402819615e-07,
+            "model_better_exact_one_sided_p": 0.9999999277364751,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.835,
+          "efficiency": 0.8489997116571673,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 148,
+            "bayes_only_wins": 250,
+            "both_win": 1522,
+            "both_lose": 80,
+            "win_difference": -0.051,
+            "win_difference_ci95": [
+              -0.0705,
+              -0.0315
+            ],
+            "mcnemar_exact_two_sided_p": 3.5917984409226257e-07,
+            "model_better_exact_one_sided_p": 0.9999998956140428,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\precise_ratio100-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "ratio10",
+      "state": "complete",
+      "run": "reward-study-20261024-ratio10-s101-n500000-pb92d2c6b51af-c64x16-20261024-061004",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 500032,
+          "win": 0.8405,
+          "efficiency": 0.8963680365987436,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 129,
+            "bayes_only_wins": 220,
+            "both_win": 1552,
+            "both_lose": 99,
+            "win_difference": -0.0455,
+            "win_difference_ci95": [
+              -0.0635,
+              -0.0275
+            ],
+            "mcnemar_exact_two_sided_p": 1.2739654551217332e-06,
+            "model_better_exact_one_sided_p": 0.9999996340478804,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8405,
+          "efficiency": 0.8963680365987436,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 129,
+            "bayes_only_wins": 220,
+            "both_win": 1552,
+            "both_lose": 99,
+            "win_difference": -0.0455,
+            "win_difference_ci95": [
+              -0.0635,
+              -0.0275
+            ],
+            "mcnemar_exact_two_sided_p": 1.2739654551217332e-06,
+            "model_better_exact_one_sided_p": 0.9999996340478804,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\ratio10-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "ratio1000",
+      "state": "complete",
+      "run": "reward-study-20261024-ratio1000-s101-n500000-pcf49df9a9a50-c64x16-20261024-061703",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 100032,
+          "win": 0.8395,
+          "efficiency": 0.8070260491920147,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 163,
+            "bayes_only_wins": 256,
+            "both_win": 1516,
+            "both_lose": 65,
+            "win_difference": -0.0465,
+            "win_difference_ci95": [
+              -0.0665,
+              -0.0265
+            ],
+            "mcnemar_exact_two_sided_p": 6.4230178957836075e-06,
+            "model_better_exact_one_sided_p": 0.9999979952570534,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8265,
+          "efficiency": 0.8180477058386518,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 268,
+            "both_win": 1504,
+            "both_lose": 79,
+            "win_difference": -0.0595,
+            "win_difference_ci95": [
+              -0.079,
+              -0.0395
+            ],
+            "mcnemar_exact_two_sided_p": 5.99072031910887e-09,
+            "model_better_exact_one_sided_p": 0.999999998360998,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\ratio1000-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "reveal_progress",
+      "state": "complete",
+      "run": "reward-study-20261024-reveal_progress-s101-n500000-paf031d93c555-c64x16-20261024-062358",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 300032,
+          "win": 0.853,
+          "efficiency": 0.8621685928068695,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 143,
+            "bayes_only_wins": 209,
+            "both_win": 1563,
+            "both_lose": 85,
+            "win_difference": -0.033,
+            "win_difference_ci95": [
+              -0.0515,
+              -0.015
+            ],
+            "mcnemar_exact_two_sided_p": 0.0005134331530007739,
+            "model_better_exact_one_sided_p": 0.9998289770888248,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.851,
+          "efficiency": 0.8619232457352862,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 140,
+            "bayes_only_wins": 210,
+            "both_win": 1562,
+            "both_lose": 88,
+            "win_difference": -0.035,
+            "win_difference_ci95": [
+              -0.053,
+              -0.017
+            ],
+            "mcnemar_exact_two_sided_p": 0.00021608406892108787,
+            "model_better_exact_one_sided_p": 0.9999297833307762,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\reveal_progress-s101-n500000-v2000\\result.json"
+    },
+    {
+      "name": "risk_only",
+      "state": "complete",
+      "run": "reward-study-20261024-risk_only-s101-n500000-pf2f2fd0ff311-c64x16-20261024-060307",
+      "models": [
+        {
+          "checkpoint": "best",
+          "step": 400000,
+          "win": 0.8475,
+          "efficiency": 0.7851584415676048,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 129,
+            "bayes_only_wins": 206,
+            "both_win": 1566,
+            "both_lose": 99,
+            "win_difference": -0.0385,
+            "win_difference_ci95": [
+              -0.056,
+              -0.021
+            ],
+            "mcnemar_exact_two_sided_p": 3.0537571127924145e-05,
+            "model_better_exact_one_sided_p": 0.9999906618001342,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        },
+        {
+          "checkpoint": "latest",
+          "step": 500032,
+          "win": 0.8455,
+          "efficiency": 0.7831437091561476,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 155,
+            "bayes_only_wins": 236,
+            "both_win": 1536,
+            "both_lose": 73,
+            "win_difference": -0.0405,
+            "win_difference_ci95": [
+              -0.0595,
+              -0.0215
+            ],
+            "mcnemar_exact_two_sided_p": 4.9234792232697396e-05,
+            "model_better_exact_one_sided_p": 0.9999841894464041,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          }
+        }
+      ],
+      "result": "screen\\risk_only-s101-n500000-v2000\\result.json"
+    }
+  ],
+  "auxiliary_current": {
+    "phase": "auxiliary",
+    "state": "complete",
+    "updated_utc": "2026-10-24T15:16:52Z",
+    "pid": 9544,
+    "stop_requested": false,
+    "variant": "zero_public_strong",
+    "results": {
+      "D:\\RL_test\\experiments\\reward-study-20261024\\auxiliary\\zero_public_strong-s201-n500000-v2000\\best-validation.json": "2acb93f0d7ab097d05746828ca72aec9649e1e9a91f491afe40f782d45aeb0f9",
+      "D:\\RL_test\\experiments\\reward-study-20261024\\auxiliary\\zero_public_strong-s201-n500000-v2000\\latest-validation.json": "a1061b1f3998eac56e2573dff8489f4b6c9850692e1d792b1bf0d75f9c0ec640"
+    }
+  },
+  "auxiliary": [
+    {
+      "name": "public_rules",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.0,
+          "win": 0.8445,
+          "efficiency": 0.7795626829080357,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 164,
+            "bayes_only_wins": 247,
+            "both_win": 1525,
+            "both_lose": 64,
+            "win_difference": -0.0415,
+            "win_difference_ci95": [
+              -0.061,
+              -0.022
+            ],
+            "mcnemar_exact_two_sided_p": 4.959162934221914e-05,
+            "model_better_exact_one_sided_p": 0.9999838918584091,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\public_rules-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8445,
+              "efficiency": 0.7795626829080357
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.0,
+          "win": 0.8205,
+          "efficiency": 0.7769772801559627,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 280,
+            "both_win": 1492,
+            "both_lose": 79,
+            "win_difference": -0.0655,
+            "win_difference_ci95": [
+              -0.0855,
+              -0.0455
+            ],
+            "mcnemar_exact_two_sided_p": 2.5340169535344856e-10,
+            "model_better_exact_one_sided_p": 0.9999999999335532,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\public_rules-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8205,
+              "efficiency": 0.7769772801559627
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "safety_control",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.0,
+          "win": 0.856,
+          "efficiency": 0.7811721271579514,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 164,
+            "bayes_only_wins": 224,
+            "both_win": 1548,
+            "both_lose": 64,
+            "win_difference": -0.03,
+            "win_difference_ci95": [
+              -0.049,
+              -0.011
+            ],
+            "mcnemar_exact_two_sided_p": 0.002695881524192998,
+            "model_better_exact_one_sided_p": 0.999040759695916,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\safety_control-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.856,
+              "efficiency": 0.7811721271579514
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.0,
+          "win": 0.842,
+          "efficiency": 0.7827300007330446,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 237,
+            "both_win": 1535,
+            "both_lose": 79,
+            "win_difference": -0.044,
+            "win_difference_ci95": [
+              -0.063,
+              -0.025
+            ],
+            "mcnemar_exact_two_sided_p": 8.735847142702541e-06,
+            "model_better_exact_one_sided_p": 0.9999973106634105,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\safety_control-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.842,
+              "efficiency": 0.7827300007330446
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "zero_policy",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.01,
+          "win": 0.848,
+          "efficiency": 0.8943164652527474,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 151,
+            "bayes_only_wins": 227,
+            "both_win": 1545,
+            "both_lose": 77,
+            "win_difference": -0.038,
+            "win_difference_ci95": [
+              -0.057,
+              -0.019
+            ],
+            "mcnemar_exact_two_sided_p": 0.0001090321471968789,
+            "model_better_exact_one_sided_p": 0.9999645835387052,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_policy-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.847,
+              "efficiency": 0.7337670121515536
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.848,
+              "efficiency": 0.8879483199959463
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.8475,
+              "efficiency": 0.8917935635217131
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.848,
+              "efficiency": 0.8943164652527474
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.842,
+              "efficiency": 0.8989510536481387
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.811,
+              "efficiency": 0.919996186328665
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.0,
+          "win": 0.843,
+          "efficiency": 0.7374972770183579,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 153,
+            "bayes_only_wins": 239,
+            "both_win": 1533,
+            "both_lose": 75,
+            "win_difference": -0.043,
+            "win_difference_ci95": [
+              -0.062,
+              -0.024
+            ],
+            "mcnemar_exact_two_sided_p": 1.637471191268046e-05,
+            "model_better_exact_one_sided_p": 0.9999948690111494,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_policy-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.843,
+              "efficiency": 0.7374972770183579
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.8415,
+              "efficiency": 0.8883302690189603
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.842,
+              "efficiency": 0.8928952962671441
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.8365,
+              "efficiency": 0.8969243124422592
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.8285,
+              "efficiency": 0.9015680504311152
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.808,
+              "efficiency": 0.9167674667558938
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "zero_public",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.03,
+          "win": 0.837,
+          "efficiency": 0.9075050026977426,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 247,
+            "both_win": 1525,
+            "both_lose": 79,
+            "win_difference": -0.049,
+            "win_difference_ci95": [
+              -0.068,
+              -0.0295
+            ],
+            "mcnemar_exact_two_sided_p": 9.666838677446576e-07,
+            "model_better_exact_one_sided_p": 0.9999997139148364,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_public-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8325,
+              "efficiency": 0.7339732632111282
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.8345,
+              "efficiency": 0.8949868684077971
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.835,
+              "efficiency": 0.9001367872648242
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.836,
+              "efficiency": 0.9030154594860054
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.837,
+              "efficiency": 0.9075050026977426
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.8155,
+              "efficiency": 0.927172603077431
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.03,
+          "win": 0.837,
+          "efficiency": 0.9075050026977426,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 149,
+            "bayes_only_wins": 247,
+            "both_win": 1525,
+            "both_lose": 79,
+            "win_difference": -0.049,
+            "win_difference_ci95": [
+              -0.068,
+              -0.0295
+            ],
+            "mcnemar_exact_two_sided_p": 9.666838677446576e-07,
+            "model_better_exact_one_sided_p": 0.9999997139148364,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_public-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8325,
+              "efficiency": 0.7339732632111282
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.8345,
+              "efficiency": 0.8949868684077971
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.835,
+              "efficiency": 0.9001367872648242
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.836,
+              "efficiency": 0.9030154594860054
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.837,
+              "efficiency": 0.9075050026977426
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.8155,
+              "efficiency": 0.927172603077431
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "zero_public_strong",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.001,
+          "win": 0.84,
+          "efficiency": 0.8631911197277877,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 172,
+            "bayes_only_wins": 264,
+            "both_win": 1508,
+            "both_lose": 56,
+            "win_difference": -0.046,
+            "win_difference_ci95": [
+              -0.066,
+              -0.0255
+            ],
+            "mcnemar_exact_two_sided_p": 1.223607680187028e-05,
+            "model_better_exact_one_sided_p": 0.9999960926334392,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_public_strong-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8395,
+              "efficiency": 0.707580708010842
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.84,
+              "efficiency": 0.8631911197277877
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.8395,
+              "efficiency": 0.8739922623506322
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.839,
+              "efficiency": 0.8815058284051193
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.8325,
+              "efficiency": 0.8873881215066405
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.803,
+              "efficiency": 0.9028385051643145
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.0,
+          "win": 0.8365,
+          "efficiency": 0.7352147253825425,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 150,
+            "bayes_only_wins": 249,
+            "both_win": 1523,
+            "both_lose": 78,
+            "win_difference": -0.0495,
+            "win_difference_ci95": [
+              -0.069,
+              -0.03
+            ],
+            "mcnemar_exact_two_sided_p": 8.210028494661694e-07,
+            "model_better_exact_one_sided_p": 0.9999997573195034,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_public_strong-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8365,
+              "efficiency": 0.7352147253825425
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.8355,
+              "efficiency": 0.884643939023856
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.835,
+              "efficiency": 0.8881595087772614
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.829,
+              "efficiency": 0.8928755529692249
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.8305,
+              "efficiency": 0.9004750906156263
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.7995,
+              "efficiency": 0.9226341401267695
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "zero_representation",
+      "state": "complete",
+      "models": [
+        {
+          "checkpoint": "best",
+          "lambda": 0.001,
+          "win": 0.856,
+          "efficiency": 0.8470946815496816,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 164,
+            "bayes_only_wins": 224,
+            "both_win": 1548,
+            "both_lose": 64,
+            "win_difference": -0.03,
+            "win_difference_ci95": [
+              -0.049,
+              -0.011
+            ],
+            "mcnemar_exact_two_sided_p": 0.002695881524192998,
+            "model_better_exact_one_sided_p": 0.999040759695916,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_representation-s201-n500000-v2000\\best-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8545,
+              "efficiency": 0.6632712717596302
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.856,
+              "efficiency": 0.8470946815496816
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.853,
+              "efficiency": 0.8655698194342212
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.843,
+              "efficiency": 0.8780190057318276
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.81,
+              "efficiency": 0.8856655288436976
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.7045,
+              "efficiency": 0.9057023623262334
+            }
+          ]
+        },
+        {
+          "checkpoint": "latest",
+          "lambda": 0.001,
+          "win": 0.851,
+          "efficiency": 0.8711973858959654,
+          "paired": {
+            "games": 2000,
+            "model_only_wins": 174,
+            "bayes_only_wins": 244,
+            "both_win": 1528,
+            "both_lose": 54,
+            "win_difference": -0.035,
+            "win_difference_ci95": [
+              -0.055,
+              -0.015
+            ],
+            "mcnemar_exact_two_sided_p": 0.0007197058272233558,
+            "model_better_exact_one_sided_p": 0.9997497241600435,
+            "bootstrap_samples": 20000,
+            "bootstrap_seed": 20261024
+          },
+          "result": "auxiliary\\zero_representation-s201-n500000-v2000\\latest-validation.json",
+          "policy_grid": [
+            {
+              "lambda": 0.0,
+              "win": 0.8505,
+              "efficiency": 0.6966241234931496
+            },
+            {
+              "lambda": 0.001,
+              "win": 0.851,
+              "efficiency": 0.8711973858959654
+            },
+            {
+              "lambda": 0.003,
+              "win": 0.8495,
+              "efficiency": 0.881399128878678
+            },
+            {
+              "lambda": 0.01,
+              "win": 0.849,
+              "efficiency": 0.8893444858476243
+            },
+            {
+              "lambda": 0.03,
+              "win": 0.829,
+              "efficiency": 0.8995810901169646
+            },
+            {
+              "lambda": 0.1,
+              "win": 0.7665,
+              "efficiency": 0.9296711827809976
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "confirmation": null,
+  "confirmation_status": {
+    "phase": "confirmation",
+    "state": "waiting_for_sweeps",
+    "pid": 19436,
+    "updated_utc": "2026-10-25T01:15:39Z",
+    "completed": 17,
+    "required": 19
+  },
+  "test_split_opened": false,
+  "success": false,
+  "interpretation": "Validation is for selection; no repeatable win-rate advantage is established."
+}

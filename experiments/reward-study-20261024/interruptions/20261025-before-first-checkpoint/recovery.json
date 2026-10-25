@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-25T01:13:14.5681767Z",
+  "reason": "Workers absent and old exec sessions unavailable. Training log ends without traceback at 80,000 clicks; final status 81,408. No checkpoint exists before first scheduled 100,000 save. Cause of termination unknown.",
+  "archived_run": "D:\\RL_test\\runs\\reward-study-20261024-future_win3-s101-n500000-pd385ea112266-c64x16-20261024-113716",
+  "restart": "Same immutable protocol, seed and initialization. Restart full 500,000 clicks; discarded partial trajectory is not evaluated or counted in final budget. Existing manifest sessions preserved."
+}

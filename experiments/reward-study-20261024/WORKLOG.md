@@ -30,8 +30,9 @@ passed and opened zero test boards. Use the `study_io confirm` wrapper.
   `reward-study-baseline-20261024`.
 - Controlled experiment implementation: commit `1c44cb8`.
 - Outcome-head/consistency experiment implementation: commit `7e164b7`.
-- Original `easy-exp2-c64x16-20261024-040042` continues independently. Its live
-  files and process have not been targeted for stopping or replacement.
+- Original `easy-exp2-c64x16-20261024-040042` ran independently. Its live
+  files and process were not targeted for stopping or replacement; it
+  finished naturally at 10M clicks (see final snapshot above).
 - Frozen best/latest models are `models/reward-study-20261024-baseline-*.pt`.
   Their hashes and arguments are in `baseline/manifest.json`.
 - Main screen is running via `python -m rl.reward_sweep --phase screen --jobs 4`.
@@ -117,3 +118,17 @@ One conservative guard in the main BCE trainer rejects all nonzero flat safe
 rewards with lookahead. Some negative-cost cases are actually bounded when
 `-safe <= mine * (1 - gamma)`. See historical metadata before a later guard
 revision; do not change frozen screen source while it is running.
+
+## 2026-10-25 UTC: abrupt worker interruption recovered
+
+At the next status check, controller/trainer/confirmation processes were absent
+and their prior exec sessions were unavailable. Saved logs end without a
+traceback; no study STOP file or recorded process crash explains the cause.
+All 17 completed trials remained intact. The interrupted future_win3 trajectory
+stopped at 81,408 clicks with no checkpoint before the scheduled 100k save.
+Its run directory and manifest were archived under
+`interruptions/20261025-before-first-checkpoint/` with a recovery record.
+The identical protocol/seed/init was restarted for its full 500k budget, with
+both sessions retained in the manifest. The partial trajectory is discarded,
+not evaluated. The remaining two trials and confirmation waiter are running
+again through the unchanged Windows IO wrapper. The test split remains unused.

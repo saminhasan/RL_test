@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import datetime as dt
+import argparse
 import json
+import time
 from pathlib import Path
 
 STUDY = Path(__file__).resolve().parent
@@ -29,7 +31,8 @@ def main():
     auxiliary_current = load(STUDY / "auxiliary-status.json") or {}
     confirmation = load(STUDY / "confirmation/summary.json")
     confirmation_status = load(STUDY / "confirmation-status.json") or {}
-    test_opened = bool(list(STUDY.glob("confirmation/seed-*/test.json")))
+    test_opened = (confirmation_status.get("state") == "testing" or
+                   bool(list(STUDY.glob("confirmation/seed-*/test.json"))))
     progress = current.get("progress") or {}
     inference = []
     for path in sorted(STUDY.glob("baseline-validation-*.json")):
@@ -158,6 +161,9 @@ def main():
               "Changing the immediate reward ratio alone cannot train future-win predictions "
               "when gamma is zero. The screen also includes terminal win/loss objectives with "
               "gamma near one. Higher precision alone did not close the measured gap.", "",
+              "This study tests 500,000-click warm starts from fixed pretrained weights. "
+              "It does not establish that the same settings are best from scratch or after "
+              "a longer training budget, nor that reward design cannot close the gap.", "",
               "A successful recipe must be frozen, repeated with fresh training seeds, and "
               "confirmed on the reserved test boards. Validation p-values are not evidence "
               "of repeatable success after searching many variants.", "",
@@ -170,4 +176,19 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--watch", action="store_true", help="refresh until confirmation finishes, STOP, or workers become stale")
+    args = parser.parse_args()
+    deadline = time.monotonic() + 6 * 3600
+    while True:
+        main()
+        if not args.watch:
+            break
+        confirmation_status = load(STUDY / "confirmation-status.json") or {}
+        if confirmation_status.get("state") == "complete" or (STUDY / "STOP").exists():
+            break
+        heartbeats = [p.stat().st_mtime for p in (STUDY / "status.json", STUDY / "confirmation-status.json") if p.exists()]
+        if time.monotonic() > deadline or not heartbeats or time.time() - max(heartbeats) > 300:
+            print("Report watch ended: workers stale or six-hour deadline reached.", flush=True)
+            break
+        time.sleep(60)

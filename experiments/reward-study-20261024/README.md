@@ -17,7 +17,9 @@ Frozen local models (ignored by git):
 - `models/reward-study-20261024-baseline-latest.pt`: 5,300,032 clicks.
 
 `baseline/status.json` and `baseline/metrics.jsonl` are snapshots, not live files.
-The original `easy-exp2` process continues independently.
+The original `easy-exp2` process finished naturally at 10M clicks. Its best
+legacy evaluation was 85.8% at 5.6M; its final score was 81.2%. The
+`original-final/` snapshot and frozen models preserve that final state.
 
 ## Protocol
 
@@ -95,3 +97,11 @@ trained checkpoint was recovered and the remaining trials resumed without
 changing their training configuration. The auxiliary cases completed in the
 intervening period; their independent initialization and click budgets remain
 unchanged.
+
+On 2026-10-25 UTC, the remaining workers were found absent with no recorded
+failure cause. The interrupted `future_win3` trial had reached 81,408 clicks,
+before its first scheduled checkpoint. Its original run directory and manifest
+were archived under `interruptions/20261025-before-first-checkpoint/`, then the
+same seed and full 500k-click protocol were restarted from the frozen init.
+The discarded partial trajectory was not evaluated. Completed trials were
+preserved; confirmation still waits for the full screen before opening test.
