@@ -1,0 +1,52 @@
+# Minesweeper Double DQN training. Runs in this window and logs to train.log next to this script.
+# The "RL training" scheduled task starts it at logon, and the dashboard's Resume button starts it again.
+# To stop: Pause on the dashboard (http://<this pc>:8765), Ctrl+C here, or create
+# RL_test\models\<run>.stop. The latest state is saved first either way.
+# While RL_test\models\PAUSED exists (Pause makes it), it does not start.
+$Host.UI.RawUI.WindowTitle = 'Minesweeper DQN training (GTX 1050)'
+$work = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repo = Join-Path $work 'RL_test'
+$py   = Join-Path $work '.venv\Scripts\python.exe'
+$log  = Join-Path $work 'train.log'
+$run  = 'dqn-L4-c64x16-20261005-084123'
+$paused = Join-Path $repo 'models\PAUSED'
+Set-Location $repo
+$env:PYTHONUNBUFFERED = '1'
+$env:PYTHONPATH = $repo
+
+function Show-And-Log { process { $_; Add-Content -Path $log -Value $_ -Encoding utf8 } }
+function Now { Get-Date -Format 'yyyy-MM-dd HH:mm:ss' }
+
+if (Test-Path $paused) {
+    "=== $(Now) paused from the dashboard, so not starting. Resume there, or delete RL_test\models\PAUSED." | Show-And-Log
+    return
+}
+
+# keep the PC from sleeping while this window trains (Windows lifts it when the window closes)
+Add-Type -Namespace Win32 -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint flags);'
+[void][Win32.Power]::SetThreadExecutionState([uint32]2147483649)   # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+
+$opts = @(
+    "--resume models/$run-latest.pt", '--curriculum 4', '--n-step 1', '--per-alpha 0', '--no-bf16',
+    '--learning-rate 1e-5', '--lr-patience 20', '--lr-min 1e-6',
+    '--reward-credit 0', '--gamma 0.999',
+    '--total-timesteps 1000000000', '--eval-every 250000', '--eval-games 1000', '--checkpoint-every 100000',
+    '--max-gpu-temp 95'
+)
+$cmd = "`"$py`" -m rl.dqn " + ($opts -join ' ')
+$crashes = 0
+while ($true) {
+    $began = Get-Date
+    "=== started $(Now)" | Show-And-Log
+    "=== $cmd" | Show-And-Log
+    cmd /c "$cmd 2>&1" | Show-And-Log
+    $code = $LASTEXITCODE
+    "=== ended $(Now), exit code $code" | Show-And-Log
+    if ($code -eq 0 -or (Test-Path $paused)) { break }
+    if (((Get-Date) - $began).TotalHours -gt 1) { $crashes = 0 }
+    $crashes++
+    if ($crashes -ge 5) { "=== crashed $crashes times in a row; not restarting. The lines above say why." | Show-And-Log; break }
+    "=== restarting from the last save in 2 minutes (crash $crashes in a row; gives up at 5)" | Show-And-Log
+    Start-Sleep -Seconds 120
+}
+"=== You can close this window." | Show-And-Log

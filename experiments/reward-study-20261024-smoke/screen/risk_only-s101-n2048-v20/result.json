@@ -1,0 +1,723 @@
+{
+  "protocol": {
+    "schema": 1,
+    "split": "validation",
+    "level": 2,
+    "games": 20,
+    "replicate": 0,
+    "requested_seed_start": 1108101562368,
+    "requested_seed_stop": 1108101562388,
+    "source_sha256": {
+      "_native.py": "1dcb69582fef718606e3c89291f326adc93ab6ed64316067a7326064a3954fd0",
+      "engine.py": "2913387c5f1ac6d9ee7dfbd031ef333a8582ceaf26d3fdcafde2ed175e6b4250",
+      "ai_agents.py": "3bd876da6128aff758926462accee8e49edf05cd03accf3c794e006dd4afcfc1",
+      "cpp/msw/engine.hpp": "9dc8d6e4a131779b71995df57cfe9ffaefeb9cc9a7f4bb2f5fe539b3c3d16672",
+      "cpp/msw/solver.hpp": "4b86134fbec5f9d8ccc8dc73c8795253e38b3e6826f0f9f03a028d970625d1b1",
+      "rl/minesweeper_env.py": "a3b6aae58557beb12d9cc0f1f127b74bb57945efb13bcddd1f2c9bb0af2e39a4",
+      "rl/qnet.py": "cbcb2e403d7a6960dbc7c72ee9f29e6a4868d37dd87de434158f7436235bd45c",
+      "rl/evaluate.py": "54ee261ebcdf9292d66aa98d61a062072a2321563f5cd94155c3b5f500c1a0d9",
+      "rl/baseline.py": "2a4ce99f76aebb84d173b3fddbfbb7e33eef4c246e54645c51bcf3495d2d8366",
+      "rl/experiment_eval.py": "0ddbb75801a3cfa5eeaf31688109c2773bd195e8e4a56242f62ad3e05dc16a3d",
+      "rl/dqn.py": "21a79ee28db597ca8c4fcea6622f751053f87e09d89e24666b4005f2167b4da3",
+      "rl/per.py": "81165c26d95429df23a2b22f40e88fd3afd9ba29ce1be034f5a451f8dd86e241",
+      "rl/journal.py": "82b528cc630e8ef5709453fb226f0b8db8df1cde77e813717c8932fd37be1be1"
+    }
+  },
+  "created_utc": "2026-10-24T12:47:39Z",
+  "git_revision": "13e3083a4ac004c63405bada4730258539f6a80b",
+  "runtime": {
+    "python": "3.13.14",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.2",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "bf16": true,
+    "symmetries": false,
+    "fp32_head_override": false,
+    "deterministic_algorithms": true,
+    "n_envs": 256
+  },
+  "interpretation": "Choose the finalist on validation before inspecting test. Paired intervals measure board uncertainty, not training-seed variation. P-values are unadjusted for multiple comparisons.",
+  "bayes": {
+    "summary": {
+      "games": 20,
+      "win": 0.85,
+      "win_margin": 0.15649345034217885,
+      "efficiency": 0.9243774782014629,
+      "revealed": 0.8528169014084508,
+      "missed_safe": 0.0,
+      "risky_guess": 0.0,
+      "coin_flip": 0.0,
+      "unlucky": 0.15,
+      "win_skill": 0.85
+    },
+    "records": [
+      {
+        "seed": 1108101562368,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562369,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562370,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562371,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562372,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562373,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562374,
+        "won": true,
+        "moves": 25,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562375,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562376,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562377,
+        "won": true,
+        "moves": 8,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562378,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562379,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562380,
+        "won": true,
+        "moves": 27,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562381,
+        "won": false,
+        "moves": 3,
+        "min_moves": 17,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562382,
+        "won": false,
+        "moves": 2,
+        "min_moves": 18,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562383,
+        "won": true,
+        "moves": 14,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562384,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562385,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562386,
+        "won": true,
+        "moves": 28,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562387,
+        "won": true,
+        "moves": 16,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      }
+    ],
+    "cache": "D:\\RL_test\\experiments\\reward-study-20261024-smoke\\bayes-cache\\bayes-validation-L2-e969ce77ec04fe0dc6e5.json"
+  },
+  "models": [
+    {
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024-smoke\\screen\\risk_only-s101-n2048-v20\\checkpoints\\best.pt",
+      "sha256": "7ee7ecf940d1c00bd702d4d18025cbe3c3d5e0b5b138c470590256420cfaf7c0",
+      "training_step": 2048,
+      "training_args": {
+        "exp_name": "reward-study-20261024-risk_only-s101-n2048-p2d94f22cdc8d",
+        "seed": 101,
+        "cuda": true,
+        "bf16": true,
+        "deterministic": true,
+        "curriculum": "2",
+        "advance_at": 0.0,
+        "reward_win": 0.0,
+        "reward_progress": 0.0,
+        "reward_credit": 0.0,
+        "reward_mine": 1.0,
+        "reward_reveal": 0.0,
+        "reveal_from": 0,
+        "stage2_mine": 0.0,
+        "reward_reveal_scale": 0.0,
+        "reward_reveal_scale_start": 0.0,
+        "reward_safe": 0.0,
+        "reward_late": 0.0,
+        "late_power": 1.0,
+        "reward_burst": 0.0,
+        "burst_rate": 5.0,
+        "wall": 0.0,
+        "skip_coin_flips": false,
+        "stage2_from": 0,
+        "stage2": "",
+        "channels": 64,
+        "layers": 16,
+        "pool_every": 0,
+        "fp32_head": true,
+        "loss": "bce",
+        "total_timesteps": 2048,
+        "learning_rate": 3e-05,
+        "num_envs": 64,
+        "buffer_size": 1000000,
+        "gamma": 0.0,
+        "n_step": 1,
+        "per_alpha": 0.0,
+        "per_beta_start": 0.4,
+        "per_eps": 0.001,
+        "tau": 1.0,
+        "target_network_frequency": 5000,
+        "batch_size": 128,
+        "start_e": 0.02,
+        "end_e": 0.005,
+        "exploration_fraction": 0.1,
+        "learning_starts": 10000,
+        "train_frequency": 16,
+        "eval_every": 2048,
+        "eval_games": 20,
+        "eval_seed0": 1108081562368,
+        "checkpoint_every": 2048,
+        "status_every": 5.0,
+        "resume": "",
+        "init": "D:\\RL_test\\models\\reward-study-20261024-baseline-best.pt",
+        "lr_patience": 0,
+        "lr_decay": 0.5,
+        "lr_min": 1e-06,
+        "lr_mode": "exp",
+        "lr_floor": 1e-05,
+        "lr_decay_clicks": 200000,
+        "ema": 0.999,
+        "augment": true,
+        "eval_breakdown": true,
+        "max_gpu_temp": 0
+      },
+      "config": {
+        "channels": 64,
+        "layers": 16,
+        "kernel": 3,
+        "pool_every": 0,
+        "fp32_head": true
+      },
+      "inference_config": {
+        "channels": 64,
+        "layers": 16,
+        "kernel": 3,
+        "pool_every": 0,
+        "fp32_head": true
+      },
+      "summary": {
+        "games": 20,
+        "win": 0.75,
+        "win_margin": 0.18977618396416343,
+        "efficiency": 0.8669941952582607,
+        "revealed": 0.7535211267605634,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.05,
+        "unlucky": 0.2,
+        "win_skill": 0.7894736842105263
+      },
+      "paired_vs_bayes": {
+        "games": 20,
+        "model_only_wins": 2,
+        "bayes_only_wins": 4,
+        "both_win": 13,
+        "both_lose": 1,
+        "win_difference": -0.1,
+        "win_difference_ci95": [
+          -0.35,
+          0.15
+        ],
+        "mcnemar_exact_two_sided_p": 0.6875,
+        "model_better_exact_one_sided_p": 0.890625,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "records": [
+        {
+          "seed": 1108101562368,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562369,
+          "won": true,
+          "moves": 19,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562370,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562371,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562372,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562373,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562374,
+          "won": true,
+          "moves": 25,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562375,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562376,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562377,
+          "won": false,
+          "moves": 2,
+          "min_moves": 7,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562378,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562379,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562380,
+          "won": false,
+          "moves": 2,
+          "min_moves": 25,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562381,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562382,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562383,
+          "won": true,
+          "moves": 14,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562384,
+          "won": true,
+          "moves": 18,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562385,
+          "won": true,
+          "moves": 25,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562386,
+          "won": true,
+          "moves": 29,
+          "min_moves": 27,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562387,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024-smoke\\screen\\risk_only-s101-n2048-v20\\checkpoints\\latest.pt",
+      "sha256": "03c7d7026481adfbd33a9e62fe07af29386f47c0d16aba93424f924e8a7d1a13",
+      "training_step": 2048,
+      "training_args": {
+        "exp_name": "reward-study-20261024-risk_only-s101-n2048-p2d94f22cdc8d",
+        "seed": 101,
+        "cuda": true,
+        "bf16": true,
+        "deterministic": true,
+        "curriculum": "2",
+        "advance_at": 0.0,
+        "reward_win": 0.0,
+        "reward_progress": 0.0,
+        "reward_credit": 0.0,
+        "reward_mine": 1.0,
+        "reward_reveal": 0.0,
+        "reveal_from": 0,
+        "stage2_mine": 0.0,
+        "reward_reveal_scale": 0.0,
+        "reward_reveal_scale_start": 0.0,
+        "reward_safe": 0.0,
+        "reward_late": 0.0,
+        "late_power": 1.0,
+        "reward_burst": 0.0,
+        "burst_rate": 5.0,
+        "wall": 0.0,
+        "skip_coin_flips": false,
+        "stage2_from": 0,
+        "stage2": "",
+        "channels": 64,
+        "layers": 16,
+        "pool_every": 0,
+        "fp32_head": true,
+        "loss": "bce",
+        "total_timesteps": 2048,
+        "learning_rate": 3e-05,
+        "num_envs": 64,
+        "buffer_size": 1000000,
+        "gamma": 0.0,
+        "n_step": 1,
+        "per_alpha": 0.0,
+        "per_beta_start": 0.4,
+        "per_eps": 0.001,
+        "tau": 1.0,
+        "target_network_frequency": 5000,
+        "batch_size": 128,
+        "start_e": 0.02,
+        "end_e": 0.005,
+        "exploration_fraction": 0.1,
+        "learning_starts": 10000,
+        "train_frequency": 16,
+        "eval_every": 2048,
+        "eval_games": 20,
+        "eval_seed0": 1108081562368,
+        "checkpoint_every": 2048,
+        "status_every": 5.0,
+        "resume": "",
+        "init": "D:\\RL_test\\models\\reward-study-20261024-baseline-best.pt",
+        "lr_patience": 0,
+        "lr_decay": 0.5,
+        "lr_min": 1e-06,
+        "lr_mode": "exp",
+        "lr_floor": 1e-05,
+        "lr_decay_clicks": 200000,
+        "ema": 0.999,
+        "augment": true,
+        "eval_breakdown": true,
+        "max_gpu_temp": 0
+      },
+      "config": {
+        "channels": 64,
+        "layers": 16,
+        "kernel": 3,
+        "pool_every": 0,
+        "fp32_head": true
+      },
+      "inference_config": {
+        "channels": 64,
+        "layers": 16,
+        "kernel": 3,
+        "pool_every": 0,
+        "fp32_head": true
+      },
+      "summary": {
+        "games": 20,
+        "win": 0.75,
+        "win_margin": 0.18977618396416343,
+        "efficiency": 0.8669941952582607,
+        "revealed": 0.7535211267605634,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.05,
+        "unlucky": 0.2,
+        "win_skill": 0.7894736842105263
+      },
+      "paired_vs_bayes": {
+        "games": 20,
+        "model_only_wins": 2,
+        "bayes_only_wins": 4,
+        "both_win": 13,
+        "both_lose": 1,
+        "win_difference": -0.1,
+        "win_difference_ci95": [
+          -0.35,
+          0.15
+        ],
+        "mcnemar_exact_two_sided_p": 0.6875,
+        "model_better_exact_one_sided_p": 0.890625,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "records": [
+        {
+          "seed": 1108101562368,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562369,
+          "won": true,
+          "moves": 19,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562370,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562371,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562372,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562373,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562374,
+          "won": true,
+          "moves": 25,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562375,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562376,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562377,
+          "won": false,
+          "moves": 2,
+          "min_moves": 7,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562378,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562379,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562380,
+          "won": false,
+          "moves": 2,
+          "min_moves": 25,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562381,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562382,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562383,
+          "won": true,
+          "moves": 14,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562384,
+          "won": true,
+          "moves": 18,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562385,
+          "won": true,
+          "moves": 25,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562386,
+          "won": true,
+          "moves": 29,
+          "min_moves": 27,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562387,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "selection_plan_sha256": "1c26c70bee79519b2c7aec326ef45309a486fccfe096365f364af23c285d612c",
+  "checkpoints": [
+    {
+      "seed": 202,
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-202\\selected.pt",
+      "sha256": "5a3b9bff124ff30e649c7507bfc16c0e0a3aa63cf0229ee3605e9b9d36150399"
+    },
+    {
+      "seed": 203,
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-203\\selected.pt",
+      "sha256": "cb0d4b69adbcc461022750dfc54f1aa90c43b46fe129eac74e318a0b68f519ed"
+    },
+    {
+      "seed": 204,
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-204\\selected.pt",
+      "sha256": "8dda753928b968ed073713a9f3905c5c1bf86a5d2eada29420cae796755ea8ab"
+    }
+  ],
+  "plan_sha256": "5a2d8ee740e7fed7497c7f8bc7f6bdd9af494a42cbe05d4b0f9a4400e24ac00e"
+}

@@ -1,0 +1,61 @@
+# Minesweeper Double DQN training. Runs in this window and logs to train.log next to this script.
+# The "RL training" scheduled task starts it at logon, and the dashboard's Resume button starts it again.
+# To stop: Pause on the dashboard (http://<this pc>:8765), Ctrl+C here, or create
+# RL_test\models\<run>.stop. The latest state is saved first either way.
+# While RL_test\models\PAUSED exists (Pause makes it), it does not start.
+#
+# The run is named after $exp: it carries on from the newest models\<exp>-c*-latest.pt,
+# or starts fresh when there is none yet.
+$Host.UI.RawUI.WindowTitle = 'Minesweeper DQN training (GTX 1050)'
+$work = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repo = Join-Path $work 'RL_test'
+$py   = Join-Path $work '.venv\Scripts\python.exe'
+$log  = Join-Path $work 'train.log'
+$paused = Join-Path $repo 'models\PAUSED'
+Set-Location $repo
+$env:PYTHONUNBUFFERED = '1'
+$env:PYTHONPATH = $repo
+
+$exp  = 'easy-staged'
+$opts = @(
+    '--curriculum 2', '--n-step 1', '--per-alpha 0', '--no-bf16',
+    # stage 1: only a large penalty for a mine; stage 2 from 1M clicks: plus the share of the board each safe click reveals
+    '--loss bce', '--reward-win 0', '--reward-progress 0', '--reward-mine 10', '--reward-reveal 1', '--reveal-from 1000000',
+    '--gamma 0', '--augment', '--ema 0.999', '--buffer-size 1000000',
+    '--learning-rate 1e-4', '--lr-patience 5', '--lr-min 1e-6',
+    '--end-e 0.005', '--exploration-fraction 0.00075',    # 150k clicks of 200M
+    '--total-timesteps 200000000', '--eval-every 100000', '--eval-games 1000', '--checkpoint-every 100000',
+    '--max-gpu-temp 95'
+)
+
+function Show-And-Log { process { $_; Add-Content -Path $log -Value $_ -Encoding utf8 } }
+function Now { Get-Date -Format 'yyyy-MM-dd HH:mm:ss' }
+
+if (Test-Path $paused) {
+    "=== $(Now) paused from the dashboard, so not starting. Resume there, or delete RL_test\models\PAUSED." | Show-And-Log
+    return
+}
+
+# keep the PC from sleeping while this window trains (Windows lifts it when the window closes)
+Add-Type -Namespace Win32 -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint flags);'
+[void][Win32.Power]::SetThreadExecutionState([uint32]2147483649)   # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+
+$crashes = 0
+while ($true) {
+    $latest = Get-ChildItem (Join-Path $repo 'models') -Filter "$exp-c*-latest.pt" | Sort-Object LastWriteTime | Select-Object -Last 1
+    $start = if ($latest) { "--resume models/$($latest.Name)" } else { "--exp-name $exp" }
+    $cmd = "`"$py`" -m rl.dqn $start " + ($opts -join ' ')
+    $began = Get-Date
+    "=== started $(Now)" | Show-And-Log
+    "=== $cmd" | Show-And-Log
+    cmd /c "$cmd 2>&1" | Show-And-Log
+    $code = $LASTEXITCODE
+    "=== ended $(Now), exit code $code" | Show-And-Log
+    if ($code -eq 0 -or (Test-Path $paused)) { break }
+    if (((Get-Date) - $began).TotalHours -gt 1) { $crashes = 0 }
+    $crashes++
+    if ($crashes -ge 5) { "=== crashed $crashes times in a row; not restarting. The lines above say why." | Show-And-Log; break }
+    "=== restarting from the last save in 2 minutes (crash $crashes in a row; gives up at 5)" | Show-And-Log
+    Start-Sleep -Seconds 120
+}
+"=== You can close this window." | Show-And-Log

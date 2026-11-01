@@ -1,0 +1,7298 @@
+{
+  "kind": "safety_opening_v1",
+  "protocol": {
+    "schema": 1,
+    "split": "validation",
+    "level": 2,
+    "games": 500,
+    "replicate": 0,
+    "requested_seed_start": 1108101562368,
+    "requested_seed_stop": 1108101562868,
+    "source_sha256": {
+      "_native.py": "1dcb69582fef718606e3c89291f326adc93ab6ed64316067a7326064a3954fd0",
+      "engine.py": "2913387c5f1ac6d9ee7dfbd031ef333a8582ceaf26d3fdcafde2ed175e6b4250",
+      "ai_agents.py": "3bd876da6128aff758926462accee8e49edf05cd03accf3c794e006dd4afcfc1",
+      "cpp/msw/engine.hpp": "9dc8d6e4a131779b71995df57cfe9ffaefeb9cc9a7f4bb2f5fe539b3c3d16672",
+      "cpp/msw/solver.hpp": "4b86134fbec5f9d8ccc8dc73c8795253e38b3e6826f0f9f03a028d970625d1b1",
+      "rl/minesweeper_env.py": "a3b6aae58557beb12d9cc0f1f127b74bb57945efb13bcddd1f2c9bb0af2e39a4",
+      "rl/qnet.py": "cbcb2e403d7a6960dbc7c72ee9f29e6a4868d37dd87de434158f7436235bd45c",
+      "rl/evaluate.py": "54ee261ebcdf9292d66aa98d61a062072a2321563f5cd94155c3b5f500c1a0d9",
+      "rl/baseline.py": "2a4ce99f76aebb84d173b3fddbfbb7e33eef4c246e54645c51bcf3495d2d8366",
+      "rl/experiment_eval.py": "0ddbb75801a3cfa5eeaf31688109c2773bd195e8e4a56242f62ad3e05dc16a3d",
+      "rl/dqn.py": "21a79ee28db597ca8c4fcea6622f751053f87e09d89e24666b4005f2167b4da3",
+      "rl/per.py": "81165c26d95429df23a2b22f40e88fd3afd9ba29ce1be034f5a451f8dd86e241",
+      "rl/journal.py": "82b528cc630e8ef5709453fb226f0b8db8df1cde77e813717c8932fd37be1be1",
+      "rl/safety_opening.py": "1e573bc158641452c495ee7ce9975f483a0b603a9cff83d137a1886cfec90989",
+      "rl/public_constraints.py": "a614e06fbe46fb2bb2fb4c2d14b68390e0429d7f0ded739483b6243a82003e6e"
+    }
+  },
+  "checkpoint": {
+    "live_policy": true,
+    "config": {
+      "channels": 64,
+      "layers": 16,
+      "kernel": 3,
+      "pool_every": 0,
+      "fp32_head": true,
+      "opening_lambda": 0.01,
+      "opening_kind": "zero"
+    },
+    "training_args": {
+      "output_dir": "D:\\RL_test\\experiments\\reward-study-20261024\\auxiliary\\zero_public_strong-s201-n500000-v2000\\model",
+      "init": "D:\\RL_test\\experiments\\reward-study-20261024\\screen\\risk_only-s101-n500000-v2000\\checkpoints\\latest.pt",
+      "resume": "",
+      "seed": 201,
+      "level": 2,
+      "total_timesteps": 500000,
+      "num_envs": 64,
+      "channels": 64,
+      "layers": 16,
+      "batch_size": 128,
+      "buffer_size": 1000000,
+      "train_frequency": 16,
+      "learning_starts": 10000,
+      "learning_rate": 3e-05,
+      "lr_floor": 1e-05,
+      "ema": 0.999,
+      "aux": "zero",
+      "aux_weight": 0.05,
+      "clue_weight": 10.0,
+      "budget_weight": 1.0,
+      "opening_lambda": 0.01,
+      "opening_kind": "zero",
+      "start_e": 0.02,
+      "end_e": 0.005,
+      "exploration_fraction": 0.1,
+      "eval_every": 100000,
+      "eval_games": 500,
+      "checkpoint_every": 100000,
+      "augment": true,
+      "bf16": true,
+      "deterministic": true,
+      "device": "auto",
+      "jobs": 4
+    },
+    "initialization": {
+      "path": "D:\\RL_test\\experiments\\reward-study-20261024\\screen\\risk_only-s101-n500000-v2000\\checkpoints\\latest.pt",
+      "sha256": "8ec3c4a583fe1508f212273824174d908831289b7416f8d5bbbfbc76c542d4ad"
+    }
+  },
+  "training_step": 100032,
+  "runtime": {
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.2",
+    "device": "cuda:0",
+    "bf16": true,
+    "deterministic": true
+  },
+  "bayes": {
+    "summary": {
+      "games": 500,
+      "win": 0.866,
+      "win_margin": 0.02985949197156576,
+      "efficiency": 0.9321238207553125,
+      "revealed": 0.8824225352112676,
+      "missed_safe": 0.0,
+      "risky_guess": 0.0,
+      "coin_flip": 0.05,
+      "unlucky": 0.084,
+      "win_skill": 0.911578947368421
+    },
+    "records": [
+      {
+        "seed": 1108101562368,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562369,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562370,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562371,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562372,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562373,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562374,
+        "won": true,
+        "moves": 25,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562375,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562376,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562377,
+        "won": true,
+        "moves": 8,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562378,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562379,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562380,
+        "won": true,
+        "moves": 27,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562381,
+        "won": false,
+        "moves": 3,
+        "min_moves": 17,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562382,
+        "won": false,
+        "moves": 2,
+        "min_moves": 18,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562383,
+        "won": true,
+        "moves": 14,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562384,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562385,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562386,
+        "won": true,
+        "moves": 28,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562387,
+        "won": true,
+        "moves": 16,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562388,
+        "won": true,
+        "moves": 30,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562389,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562390,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562391,
+        "won": false,
+        "moves": 3,
+        "min_moves": 14,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562392,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562393,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562394,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562395,
+        "won": true,
+        "moves": 11,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562396,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562397,
+        "won": false,
+        "moves": 3,
+        "min_moves": 9,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562398,
+        "won": true,
+        "moves": 32,
+        "min_moves": 31,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562399,
+        "won": false,
+        "moves": 2,
+        "min_moves": 9,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562400,
+        "won": false,
+        "moves": 3,
+        "min_moves": 22,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562401,
+        "won": true,
+        "moves": 28,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562402,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562403,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562404,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562405,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562406,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562407,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562408,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562409,
+        "won": false,
+        "moves": 6,
+        "min_moves": 6,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562410,
+        "won": false,
+        "moves": 2,
+        "min_moves": 14,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562411,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562412,
+        "won": true,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562413,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562414,
+        "won": true,
+        "moves": 23,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562415,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562416,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562417,
+        "won": true,
+        "moves": 24,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562418,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562419,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562420,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562421,
+        "won": false,
+        "moves": 21,
+        "min_moves": 21,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562422,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562423,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562424,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562425,
+        "won": true,
+        "moves": 26,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562426,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562427,
+        "won": false,
+        "moves": 2,
+        "min_moves": 9,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562428,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562429,
+        "won": true,
+        "moves": 24,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562430,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562431,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562432,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562433,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562434,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562435,
+        "won": true,
+        "moves": 16,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562436,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562437,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562438,
+        "won": true,
+        "moves": 20,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562439,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562440,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562441,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562442,
+        "won": true,
+        "moves": 21,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562443,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562444,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562445,
+        "won": true,
+        "moves": 25,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562446,
+        "won": true,
+        "moves": 7,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562447,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562448,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562449,
+        "won": false,
+        "moves": 2,
+        "min_moves": 10,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562450,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562451,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562452,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562453,
+        "won": true,
+        "moves": 24,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562454,
+        "won": true,
+        "moves": 10,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562455,
+        "won": true,
+        "moves": 23,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562456,
+        "won": true,
+        "moves": 21,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562457,
+        "won": true,
+        "moves": 12,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562458,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562459,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562460,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562461,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562462,
+        "won": true,
+        "moves": 20,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562463,
+        "won": true,
+        "moves": 29,
+        "min_moves": 29,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562464,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562465,
+        "won": true,
+        "moves": 7,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562466,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562467,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562468,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562469,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562470,
+        "won": true,
+        "moves": 18,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562471,
+        "won": false,
+        "moves": 2,
+        "min_moves": 10,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562472,
+        "won": true,
+        "moves": 27,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562473,
+        "won": true,
+        "moves": 21,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562474,
+        "won": false,
+        "moves": 2,
+        "min_moves": 14,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562475,
+        "won": true,
+        "moves": 24,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562476,
+        "won": false,
+        "moves": 10,
+        "min_moves": 11,
+        "revealed_fraction": 0.971830985915493,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562477,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562478,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562479,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562480,
+        "won": true,
+        "moves": 7,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562481,
+        "won": true,
+        "moves": 19,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562482,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562483,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562484,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562485,
+        "won": false,
+        "moves": 4,
+        "min_moves": 13,
+        "revealed_fraction": 0.04225352112676056,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562486,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562487,
+        "won": true,
+        "moves": 7,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562488,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562489,
+        "won": true,
+        "moves": 20,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562490,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562491,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562492,
+        "won": true,
+        "moves": 26,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562493,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562494,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562495,
+        "won": true,
+        "moves": 23,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562496,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562497,
+        "won": false,
+        "moves": 2,
+        "min_moves": 29,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562498,
+        "won": false,
+        "moves": 3,
+        "min_moves": 15,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562499,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562500,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562501,
+        "won": false,
+        "moves": 3,
+        "min_moves": 14,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562502,
+        "won": true,
+        "moves": 7,
+        "min_moves": 6,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562503,
+        "won": false,
+        "moves": 2,
+        "min_moves": 25,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562504,
+        "won": true,
+        "moves": 24,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562505,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562506,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562507,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562508,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562509,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562510,
+        "won": false,
+        "moves": 6,
+        "min_moves": 22,
+        "revealed_fraction": 0.07042253521126761,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562511,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562512,
+        "won": false,
+        "moves": 2,
+        "min_moves": 18,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562513,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562514,
+        "won": false,
+        "moves": 2,
+        "min_moves": 19,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562515,
+        "won": true,
+        "moves": 28,
+        "min_moves": 26,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562516,
+        "won": false,
+        "moves": 28,
+        "min_moves": 24,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562517,
+        "won": true,
+        "moves": 23,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562518,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562519,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562520,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562521,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562522,
+        "won": true,
+        "moves": 26,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562523,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562524,
+        "won": true,
+        "moves": 17,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562525,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562526,
+        "won": false,
+        "moves": 2,
+        "min_moves": 16,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562527,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562528,
+        "won": true,
+        "moves": 23,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562529,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562530,
+        "won": true,
+        "moves": 30,
+        "min_moves": 29,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562531,
+        "won": true,
+        "moves": 20,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562532,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562533,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562534,
+        "won": true,
+        "moves": 20,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562535,
+        "won": true,
+        "moves": 24,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562536,
+        "won": true,
+        "moves": 26,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562537,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562538,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562539,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562540,
+        "won": false,
+        "moves": 3,
+        "min_moves": 16,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562541,
+        "won": true,
+        "moves": 28,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562542,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562543,
+        "won": true,
+        "moves": 34,
+        "min_moves": 34,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562544,
+        "won": true,
+        "moves": 21,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562545,
+        "won": true,
+        "moves": 17,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562546,
+        "won": true,
+        "moves": 11,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562547,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562548,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562549,
+        "won": true,
+        "moves": 13,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562550,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562551,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562552,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562553,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562554,
+        "won": false,
+        "moves": 2,
+        "min_moves": 13,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562555,
+        "won": true,
+        "moves": 23,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562556,
+        "won": true,
+        "moves": 23,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562557,
+        "won": false,
+        "moves": 2,
+        "min_moves": 17,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562558,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562559,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562560,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562561,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562562,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562563,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562564,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562565,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562566,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562567,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562568,
+        "won": true,
+        "moves": 24,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562569,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562570,
+        "won": true,
+        "moves": 17,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562571,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562572,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562573,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562574,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562575,
+        "won": true,
+        "moves": 19,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562576,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562577,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562578,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562579,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562580,
+        "won": false,
+        "moves": 2,
+        "min_moves": 15,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562581,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562582,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562583,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562584,
+        "won": true,
+        "moves": 19,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562585,
+        "won": false,
+        "moves": 2,
+        "min_moves": 15,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562586,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562587,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562588,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562589,
+        "won": true,
+        "moves": 6,
+        "min_moves": 6,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562590,
+        "won": true,
+        "moves": 17,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562591,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562592,
+        "won": false,
+        "moves": 3,
+        "min_moves": 10,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562593,
+        "won": true,
+        "moves": 29,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562594,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562595,
+        "won": true,
+        "moves": 27,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562596,
+        "won": true,
+        "moves": 17,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562597,
+        "won": true,
+        "moves": 14,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562598,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562599,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562600,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562601,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562602,
+        "won": true,
+        "moves": 12,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562603,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562604,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562605,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562606,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562607,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562608,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562609,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562610,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562611,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562612,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562613,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562614,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562615,
+        "won": true,
+        "moves": 27,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562616,
+        "won": false,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562617,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562618,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562619,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562620,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562621,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562622,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562623,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562624,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562625,
+        "won": true,
+        "moves": 17,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562626,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562627,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562628,
+        "won": true,
+        "moves": 19,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562629,
+        "won": true,
+        "moves": 10,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562630,
+        "won": true,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562631,
+        "won": true,
+        "moves": 11,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562632,
+        "won": false,
+        "moves": 4,
+        "min_moves": 8,
+        "revealed_fraction": 0.08450704225352113,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562633,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562634,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562635,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562636,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562637,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562638,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562639,
+        "won": true,
+        "moves": 10,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562640,
+        "won": true,
+        "moves": 24,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562641,
+        "won": true,
+        "moves": 26,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562642,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562643,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562644,
+        "won": true,
+        "moves": 24,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562645,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562646,
+        "won": true,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562647,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562648,
+        "won": false,
+        "moves": 3,
+        "min_moves": 16,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562649,
+        "won": false,
+        "moves": 2,
+        "min_moves": 17,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562650,
+        "won": true,
+        "moves": 21,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562651,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562652,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562653,
+        "won": true,
+        "moves": 28,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562654,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562655,
+        "won": true,
+        "moves": 20,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562656,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562657,
+        "won": false,
+        "moves": 2,
+        "min_moves": 11,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562658,
+        "won": true,
+        "moves": 22,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562659,
+        "won": true,
+        "moves": 23,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562660,
+        "won": true,
+        "moves": 21,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562661,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562662,
+        "won": false,
+        "moves": 3,
+        "min_moves": 17,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562663,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562664,
+        "won": false,
+        "moves": 3,
+        "min_moves": 17,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562665,
+        "won": false,
+        "moves": 2,
+        "min_moves": 19,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562666,
+        "won": true,
+        "moves": 20,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562667,
+        "won": true,
+        "moves": 17,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562668,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562669,
+        "won": false,
+        "moves": 2,
+        "min_moves": 20,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562670,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562671,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562672,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562673,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562674,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562675,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562676,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562677,
+        "won": false,
+        "moves": 5,
+        "min_moves": 19,
+        "revealed_fraction": 0.056338028169014086,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562678,
+        "won": false,
+        "moves": 3,
+        "min_moves": 11,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562679,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562680,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562681,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562682,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562683,
+        "won": false,
+        "moves": 3,
+        "min_moves": 17,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562684,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562685,
+        "won": false,
+        "moves": 20,
+        "min_moves": 18,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562686,
+        "won": false,
+        "moves": 2,
+        "min_moves": 14,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562687,
+        "won": true,
+        "moves": 31,
+        "min_moves": 31,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562688,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562689,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562690,
+        "won": true,
+        "moves": 22,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562691,
+        "won": true,
+        "moves": 24,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562692,
+        "won": true,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562693,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562694,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562695,
+        "won": true,
+        "moves": 22,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562696,
+        "won": true,
+        "moves": 23,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562697,
+        "won": true,
+        "moves": 21,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562698,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562699,
+        "won": false,
+        "moves": 2,
+        "min_moves": 13,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562700,
+        "won": true,
+        "moves": 27,
+        "min_moves": 26,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562701,
+        "won": true,
+        "moves": 28,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562702,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562703,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562704,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562705,
+        "won": true,
+        "moves": 36,
+        "min_moves": 31,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562706,
+        "won": false,
+        "moves": 2,
+        "min_moves": 19,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562707,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562708,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562709,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562710,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562711,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562712,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562713,
+        "won": true,
+        "moves": 19,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562714,
+        "won": true,
+        "moves": 20,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562715,
+        "won": true,
+        "moves": 28,
+        "min_moves": 26,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562716,
+        "won": false,
+        "moves": 2,
+        "min_moves": 13,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562717,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562718,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562719,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562720,
+        "won": true,
+        "moves": 11,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562721,
+        "won": true,
+        "moves": 6,
+        "min_moves": 6,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562722,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562723,
+        "won": true,
+        "moves": 6,
+        "min_moves": 6,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562724,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562725,
+        "won": true,
+        "moves": 24,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562726,
+        "won": true,
+        "moves": 9,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562727,
+        "won": true,
+        "moves": 23,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562728,
+        "won": false,
+        "moves": 3,
+        "min_moves": 10,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562729,
+        "won": true,
+        "moves": 16,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562730,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562731,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562732,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562733,
+        "won": false,
+        "moves": 10,
+        "min_moves": 9,
+        "revealed_fraction": 0.9859154929577465,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562734,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562735,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562736,
+        "won": true,
+        "moves": 27,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562737,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562738,
+        "won": true,
+        "moves": 12,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562739,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562740,
+        "won": false,
+        "moves": 2,
+        "min_moves": 10,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562741,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562742,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562743,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562744,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562745,
+        "won": true,
+        "moves": 17,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562746,
+        "won": true,
+        "moves": 21,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562747,
+        "won": true,
+        "moves": 16,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562748,
+        "won": true,
+        "moves": 30,
+        "min_moves": 26,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562749,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562750,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562751,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562752,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562753,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562754,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562755,
+        "won": true,
+        "moves": 28,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562756,
+        "won": true,
+        "moves": 26,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562757,
+        "won": true,
+        "moves": 23,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562758,
+        "won": true,
+        "moves": 26,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562759,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562760,
+        "won": false,
+        "moves": 2,
+        "min_moves": 16,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562761,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562762,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562763,
+        "won": false,
+        "moves": 2,
+        "min_moves": 22,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562764,
+        "won": true,
+        "moves": 14,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562765,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562766,
+        "won": true,
+        "moves": 21,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562767,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562768,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562769,
+        "won": true,
+        "moves": 21,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562770,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562771,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562772,
+        "won": true,
+        "moves": 8,
+        "min_moves": 7,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562773,
+        "won": true,
+        "moves": 14,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562774,
+        "won": false,
+        "moves": 3,
+        "min_moves": 14,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562775,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562776,
+        "won": true,
+        "moves": 20,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562777,
+        "won": false,
+        "moves": 2,
+        "min_moves": 8,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562778,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562779,
+        "won": true,
+        "moves": 9,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562780,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562781,
+        "won": false,
+        "moves": 2,
+        "min_moves": 16,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562782,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562783,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562784,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562785,
+        "won": true,
+        "moves": 21,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562786,
+        "won": true,
+        "moves": 10,
+        "min_moves": 9,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562787,
+        "won": true,
+        "moves": 22,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562788,
+        "won": true,
+        "moves": 22,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562789,
+        "won": true,
+        "moves": 20,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562790,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562791,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562792,
+        "won": true,
+        "moves": 21,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562793,
+        "won": true,
+        "moves": 30,
+        "min_moves": 29,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562794,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562795,
+        "won": true,
+        "moves": 13,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562796,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562797,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562798,
+        "won": true,
+        "moves": 32,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562799,
+        "won": false,
+        "moves": 2,
+        "min_moves": 12,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562800,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562801,
+        "won": true,
+        "moves": 30,
+        "min_moves": 30,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562802,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562803,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562804,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562805,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562806,
+        "won": true,
+        "moves": 19,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562807,
+        "won": true,
+        "moves": 31,
+        "min_moves": 28,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562808,
+        "won": true,
+        "moves": 13,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562809,
+        "won": true,
+        "moves": 27,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562810,
+        "won": true,
+        "moves": 22,
+        "min_moves": 22,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562811,
+        "won": false,
+        "moves": 2,
+        "min_moves": 15,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562812,
+        "won": true,
+        "moves": 23,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562813,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562814,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562815,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562816,
+        "won": true,
+        "moves": 39,
+        "min_moves": 36,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562817,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562818,
+        "won": true,
+        "moves": 24,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562819,
+        "won": false,
+        "moves": 2,
+        "min_moves": 22,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562820,
+        "won": true,
+        "moves": 15,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562821,
+        "won": true,
+        "moves": 11,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562822,
+        "won": true,
+        "moves": 21,
+        "min_moves": 21,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562823,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562824,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562825,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562826,
+        "won": true,
+        "moves": 27,
+        "min_moves": 25,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562827,
+        "won": true,
+        "moves": 12,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562828,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562829,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562830,
+        "won": true,
+        "moves": 34,
+        "min_moves": 31,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562831,
+        "won": true,
+        "moves": 19,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562832,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562833,
+        "won": true,
+        "moves": 23,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562834,
+        "won": true,
+        "moves": 18,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562835,
+        "won": true,
+        "moves": 32,
+        "min_moves": 27,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562836,
+        "won": true,
+        "moves": 19,
+        "min_moves": 18,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562837,
+        "won": false,
+        "moves": 3,
+        "min_moves": 10,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562838,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562839,
+        "won": true,
+        "moves": 15,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562840,
+        "won": true,
+        "moves": 18,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562841,
+        "won": true,
+        "moves": 24,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562842,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562843,
+        "won": true,
+        "moves": 18,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562844,
+        "won": true,
+        "moves": 18,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562845,
+        "won": true,
+        "moves": 15,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562846,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562847,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562848,
+        "won": true,
+        "moves": 29,
+        "min_moves": 24,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562849,
+        "won": true,
+        "moves": 24,
+        "min_moves": 23,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562850,
+        "won": false,
+        "moves": 2,
+        "min_moves": 10,
+        "revealed_fraction": 0.014084507042253521,
+        "lost_by": "coin_flip"
+      },
+      {
+        "seed": 1108101562851,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562852,
+        "won": true,
+        "moves": 16,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562853,
+        "won": true,
+        "moves": 20,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562854,
+        "won": true,
+        "moves": 14,
+        "min_moves": 14,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562855,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562856,
+        "won": true,
+        "moves": 17,
+        "min_moves": 17,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562857,
+        "won": true,
+        "moves": 36,
+        "min_moves": 35,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562858,
+        "won": true,
+        "moves": 8,
+        "min_moves": 8,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562859,
+        "won": true,
+        "moves": 11,
+        "min_moves": 11,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562860,
+        "won": true,
+        "moves": 10,
+        "min_moves": 10,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562861,
+        "won": false,
+        "moves": 3,
+        "min_moves": 8,
+        "revealed_fraction": 0.028169014084507043,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562862,
+        "won": true,
+        "moves": 22,
+        "min_moves": 19,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562863,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562864,
+        "won": true,
+        "moves": 21,
+        "min_moves": 20,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562865,
+        "won": false,
+        "moves": 5,
+        "min_moves": 19,
+        "revealed_fraction": 0.056338028169014086,
+        "lost_by": "unlucky"
+      },
+      {
+        "seed": 1108101562866,
+        "won": true,
+        "moves": 13,
+        "min_moves": 13,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562867,
+        "won": true,
+        "moves": 15,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      }
+    ]
+  },
+  "policies": [
+    {
+      "opening_lambda": 0.01,
+      "opening_kind": "zero",
+      "summary": {
+        "games": 500,
+        "win": 0.82,
+        "win_margin": 0.033675515140825986,
+        "efficiency": 0.882664276249404,
+        "revealed": 0.8496901408450703,
+        "missed_safe": 0.002,
+        "risky_guess": 0.012,
+        "coin_flip": 0.062,
+        "unlucky": 0.104,
+        "win_skill": 0.8742004264392325
+      },
+      "paired_vs_bayes": {
+        "games": 500,
+        "model_only_wins": 51,
+        "bayes_only_wins": 74,
+        "both_win": 359,
+        "both_lose": 16,
+        "win_difference": -0.046,
+        "win_difference_ci95": [
+          -0.09,
+          -0.002
+        ],
+        "mcnemar_exact_two_sided_p": 0.04866218514586795,
+        "model_better_exact_one_sided_p": 0.98429533321665,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "records": [
+        {
+          "seed": 1108101562368,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562369,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562370,
+          "won": false,
+          "moves": 2,
+          "min_moves": 15,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562371,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562372,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562373,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562374,
+          "won": false,
+          "moves": 2,
+          "min_moves": 22,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562375,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562376,
+          "won": false,
+          "moves": 3,
+          "min_moves": 17,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562377,
+          "won": false,
+          "moves": 2,
+          "min_moves": 7,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562378,
+          "won": true,
+          "moves": 17,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562379,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562380,
+          "won": true,
+          "moves": 27,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562381,
+          "won": true,
+          "moves": 22,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562382,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562383,
+          "won": false,
+          "moves": 3,
+          "min_moves": 11,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562384,
+          "won": true,
+          "moves": 18,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562385,
+          "won": true,
+          "moves": 15,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562386,
+          "won": true,
+          "moves": 29,
+          "min_moves": 27,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562387,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562388,
+          "won": true,
+          "moves": 33,
+          "min_moves": 27,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562389,
+          "won": false,
+          "moves": 2,
+          "min_moves": 15,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562390,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562391,
+          "won": true,
+          "moves": 18,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562392,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562393,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562394,
+          "won": true,
+          "moves": 21,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562395,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562396,
+          "won": true,
+          "moves": 23,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562397,
+          "won": false,
+          "moves": 5,
+          "min_moves": 9,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562398,
+          "won": false,
+          "moves": 4,
+          "min_moves": 31,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562399,
+          "won": true,
+          "moves": 10,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562400,
+          "won": false,
+          "moves": 3,
+          "min_moves": 22,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562401,
+          "won": true,
+          "moves": 28,
+          "min_moves": 27,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562402,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562403,
+          "won": false,
+          "moves": 2,
+          "min_moves": 11,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562404,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562405,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562406,
+          "won": false,
+          "moves": 4,
+          "min_moves": 12,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562407,
+          "won": true,
+          "moves": 15,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562408,
+          "won": false,
+          "moves": 2,
+          "min_moves": 11,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562409,
+          "won": true,
+          "moves": 6,
+          "min_moves": 6,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562410,
+          "won": true,
+          "moves": 18,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562411,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562412,
+          "won": true,
+          "moves": 9,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562413,
+          "won": true,
+          "moves": 10,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562414,
+          "won": true,
+          "moves": 24,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562415,
+          "won": true,
+          "moves": 16,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562416,
+          "won": true,
+          "moves": 19,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562417,
+          "won": false,
+          "moves": 3,
+          "min_moves": 22,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562418,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562419,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562420,
+          "won": true,
+          "moves": 21,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562421,
+          "won": false,
+          "moves": 21,
+          "min_moves": 21,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562422,
+          "won": true,
+          "moves": 13,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562423,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562424,
+          "won": true,
+          "moves": 10,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562425,
+          "won": true,
+          "moves": 27,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562426,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562427,
+          "won": false,
+          "moves": 4,
+          "min_moves": 9,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562428,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562429,
+          "won": true,
+          "moves": 27,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562430,
+          "won": true,
+          "moves": 11,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562431,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562432,
+          "won": true,
+          "moves": 10,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562433,
+          "won": false,
+          "moves": 3,
+          "min_moves": 15,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562434,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562435,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562436,
+          "won": true,
+          "moves": 33,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562437,
+          "won": true,
+          "moves": 22,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562438,
+          "won": true,
+          "moves": 21,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562439,
+          "won": true,
+          "moves": 20,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562440,
+          "won": true,
+          "moves": 22,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562441,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562442,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562443,
+          "won": true,
+          "moves": 17,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562444,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562445,
+          "won": false,
+          "moves": 3,
+          "min_moves": 21,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562446,
+          "won": true,
+          "moves": 8,
+          "min_moves": 7,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562447,
+          "won": true,
+          "moves": 15,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562448,
+          "won": false,
+          "moves": 2,
+          "min_moves": 15,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562449,
+          "won": true,
+          "moves": 10,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562450,
+          "won": true,
+          "moves": 20,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562451,
+          "won": false,
+          "moves": 5,
+          "min_moves": 11,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562452,
+          "won": true,
+          "moves": 24,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562453,
+          "won": true,
+          "moves": 25,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562454,
+          "won": true,
+          "moves": 10,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562455,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562456,
+          "won": true,
+          "moves": 24,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562457,
+          "won": true,
+          "moves": 11,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562458,
+          "won": true,
+          "moves": 22,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562459,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562460,
+          "won": true,
+          "moves": 15,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562461,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562462,
+          "won": true,
+          "moves": 24,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562463,
+          "won": true,
+          "moves": 31,
+          "min_moves": 29,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562464,
+          "won": true,
+          "moves": 19,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562465,
+          "won": true,
+          "moves": 7,
+          "min_moves": 7,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562466,
+          "won": true,
+          "moves": 11,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562467,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562468,
+          "won": true,
+          "moves": 22,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562469,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562470,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562471,
+          "won": true,
+          "moves": 12,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562472,
+          "won": true,
+          "moves": 30,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562473,
+          "won": true,
+          "moves": 26,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562474,
+          "won": true,
+          "moves": 18,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562475,
+          "won": false,
+          "moves": 4,
+          "min_moves": 24,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562476,
+          "won": false,
+          "moves": 10,
+          "min_moves": 11,
+          "revealed_fraction": 0.9154929577464789,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562477,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562478,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562479,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562480,
+          "won": true,
+          "moves": 8,
+          "min_moves": 7,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562481,
+          "won": true,
+          "moves": 15,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562482,
+          "won": true,
+          "moves": 11,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562483,
+          "won": false,
+          "moves": 4,
+          "min_moves": 19,
+          "revealed_fraction": 0.19718309859154928,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562484,
+          "won": true,
+          "moves": 20,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562485,
+          "won": true,
+          "moves": 17,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562486,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562487,
+          "won": false,
+          "moves": 7,
+          "min_moves": 7,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562488,
+          "won": true,
+          "moves": 10,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562489,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562490,
+          "won": true,
+          "moves": 22,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562491,
+          "won": false,
+          "moves": 2,
+          "min_moves": 18,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562492,
+          "won": true,
+          "moves": 24,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562493,
+          "won": true,
+          "moves": 17,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562494,
+          "won": false,
+          "moves": 3,
+          "min_moves": 14,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562495,
+          "won": true,
+          "moves": 25,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562496,
+          "won": true,
+          "moves": 26,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562497,
+          "won": true,
+          "moves": 35,
+          "min_moves": 29,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562498,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562499,
+          "won": false,
+          "moves": 4,
+          "min_moves": 13,
+          "revealed_fraction": 0.16901408450704225,
+          "lost_by": "missed_safe"
+        },
+        {
+          "seed": 1108101562500,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562501,
+          "won": true,
+          "moves": 16,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562502,
+          "won": true,
+          "moves": 7,
+          "min_moves": 6,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562503,
+          "won": true,
+          "moves": 28,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562504,
+          "won": false,
+          "moves": 24,
+          "min_moves": 23,
+          "revealed_fraction": 0.971830985915493,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562505,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562506,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562507,
+          "won": true,
+          "moves": 23,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562508,
+          "won": false,
+          "moves": 3,
+          "min_moves": 14,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562509,
+          "won": false,
+          "moves": 2,
+          "min_moves": 12,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562510,
+          "won": true,
+          "moves": 24,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562511,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562512,
+          "won": false,
+          "moves": 2,
+          "min_moves": 18,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562513,
+          "won": true,
+          "moves": 11,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562514,
+          "won": true,
+          "moves": 20,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562515,
+          "won": true,
+          "moves": 30,
+          "min_moves": 26,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562516,
+          "won": true,
+          "moves": 29,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562517,
+          "won": false,
+          "moves": 2,
+          "min_moves": 22,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562518,
+          "won": true,
+          "moves": 20,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562519,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562520,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562521,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562522,
+          "won": true,
+          "moves": 29,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562523,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562524,
+          "won": true,
+          "moves": 16,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562525,
+          "won": true,
+          "moves": 19,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562526,
+          "won": false,
+          "moves": 14,
+          "min_moves": 16,
+          "revealed_fraction": 0.9436619718309859,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562527,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562528,
+          "won": false,
+          "moves": 5,
+          "min_moves": 22,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562529,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562530,
+          "won": true,
+          "moves": 31,
+          "min_moves": 29,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562531,
+          "won": false,
+          "moves": 19,
+          "min_moves": 16,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562532,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562533,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562534,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562535,
+          "won": true,
+          "moves": 28,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562536,
+          "won": true,
+          "moves": 28,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562537,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562538,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562539,
+          "won": false,
+          "moves": 4,
+          "min_moves": 11,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562540,
+          "won": true,
+          "moves": 19,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562541,
+          "won": true,
+          "moves": 27,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562542,
+          "won": false,
+          "moves": 20,
+          "min_moves": 20,
+          "revealed_fraction": 0.971830985915493,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562543,
+          "won": true,
+          "moves": 34,
+          "min_moves": 34,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562544,
+          "won": true,
+          "moves": 21,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562545,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562546,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562547,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562548,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562549,
+          "won": false,
+          "moves": 2,
+          "min_moves": 10,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562550,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562551,
+          "won": false,
+          "moves": 3,
+          "min_moves": 18,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562552,
+          "won": true,
+          "moves": 22,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562553,
+          "won": false,
+          "moves": 2,
+          "min_moves": 19,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562554,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562555,
+          "won": false,
+          "moves": 4,
+          "min_moves": 22,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562556,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562557,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562558,
+          "won": false,
+          "moves": 5,
+          "min_moves": 17,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562559,
+          "won": false,
+          "moves": 3,
+          "min_moves": 13,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562560,
+          "won": true,
+          "moves": 23,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562561,
+          "won": true,
+          "moves": 17,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562562,
+          "won": true,
+          "moves": 23,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562563,
+          "won": false,
+          "moves": 2,
+          "min_moves": 16,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562564,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562565,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562566,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562567,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562568,
+          "won": true,
+          "moves": 27,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562569,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562570,
+          "won": true,
+          "moves": 17,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562571,
+          "won": true,
+          "moves": 9,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562572,
+          "won": true,
+          "moves": 19,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562573,
+          "won": true,
+          "moves": 30,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562574,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562575,
+          "won": false,
+          "moves": 2,
+          "min_moves": 16,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562576,
+          "won": true,
+          "moves": 22,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562577,
+          "won": true,
+          "moves": 14,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562578,
+          "won": true,
+          "moves": 10,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562579,
+          "won": true,
+          "moves": 23,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562580,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562581,
+          "won": true,
+          "moves": 26,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562582,
+          "won": true,
+          "moves": 20,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562583,
+          "won": false,
+          "moves": 2,
+          "min_moves": 16,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562584,
+          "won": true,
+          "moves": 22,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562585,
+          "won": true,
+          "moves": 19,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562586,
+          "won": true,
+          "moves": 16,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562587,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562588,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562589,
+          "won": true,
+          "moves": 6,
+          "min_moves": 6,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562590,
+          "won": true,
+          "moves": 17,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562591,
+          "won": true,
+          "moves": 24,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562592,
+          "won": true,
+          "moves": 12,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562593,
+          "won": true,
+          "moves": 28,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562594,
+          "won": true,
+          "moves": 16,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562595,
+          "won": true,
+          "moves": 27,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562596,
+          "won": true,
+          "moves": 18,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562597,
+          "won": true,
+          "moves": 15,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562598,
+          "won": false,
+          "moves": 2,
+          "min_moves": 8,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562599,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562600,
+          "won": true,
+          "moves": 23,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562601,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562602,
+          "won": true,
+          "moves": 13,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562603,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562604,
+          "won": true,
+          "moves": 15,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562605,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562606,
+          "won": true,
+          "moves": 24,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562607,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562608,
+          "won": true,
+          "moves": 11,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562609,
+          "won": false,
+          "moves": 5,
+          "min_moves": 18,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562610,
+          "won": true,
+          "moves": 19,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562611,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562612,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562613,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562614,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562615,
+          "won": true,
+          "moves": 29,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562616,
+          "won": true,
+          "moves": 9,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562617,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562618,
+          "won": true,
+          "moves": 15,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562619,
+          "won": true,
+          "moves": 18,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562620,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562621,
+          "won": true,
+          "moves": 13,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562622,
+          "won": false,
+          "moves": 2,
+          "min_moves": 15,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562623,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562624,
+          "won": true,
+          "moves": 20,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562625,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562626,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562627,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562628,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562629,
+          "won": true,
+          "moves": 10,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562630,
+          "won": false,
+          "moves": 10,
+          "min_moves": 9,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562631,
+          "won": true,
+          "moves": 12,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562632,
+          "won": true,
+          "moves": 10,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562633,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562634,
+          "won": false,
+          "moves": 2,
+          "min_moves": 11,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562635,
+          "won": true,
+          "moves": 13,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562636,
+          "won": true,
+          "moves": 19,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562637,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562638,
+          "won": false,
+          "moves": 2,
+          "min_moves": 14,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562639,
+          "won": true,
+          "moves": 11,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562640,
+          "won": true,
+          "moves": 24,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562641,
+          "won": true,
+          "moves": 28,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562642,
+          "won": false,
+          "moves": 3,
+          "min_moves": 18,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562643,
+          "won": true,
+          "moves": 17,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562644,
+          "won": true,
+          "moves": 22,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562645,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562646,
+          "won": true,
+          "moves": 9,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562647,
+          "won": true,
+          "moves": 16,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562648,
+          "won": true,
+          "moves": 16,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562649,
+          "won": false,
+          "moves": 4,
+          "min_moves": 17,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562650,
+          "won": true,
+          "moves": 21,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562651,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562652,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562653,
+          "won": true,
+          "moves": 27,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562654,
+          "won": false,
+          "moves": 3,
+          "min_moves": 15,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562655,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562656,
+          "won": true,
+          "moves": 13,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562657,
+          "won": false,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562658,
+          "won": true,
+          "moves": 24,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562659,
+          "won": false,
+          "moves": 2,
+          "min_moves": 22,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562660,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562661,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562662,
+          "won": true,
+          "moves": 21,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562663,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562664,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562665,
+          "won": true,
+          "moves": 23,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562666,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562667,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562668,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562669,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562670,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562671,
+          "won": true,
+          "moves": 25,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562672,
+          "won": true,
+          "moves": 16,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562673,
+          "won": true,
+          "moves": 20,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562674,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562675,
+          "won": false,
+          "moves": 2,
+          "min_moves": 20,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562676,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562677,
+          "won": true,
+          "moves": 19,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562678,
+          "won": false,
+          "moves": 5,
+          "min_moves": 11,
+          "revealed_fraction": 0.056338028169014086,
+          "lost_by": "risky_guess"
+        },
+        {
+          "seed": 1108101562679,
+          "won": true,
+          "moves": 22,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562680,
+          "won": true,
+          "moves": 14,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562681,
+          "won": true,
+          "moves": 13,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562682,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562683,
+          "won": false,
+          "moves": 3,
+          "min_moves": 17,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562684,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562685,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562686,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562687,
+          "won": true,
+          "moves": 33,
+          "min_moves": 31,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562688,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562689,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562690,
+          "won": false,
+          "moves": 4,
+          "min_moves": 21,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562691,
+          "won": true,
+          "moves": 21,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562692,
+          "won": false,
+          "moves": 2,
+          "min_moves": 9,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562693,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562694,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562695,
+          "won": true,
+          "moves": 22,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562696,
+          "won": true,
+          "moves": 27,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562697,
+          "won": true,
+          "moves": 21,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562698,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562699,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562700,
+          "won": true,
+          "moves": 31,
+          "min_moves": 26,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562701,
+          "won": true,
+          "moves": 30,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562702,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562703,
+          "won": false,
+          "moves": 2,
+          "min_moves": 13,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562704,
+          "won": false,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562705,
+          "won": true,
+          "moves": 41,
+          "min_moves": 31,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562706,
+          "won": true,
+          "moves": 23,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562707,
+          "won": false,
+          "moves": 23,
+          "min_moves": 20,
+          "revealed_fraction": 0.971830985915493,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562708,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562709,
+          "won": true,
+          "moves": 22,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562710,
+          "won": true,
+          "moves": 16,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562711,
+          "won": true,
+          "moves": 12,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562712,
+          "won": true,
+          "moves": 21,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562713,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562714,
+          "won": true,
+          "moves": 20,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562715,
+          "won": false,
+          "moves": 4,
+          "min_moves": 26,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562716,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562717,
+          "won": true,
+          "moves": 26,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562718,
+          "won": true,
+          "moves": 21,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562719,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562720,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562721,
+          "won": true,
+          "moves": 7,
+          "min_moves": 6,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562722,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562723,
+          "won": true,
+          "moves": 6,
+          "min_moves": 6,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562724,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562725,
+          "won": false,
+          "moves": 2,
+          "min_moves": 20,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562726,
+          "won": true,
+          "moves": 10,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562727,
+          "won": true,
+          "moves": 26,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562728,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562729,
+          "won": false,
+          "moves": 2,
+          "min_moves": 14,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562730,
+          "won": false,
+          "moves": 2,
+          "min_moves": 11,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562731,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562732,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562733,
+          "won": false,
+          "moves": 12,
+          "min_moves": 9,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562734,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562735,
+          "won": false,
+          "moves": 2,
+          "min_moves": 17,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562736,
+          "won": true,
+          "moves": 29,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562737,
+          "won": true,
+          "moves": 9,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562738,
+          "won": true,
+          "moves": 11,
+          "min_moves": 9,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562739,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562740,
+          "won": true,
+          "moves": 19,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562741,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562742,
+          "won": false,
+          "moves": 24,
+          "min_moves": 19,
+          "revealed_fraction": 0.9859154929577465,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562743,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562744,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562745,
+          "won": true,
+          "moves": 19,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562746,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562747,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562748,
+          "won": true,
+          "moves": 29,
+          "min_moves": 26,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562749,
+          "won": true,
+          "moves": 17,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562750,
+          "won": true,
+          "moves": 18,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562751,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562752,
+          "won": true,
+          "moves": 17,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562753,
+          "won": true,
+          "moves": 16,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562754,
+          "won": true,
+          "moves": 13,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562755,
+          "won": false,
+          "moves": 2,
+          "min_moves": 27,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562756,
+          "won": true,
+          "moves": 26,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562757,
+          "won": true,
+          "moves": 28,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562758,
+          "won": true,
+          "moves": 28,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562759,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562760,
+          "won": false,
+          "moves": 4,
+          "min_moves": 16,
+          "revealed_fraction": 0.04225352112676056,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562761,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562762,
+          "won": true,
+          "moves": 16,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562763,
+          "won": true,
+          "moves": 24,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562764,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562765,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562766,
+          "won": true,
+          "moves": 21,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562767,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562768,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562769,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562770,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562771,
+          "won": true,
+          "moves": 23,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562772,
+          "won": true,
+          "moves": 9,
+          "min_moves": 7,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562773,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562774,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562775,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562776,
+          "won": true,
+          "moves": 21,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562777,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562778,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562779,
+          "won": true,
+          "moves": 9,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562780,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562781,
+          "won": true,
+          "moves": 16,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562782,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562783,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562784,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562785,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562786,
+          "won": false,
+          "moves": 2,
+          "min_moves": 9,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562787,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562788,
+          "won": true,
+          "moves": 23,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562789,
+          "won": true,
+          "moves": 21,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562790,
+          "won": true,
+          "moves": 13,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562791,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562792,
+          "won": true,
+          "moves": 21,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562793,
+          "won": true,
+          "moves": 33,
+          "min_moves": 29,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562794,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562795,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562796,
+          "won": true,
+          "moves": 14,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562797,
+          "won": true,
+          "moves": 9,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562798,
+          "won": false,
+          "moves": 2,
+          "min_moves": 23,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562799,
+          "won": false,
+          "moves": 2,
+          "min_moves": 12,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562800,
+          "won": false,
+          "moves": 2,
+          "min_moves": 12,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562801,
+          "won": true,
+          "moves": 33,
+          "min_moves": 30,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562802,
+          "won": true,
+          "moves": 20,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562803,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562804,
+          "won": true,
+          "moves": 21,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562805,
+          "won": true,
+          "moves": 13,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562806,
+          "won": true,
+          "moves": 24,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562807,
+          "won": true,
+          "moves": 34,
+          "min_moves": 28,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562808,
+          "won": true,
+          "moves": 14,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562809,
+          "won": true,
+          "moves": 31,
+          "min_moves": 25,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562810,
+          "won": true,
+          "moves": 23,
+          "min_moves": 22,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562811,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562812,
+          "won": true,
+          "moves": 28,
+          "min_moves": 23,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562813,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562814,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562815,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562816,
+          "won": false,
+          "moves": 3,
+          "min_moves": 36,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562817,
+          "won": true,
+          "moves": 15,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562818,
+          "won": true,
+          "moves": 24,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562819,
+          "won": false,
+          "moves": 2,
+          "min_moves": 22,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562820,
+          "won": true,
+          "moves": 17,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562821,
+          "won": true,
+          "moves": 12,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562822,
+          "won": true,
+          "moves": 22,
+          "min_moves": 21,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562823,
+          "won": true,
+          "moves": 17,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562824,
+          "won": true,
+          "moves": 25,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562825,
+          "won": false,
+          "moves": 3,
+          "min_moves": 15,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562826,
+          "won": false,
+          "moves": 2,
+          "min_moves": 25,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562827,
+          "won": false,
+          "moves": 2,
+          "min_moves": 11,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562828,
+          "won": true,
+          "moves": 19,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562829,
+          "won": true,
+          "moves": 22,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562830,
+          "won": true,
+          "moves": 34,
+          "min_moves": 31,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562831,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562832,
+          "won": true,
+          "moves": 17,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562833,
+          "won": true,
+          "moves": 23,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562834,
+          "won": true,
+          "moves": 20,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562835,
+          "won": false,
+          "moves": 2,
+          "min_moves": 27,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562836,
+          "won": true,
+          "moves": 19,
+          "min_moves": 18,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562837,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562838,
+          "won": true,
+          "moves": 21,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562839,
+          "won": true,
+          "moves": 15,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562840,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562841,
+          "won": true,
+          "moves": 24,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562842,
+          "won": true,
+          "moves": 23,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562843,
+          "won": true,
+          "moves": 18,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562844,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562845,
+          "won": true,
+          "moves": 14,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562846,
+          "won": true,
+          "moves": 12,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562847,
+          "won": false,
+          "moves": 3,
+          "min_moves": 15,
+          "revealed_fraction": 0.028169014084507043,
+          "lost_by": "unlucky"
+        },
+        {
+          "seed": 1108101562848,
+          "won": true,
+          "moves": 27,
+          "min_moves": 24,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562849,
+          "won": false,
+          "moves": 2,
+          "min_moves": 23,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        },
+        {
+          "seed": 1108101562850,
+          "won": true,
+          "moves": 16,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562851,
+          "won": true,
+          "moves": 18,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562852,
+          "won": true,
+          "moves": 16,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562853,
+          "won": true,
+          "moves": 23,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562854,
+          "won": true,
+          "moves": 15,
+          "min_moves": 14,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562855,
+          "won": true,
+          "moves": 23,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562856,
+          "won": true,
+          "moves": 20,
+          "min_moves": 17,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562857,
+          "won": true,
+          "moves": 39,
+          "min_moves": 35,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562858,
+          "won": true,
+          "moves": 8,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562859,
+          "won": true,
+          "moves": 11,
+          "min_moves": 11,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562860,
+          "won": true,
+          "moves": 11,
+          "min_moves": 10,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562861,
+          "won": true,
+          "moves": 9,
+          "min_moves": 8,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562862,
+          "won": true,
+          "moves": 23,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562863,
+          "won": true,
+          "moves": 14,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562864,
+          "won": true,
+          "moves": 22,
+          "min_moves": 20,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562865,
+          "won": true,
+          "moves": 22,
+          "min_moves": 19,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562866,
+          "won": true,
+          "moves": 13,
+          "min_moves": 13,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562867,
+          "won": true,
+          "moves": 15,
+          "min_moves": 15,
+          "revealed_fraction": 1.0
+        }
+      ]
+    }
+  ],
+  "interpretation": "Lambda selection uses validation. Paired board intervals do not measure training-seed variability; search p-values are unadjusted."
+}

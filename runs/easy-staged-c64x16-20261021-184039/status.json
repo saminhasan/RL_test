@@ -1,0 +1,100 @@
+{
+ "updated": 1792635387.4142172,
+ "state": "stopped",
+ "run": "easy-staged-c64x16-20261021-184039",
+ "pid": 1476,
+ "host": "DESKTOP-CUQNPID",
+ "device": "NVIDIA GeForce GTX 1050",
+ "started": 1792633263.7429373,
+ "session_step": 0,
+ "step": 696960,
+ "total_steps": 200000000,
+ "level": 2,
+ "target_level": 2,
+ "epsilon": 0.005,
+ "lr": 0.0001,
+ "lr_patience": 5,
+ "lr_decay": 0.5,
+ "lr_min": 1e-06,
+ "evals_since_best": 0,
+ "sps": 328,
+ "sps_recent": 342.22465024168935,
+ "games": {
+  "return": -1.99,
+  "won": 0.801,
+  "revealed": 0.8560845070422536,
+  "length": 17.618
+ },
+ "td": 0.31575459241867065,
+ "q": -0.24480018019676208,
+ "gpu_temp": 92.0,
+ "gpu_pause": 0.0,
+ "max_gpu_temp": 95.0,
+ "last_eval": {
+  "games": 1000,
+  "win": 0.827,
+  "win_margin": 0.02344400890632829,
+  "efficiency": 0.7773410517076657,
+  "revealed": 0.8610563380281689,
+  "step": 600000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 10.0,
+   "reveal": 0.0,
+   "gamma": 0.0
+  }
+ },
+ "best": {
+  "games": 1000,
+  "win": 0.827,
+  "win_margin": 0.02344400890632829,
+  "efficiency": 0.7773410517076657,
+  "revealed": 0.8610563380281689,
+  "step": 600000,
+  "level": 2,
+  "lr": 0.0001,
+  "reward": {
+   "win": 0.0,
+   "progress": 0.0,
+   "credit": 0.0,
+   "mine": 10.0,
+   "reveal": 0.0,
+   "gamma": 0.0
+  }
+ },
+ "bayes": {
+  "2": {
+   "games": 1000,
+   "win": 0.872,
+   "win_margin": 0.02070710084970854,
+   "efficiency": 0.9359235898168025,
+   "revealed": 0.8963098591549297
+  }
+ },
+ "eval_games": 1000,
+ "eval_every": 100000,
+ "next_eval": 700000,
+ "reward": {
+  "win": 0.0,
+  "progress": 0.0,
+  "credit": 0.0,
+  "mine": 10.0,
+  "reveal": 0.0,
+  "gamma": 0.0
+ },
+ "bf16": false,
+ "model": {
+  "channels": 64,
+  "layers": 16,
+  "weights": 560961
+ },
+ "checkpoints": {
+  "latest": "C:\\Users\\james\\OneDrive\\Desktop\\grunt work\\RL_test\\models\\easy-staged-c64x16-20261021-184039-latest.pt",
+  "best": "C:\\Users\\james\\OneDrive\\Desktop\\grunt work\\RL_test\\models\\easy-staged-c64x16-20261021-184039-best.pt"
+ },
+ "stop_reason": "stopped by stop file"
+}

@@ -1,0 +1,12 @@
+{
+  "phase": "auxiliary",
+  "state": "complete",
+  "updated_utc": "2026-10-24T13:39:57Z",
+  "pid": 21216,
+  "stop_requested": false,
+  "variant": "safety_control",
+  "results": {
+    "D:\\RL_test\\experiments\\reward-study-20261024-aux-queue-smoke\\auxiliary\\safety_control-s201-n128-v3\\best-validation.json": "2b0161ec2f5dc72a945d46607486124582af9c26056281ca6e659d49fd3a275a",
+    "D:\\RL_test\\experiments\\reward-study-20261024-aux-queue-smoke\\auxiliary\\safety_control-s201-n128-v3\\latest-validation.json": "b637813f194776b7fc469244d5ef4999fa5b24114ff326b80229bffdaa549c1a"
+  }
+}

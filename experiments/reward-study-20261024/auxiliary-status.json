@@ -1,0 +1,12 @@
+{
+  "phase": "auxiliary",
+  "state": "complete",
+  "updated_utc": "2026-10-24T15:16:52Z",
+  "pid": 9544,
+  "stop_requested": false,
+  "variant": "zero_public_strong",
+  "results": {
+    "D:\\RL_test\\experiments\\reward-study-20261024\\auxiliary\\zero_public_strong-s201-n500000-v2000\\best-validation.json": "2acb93f0d7ab097d05746828ca72aec9649e1e9a91f491afe40f782d45aeb0f9",
+    "D:\\RL_test\\experiments\\reward-study-20261024\\auxiliary\\zero_public_strong-s201-n500000-v2000\\latest-validation.json": "a1061b1f3998eac56e2573dff8489f4b6c9850692e1d792b1bf0d75f9c0ec640"
+  }
+}

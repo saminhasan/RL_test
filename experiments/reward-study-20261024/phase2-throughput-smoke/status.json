@@ -1,0 +1,23 @@
+{
+ "updated": 1792849079.4664512,
+ "state": "stopped",
+ "kind": "safety_opening_v1",
+ "pid": 24092,
+ "step": 20032,
+ "total_steps": 20032,
+ "seed": 201,
+ "level": 2,
+ "epsilon": 0.005,
+ "lr": 1.0035161104788994e-05,
+ "losses": {
+  "safety": 0.026110121980309486,
+  "zero": 0.3433223068714142,
+  "reveal": 0.0,
+  "clue": 0.0009251551819033921,
+  "budget": 0.006964991334825754
+ },
+ "win": 0.804,
+ "best_win": -1.0,
+ "sps": 480.5082877120392,
+ "stop_reason": "finished"
+}

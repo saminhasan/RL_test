@@ -1,0 +1,17 @@
+{
+ "updated": 1792849114.425441,
+ "state": "stopped",
+ "kind": "safety_opening_v1",
+ "pid": 8032,
+ "step": 128,
+ "total_steps": 128,
+ "seed": 201,
+ "level": 2,
+ "epsilon": 0.005,
+ "lr": 1.7320508075688777e-05,
+ "losses": {},
+ "win": 0.0,
+ "best_win": 0.6666666666666666,
+ "sps": 14.509277616922697,
+ "stop_reason": "finished"
+}

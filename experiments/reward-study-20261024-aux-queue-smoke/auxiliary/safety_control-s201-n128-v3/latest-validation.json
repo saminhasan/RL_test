@@ -1,0 +1,176 @@
+{
+  "kind": "safety_opening_v1",
+  "protocol": {
+    "schema": 1,
+    "split": "validation",
+    "level": 2,
+    "games": 3,
+    "replicate": 0,
+    "requested_seed_start": 1108101562368,
+    "requested_seed_stop": 1108101562371,
+    "source_sha256": {
+      "_native.py": "1dcb69582fef718606e3c89291f326adc93ab6ed64316067a7326064a3954fd0",
+      "engine.py": "2913387c5f1ac6d9ee7dfbd031ef333a8582ceaf26d3fdcafde2ed175e6b4250",
+      "ai_agents.py": "3bd876da6128aff758926462accee8e49edf05cd03accf3c794e006dd4afcfc1",
+      "cpp/msw/engine.hpp": "9dc8d6e4a131779b71995df57cfe9ffaefeb9cc9a7f4bb2f5fe539b3c3d16672",
+      "cpp/msw/solver.hpp": "4b86134fbec5f9d8ccc8dc73c8795253e38b3e6826f0f9f03a028d970625d1b1",
+      "rl/minesweeper_env.py": "a3b6aae58557beb12d9cc0f1f127b74bb57945efb13bcddd1f2c9bb0af2e39a4",
+      "rl/qnet.py": "cbcb2e403d7a6960dbc7c72ee9f29e6a4868d37dd87de434158f7436235bd45c",
+      "rl/evaluate.py": "54ee261ebcdf9292d66aa98d61a062072a2321563f5cd94155c3b5f500c1a0d9",
+      "rl/baseline.py": "2a4ce99f76aebb84d173b3fddbfbb7e33eef4c246e54645c51bcf3495d2d8366",
+      "rl/experiment_eval.py": "0ddbb75801a3cfa5eeaf31688109c2773bd195e8e4a56242f62ad3e05dc16a3d",
+      "rl/dqn.py": "21a79ee28db597ca8c4fcea6622f751053f87e09d89e24666b4005f2167b4da3",
+      "rl/per.py": "81165c26d95429df23a2b22f40e88fd3afd9ba29ce1be034f5a451f8dd86e241",
+      "rl/journal.py": "82b528cc630e8ef5709453fb226f0b8db8df1cde77e813717c8932fd37be1be1",
+      "rl/safety_opening.py": "1e573bc158641452c495ee7ce9975f483a0b603a9cff83d137a1886cfec90989",
+      "rl/public_constraints.py": "a614e06fbe46fb2bb2fb4c2d14b68390e0429d7f0ded739483b6243a82003e6e"
+    }
+  },
+  "checkpoint": {
+    "path": "D:\\RL_test\\experiments\\reward-study-20261024-aux-queue-smoke\\auxiliary\\safety_control-s201-n128-v3\\checkpoints\\latest.pt",
+    "sha256": "dabb2f35def49cd3904feaa5fd449910a63ad6ac1d604feefb3ac0061ee116a6",
+    "config": {
+      "channels": 64,
+      "layers": 16,
+      "kernel": 3,
+      "pool_every": 0,
+      "fp32_head": true,
+      "opening_lambda": 0.0,
+      "opening_kind": "zero"
+    },
+    "training_args": {
+      "output_dir": "D:\\RL_test\\experiments\\reward-study-20261024-aux-queue-smoke\\auxiliary\\safety_control-s201-n128-v3\\model",
+      "init": "D:\\RL_test\\experiments\\reward-study-20261024\\screen\\risk_only-s101-n500000-v2000\\checkpoints\\latest.pt",
+      "resume": "",
+      "seed": 201,
+      "level": 2,
+      "total_timesteps": 128,
+      "num_envs": 64,
+      "channels": 64,
+      "layers": 16,
+      "batch_size": 128,
+      "buffer_size": 1000000,
+      "train_frequency": 16,
+      "learning_starts": 10000,
+      "learning_rate": 3e-05,
+      "lr_floor": 1e-05,
+      "ema": 0.999,
+      "aux": "none",
+      "aux_weight": 0.05,
+      "clue_weight": 0.0,
+      "budget_weight": 0.0,
+      "opening_lambda": 0.0,
+      "opening_kind": "zero",
+      "start_e": 0.02,
+      "end_e": 0.005,
+      "exploration_fraction": 0.1,
+      "eval_every": 128,
+      "eval_games": 3,
+      "checkpoint_every": 128,
+      "augment": true,
+      "bf16": true,
+      "deterministic": true,
+      "device": "cpu",
+      "jobs": 1
+    }
+  },
+  "training_step": 128,
+  "runtime": {
+    "torch": "2.11.0+cu128",
+    "numpy": "2.5.2",
+    "device": "cpu",
+    "bf16": false,
+    "deterministic": true
+  },
+  "bayes": {
+    "summary": {
+      "games": 3,
+      "win": 1.0,
+      "win_margin": 0.0,
+      "efficiency": 0.9607843137254902,
+      "revealed": 1.0
+    },
+    "records": [
+      {
+        "seed": 1108101562368,
+        "won": true,
+        "moves": 12,
+        "min_moves": 12,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562369,
+        "won": true,
+        "moves": 16,
+        "min_moves": 16,
+        "revealed_fraction": 1.0
+      },
+      {
+        "seed": 1108101562370,
+        "won": true,
+        "moves": 17,
+        "min_moves": 15,
+        "revealed_fraction": 1.0
+      }
+    ]
+  },
+  "policies": [
+    {
+      "opening_lambda": 0.0,
+      "opening_kind": "zero",
+      "summary": {
+        "games": 3,
+        "win": 0.6666666666666666,
+        "win_margin": 0.533444432872781,
+        "efficiency": 0.7602339181286549,
+        "revealed": 0.6713615023474179,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.3333333333333333,
+        "unlucky": 0.0,
+        "win_skill": 0.9999999999999999
+      },
+      "paired_vs_bayes": {
+        "games": 3,
+        "model_only_wins": 0,
+        "bayes_only_wins": 1,
+        "both_win": 2,
+        "both_lose": 0,
+        "win_difference": -0.3333333333333333,
+        "win_difference_ci95": [
+          -1.0,
+          0.0
+        ],
+        "mcnemar_exact_two_sided_p": 1.0,
+        "model_better_exact_one_sided_p": 1.0,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "records": [
+        {
+          "seed": 1108101562368,
+          "won": true,
+          "moves": 19,
+          "min_moves": 12,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562369,
+          "won": true,
+          "moves": 18,
+          "min_moves": 16,
+          "revealed_fraction": 1.0
+        },
+        {
+          "seed": 1108101562370,
+          "won": false,
+          "moves": 2,
+          "min_moves": 15,
+          "revealed_fraction": 0.014084507042253521,
+          "lost_by": "coin_flip"
+        }
+      ]
+    }
+  ],
+  "interpretation": "Lambda selection uses validation. Paired board intervals do not measure training-seed variability; search p-values are unadjusted."
+}

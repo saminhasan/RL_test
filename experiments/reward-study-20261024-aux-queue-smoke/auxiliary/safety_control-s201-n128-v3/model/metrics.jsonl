@@ -1,0 +1,5 @@
+{"kind": "event", "step": 0, "t": 1792849104.9, "text": "started", "tag": "session"}
+{"kind": "train", "step": 64, "t": 1792849105.7, "win": 0.0, "lr": 3e-05}
+{"kind": "eval", "step": 128, "t": 1792849114.4, "games": 3, "win": 0.6666666666666666, "win_margin": 0.533444432872781, "efficiency": 0.7602339181286549, "revealed": 0.6713615023474179, "missed_safe": 0.0, "risky_guess": 0.0, "coin_flip": 0.3333333333333333, "unlucky": 0.0, "win_skill": 0.9999999999999999}
+{"kind": "train", "step": 128, "t": 1792849114.4, "win": 0.0, "lr": 1.7320508075688777e-05}
+{"kind": "event", "step": 128, "t": 1792849114.4, "text": "finished", "tag": "stop"}

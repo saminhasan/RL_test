@@ -1,0 +1,145 @@
+{
+  "success": false,
+  "confirmatory_budget": true,
+  "selection_plan_sha256": "1c26c70bee79519b2c7aec326ef45309a486fccfe096365f364af23c285d612c",
+  "repeats": [
+    {
+      "seed": 202,
+      "summary": {
+        "games": 10000,
+        "win": 0.8676,
+        "win_margin": 0.006642932439698599,
+        "efficiency": 0.7274364542414796,
+        "revealed": 0.8979985915492958,
+        "missed_safe": 0.0108,
+        "risky_guess": 0.0085,
+        "coin_flip": 0.0456,
+        "unlucky": 0.0675,
+        "win_skill": 0.9090528080469406
+      },
+      "paired_vs_bayes": {
+        "games": 10000,
+        "model_only_wins": 731,
+        "bayes_only_wins": 809,
+        "both_win": 7945,
+        "both_lose": 515,
+        "win_difference": -0.0078,
+        "win_difference_ci95": [
+          -0.0156,
+          0.0
+        ],
+        "mcnemar_exact_two_sided_p": 0.04971075661923963,
+        "model_better_exact_one_sided_p": 0.9779657767559904,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "bayes": {
+        "games": 10000,
+        "win": 0.8754,
+        "win_margin": 0.006473190135814026,
+        "efficiency": 0.9339636822904718,
+        "revealed": 0.9019929577464787,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.052,
+        "unlucky": 0.0726,
+        "win_skill": 0.9234177215189874
+      },
+      "artifact": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-202\\test.json",
+      "sha256": "3d2ed6cba48926e566d32f40ae6854574f9b9236244d286ca7ce2be4d54e1954"
+    },
+    {
+      "seed": 203,
+      "summary": {
+        "games": 10000,
+        "win": 0.8617,
+        "win_margin": 0.0067662058746094916,
+        "efficiency": 0.7256841990146775,
+        "revealed": 0.8933549295774649,
+        "missed_safe": 0.0084,
+        "risky_guess": 0.0084,
+        "coin_flip": 0.0537,
+        "unlucky": 0.0678,
+        "win_skill": 0.9105991757370813
+      },
+      "paired_vs_bayes": {
+        "games": 10000,
+        "model_only_wins": 694,
+        "bayes_only_wins": 831,
+        "both_win": 7923,
+        "both_lose": 552,
+        "win_difference": -0.0137,
+        "win_difference_ci95": [
+          -0.0213,
+          -0.006
+        ],
+        "mcnemar_exact_two_sided_p": 0.0004926393329882489,
+        "model_better_exact_one_sided_p": 0.9997969155602378,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "bayes": {
+        "games": 10000,
+        "win": 0.8754,
+        "win_margin": 0.006473190135814026,
+        "efficiency": 0.9339636822904718,
+        "revealed": 0.9019929577464787,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.052,
+        "unlucky": 0.0726,
+        "win_skill": 0.9234177215189874
+      },
+      "artifact": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-203\\test.json",
+      "sha256": "731a9aa0baf2335cb7beb8173f10572453d14e404d25e4b3e630260a440ca73c"
+    },
+    {
+      "seed": 204,
+      "summary": {
+        "games": 10000,
+        "win": 0.8625,
+        "win_margin": 0.006749738883838396,
+        "efficiency": 0.7320358185174691,
+        "revealed": 0.8926647887323943,
+        "missed_safe": 0.009,
+        "risky_guess": 0.0094,
+        "coin_flip": 0.0495,
+        "unlucky": 0.0696,
+        "win_skill": 0.9074171488690164
+      },
+      "paired_vs_bayes": {
+        "games": 10000,
+        "model_only_wins": 723,
+        "bayes_only_wins": 852,
+        "both_win": 7902,
+        "both_lose": 523,
+        "win_difference": -0.0129,
+        "win_difference_ci95": [
+          -0.0208,
+          -0.005
+        ],
+        "mcnemar_exact_two_sided_p": 0.001251369200375667,
+        "model_better_exact_one_sided_p": 0.9994761285873375,
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 20261024
+      },
+      "bayes": {
+        "games": 10000,
+        "win": 0.8754,
+        "win_margin": 0.006473190135814026,
+        "efficiency": 0.9339636822904718,
+        "revealed": 0.9019929577464787,
+        "missed_safe": 0.0,
+        "risky_guess": 0.0,
+        "coin_flip": 0.052,
+        "unlucky": 0.0726,
+        "win_skill": 0.9234177215189874
+      },
+      "artifact": "D:\\RL_test\\experiments\\reward-study-20261024\\confirmation\\seed-204\\test.json",
+      "sha256": "8e8de5c8aa9b57344f82da3ffb5b690fe2f9bdb7692e3532d39908ffd20c1b0d"
+    }
+  ],
+  "mean_win": 0.8639333333333333,
+  "training_seed_win_stdev": 0.00320052079095471,
+  "conclusion": "Repeatable advantage over Bayes was not established under the sealed protocol."
+}

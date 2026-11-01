@@ -1,14 +1,14 @@
 # Reward study results
 
-Updated 2026-10-25T01:16:02+00:00.
+Updated 2026-10-25T02:15:23+00:00.
 
 Baseline code checkpoint: `13e3083`, tag `reward-study-baseline-20261024`.
 
-**No repeatable win-rate advantage over Bayes has been established.**
+**Repeatable advantage over Bayes was not established under the sealed protocol.**
 
-Screening numbers below are validation results. The final test split is still unused.
+Screening numbers below are validation results. The preselected confirmation comparison has opened the test split.
 
-Current: **future_win3**, training, 92,352 / 500,000 clicks.
+Current: **confirmation**, complete, seed pending.
 
 ## Frozen model: inference ablations
 
@@ -34,7 +34,10 @@ Same 2,000 validation boards; Bayes wins 88.60% with efficiency 0.936.
 | [burst5](screen\burst5-s101-n500000-v2000\result.json) | complete | latest at 500,032 | 81.55% | 0.816 | -7.05 points |
 | [future_win1](screen\future_win1-s101-n500000-v2000\result.json) | complete | best at 500,032 | 86.65% | 0.723 | -1.95 points |
 | [future_win1](screen\future_win1-s101-n500000-v2000\result.json) | complete | latest at 500,032 | 86.65% | 0.723 | -1.95 points |
-| future_win3 | training | pending | pending | pending | pending |
+| [future_win3](screen\future_win3-s101-n500000-v2000\result.json) | complete | best at 100,032 | 85.10% | 0.854 | -3.50 points |
+| [future_win3](screen\future_win3-s101-n500000-v2000\result.json) | complete | latest at 500,032 | 84.45% | 0.800 | -4.15 points |
+| [future_win_discount](screen\future_win_discount-s101-n500000-v2000\result.json) | complete | best at 400,000 | 84.50% | 0.779 | -4.10 points |
+| [future_win_discount](screen\future_win_discount-s101-n500000-v2000\result.json) | complete | latest at 500,032 | 84.65% | 0.775 | -3.95 points |
 | [late10](screen\late10-s101-n500000-v2000\result.json) | complete | best at 400,000 | 85.35% | 0.862 | -3.25 points |
 | [late10](screen\late10-s101-n500000-v2000\result.json) | complete | latest at 500,032 | 85.40% | 0.862 | -3.20 points |
 | [late2](screen\late2-s101-n500000-v2000\result.json) | complete | best at 400,000 | 84.40% | 0.862 | -4.20 points |
@@ -70,6 +73,19 @@ Each checkpoint's displayed lambda is selected from its validation grid. This is
 | [zero_public_strong](auxiliary\zero_public_strong-s201-n500000-v2000\latest-validation.json) | complete | latest | 0 | 83.65% | 0.735 | -4.95 points |
 | [zero_representation](auxiliary\zero_representation-s201-n500000-v2000\best-validation.json) | complete | best | 0.001 | 85.60% | 0.847 | -3.00 points |
 | [zero_representation](auxiliary\zero_representation-s201-n500000-v2000\latest-validation.json) | complete | latest | 0.001 | 85.10% | 0.871 | -3.50 points |
+
+## Frozen-policy confirmation on test boards
+
+Each repeat uses fresh training data and the same frozen pretrained initialization. The recipe, checkpoint rule and inference settings were fixed before testing.
+
+| Training seed | Wins | Bayes wins | Efficiency | Paired win gap | 95% interval |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 202 | 86.76% | 87.54% | 0.727 | -0.78 points | [-1.56, +0.00] |
+| 203 | 86.17% | 87.54% | 0.726 | -1.37 points | [-2.13, -0.60] |
+| 204 | 86.25% | 87.54% | 0.732 | -1.29 points | [-2.08, -0.50] |
+
+See [confirmation report](confirmation/summary.md) and [sealed selection plan](confirmation/selection-plan.json).
+
 
 ## Interpretation
 
